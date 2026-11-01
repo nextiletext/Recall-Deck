@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Recall Deck - Master Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <style>
+    :root {
+      --bg: #0d1318;
+      --surface: #141c24;
+      --surface-card: #19232c;
+      --ink: #e8edf0;
+      --muted: #8a9ba8;
+      --line: #24323e;
+      --accent: #00c896;
+      --accent-ink: #0d1318;
+      --display: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
+      --body: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif;
+      --mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+    }
+    :root[data-theme="light"] {
+      --bg: #eceff1;
+      --surface: #fbfcfc;
+      --surface-card: #ffffff;
+      --ink: #15212b;
+      --muted: #5b6874;
+      --line: #d0d7dc;
+      --accent: #a8480c;
+      --accent-ink: #ffffff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.5;
+      padding: 40px 16px; display: flex; align-items: center; justify-content: center; min-height: 100vh;
+    }
+    .wrap { max-width: 500px; width: 100%; display: flex; flex-direction: column; gap: 24px; }
+    
+    .top-box {
+      background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 32px;
+      display: flex; flex-direction: column; gap: 24px; text-align: center;
+    }
+    .header-row { display: flex; justify-content: space-between; align-items: center; }
+    .brand h1 { font-family: var(--display); font-weight: 700; font-size: 2rem; letter-spacing: -0.02em; margin: 0; text-align: left; }
+    .brand .sub { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.05em; color: var(--muted); text-transform: uppercase; margin-top: 4px; display: block; text-align: left; }
+    
+    .mode-btn {
+      font-family: var(--body); font-size: 0.8rem; padding: 6px 12px; border-radius: 20px;
+      border: 1px solid var(--line); background: var(--bg); color: var(--muted); cursor: pointer; height: fit-content;
+    }
+    .mode-btn:hover { border-color: var(--accent); color: var(--ink); }
+
+    .link-buttons { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+    .portal-btn {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--surface-card); border: 1px solid var(--line); border-radius: 12px;
+      padding: 16px 20px; color: var(--ink); text-decoration: none; font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .portal-btn:hover { border-color: var(--accent); background: var(--surface); transform: translateY(-2px); }
+    .portal-btn span { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); font-weight: 400; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top-box">
+      <div class="header-row">
+        <div class="brand">
+          <h1>Recall Deck</h1>
+          <span class="sub">GCSE Revision Portal</span>
+        </div>
+        <button class="mode-btn" onclick="toggleTheme()" id="themeBtn">Light Mode</button>
+      </div>
+
+      <div class="link-buttons">
+        <!-- Replace these # symbols with your actual links or filenames -->
+        <a href="https://nextiletext.github.io/Recall-Deck-CS/" class="portal-btn">
+          Computer Science <span>OCR J277 &rarr;</span>
+        </a>
+        <a href="https://nextiletext.github.io/Recall-Deck-Geography/" class="portal-btn">
+          Geography <span>AQA &rarr;</span>
+        </a>
+        <a href="https://nextiletext.github.io/Recall-Deck-Science/" class="portal-btn">
+          Science <span>OCR B 21st Century &rarr;</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var theme = 'dark';
+    function toggleTheme() {
+      theme = theme === 'dark' ? 'light' : 'dark';
+      if (theme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        document.getElementById('themeBtn').textContent = 'Dark Mode';
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        document.getElementById('themeBtn').textContent = 'Light Mode';
+      }
+    }
+  </script>
+</body>
+</html>
