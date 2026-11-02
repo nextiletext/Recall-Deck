@@ -1,0 +1,679 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Recall Deck - OCR GCSE Computer Science</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <style>
+    :root {
+      --bg: #0d1318;
+      --surface: #141c24;
+      --surface-card: #19232c;
+      --ink: #e8edf0;
+      --muted: #8a9ba8;
+      --line: #24323e;
+      --accent: #00c896;
+      --accent-ink: #0d1318;
+      --good: #4fc596;
+      --bad: #f0707a;
+      --track: #26333d;
+      --display: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
+      --body: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif;
+      --mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+    }
+    :root[data-theme="light"] {
+      --bg: #eceff1;
+      --surface: #fbfcfc;
+      --surface-card: #ffffff;
+      --ink: #15212b;
+      --muted: #5b6874;
+      --line: #d0d7dc;
+      --accent: #a8480c;
+      --accent-ink: #ffffff;
+      --good: #17744f;
+      --bad: #b4262f;
+      --track: #dde3e7;
+    }
+    * { box-sizing: border-box; }
+    body {
+      background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.5;
+      padding: 24px 16px 48px;
+    }
+    .wrap { max-width: 820px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+    
+    .top-box {
+      background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    }
+    .brand h1 { font-family: var(--display); font-weight: 700; font-size: 1.8rem; letter-spacing: -0.02em; margin: 0; }
+    .brand .sub { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.05em; color: var(--muted); text-transform: uppercase; margin-top: 4px; display: block; }
+    
+    .header-controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    
+    .pill-picker { display: flex; background: var(--bg); border: 1px solid var(--line); border-radius: 30px; padding: 4px; gap: 4px; }
+    .pill-btn {
+      font-family: var(--body); font-size: 0.85rem; padding: 6px 14px; border-radius: 20px;
+      border: 0; background: transparent; color: var(--muted); cursor: pointer; transition: all 0.2s;
+    }
+    .pill-btn.active { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
+
+    .mode-btn {
+      font-family: var(--body); font-size: 0.85rem; padding: 8px 14px; border-radius: 20px;
+      border: 1px solid var(--line); background: var(--bg); color: var(--muted); cursor: pointer;
+    }
+    .mode-btn:hover { border-color: var(--accent); color: var(--ink); }
+
+    .nav-bar {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--line); padding-bottom: 2px; flex-wrap: wrap;
+    }
+    .tabs { display: flex; gap: 4px; overflow-x: auto; }
+    .tabs button {
+      background: none; border: 0; border-bottom: 3px solid transparent; color: var(--muted);
+      font: 500 0.95rem var(--body); padding: 10px 14px 9px; cursor: pointer; white-space: nowrap;
+    }
+    .tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+
+    .unit-select-wrap { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 0.75rem; color: var(--muted); text-transform: uppercase; }
+    select {
+      font: 400 0.85rem var(--body); color: var(--ink); background: var(--surface); border: 1px solid var(--line);
+      border-radius: 6px; padding: 6px 10px; cursor: pointer; max-width: 280px;
+    }
+
+    .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 18px; }
+    .unit-title-header { font-family: var(--display); font-size: 1.4rem; color: var(--accent); margin: 0 0 8px; display: flex; justify-content: space-between; align-items: baseline; }
+    .unit-sub-tag { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); font-weight: 400; text-transform: uppercase; }
+
+    .cognito-card {
+      background: var(--surface-card); border: 1px solid var(--line); border-left: 4px solid var(--accent);
+      border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;
+    }
+    .cognito-card h3 { font-family: var(--display); font-size: 1.1rem; margin: 0; color: var(--ink); }
+    .cognito-card p { margin: 0; font-size: 0.95rem; color: var(--ink); line-height: 1.6; }
+    .cognito-card ul { margin: 4px 0 0; padding-left: 1.2em; color: var(--muted); font-size: 0.92rem; display: flex; flex-direction: column; gap: 6px; }
+
+    .flashcard {
+      background: var(--surface-card); border: 1px solid var(--line); border-radius: 8px; padding: 32px 24px;
+      min-height: 280px; display: flex; flex-direction: column; gap: 18px; cursor: pointer; user-select: none;
+    }
+    .topic-tag { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); display: flex; justify-content: space-between; }
+    .q-text { font-family: var(--display); font-weight: 500; font-size: 1.35rem; line-height: 1.3; margin: 0; }
+    .ans-text { border-top: 1px dashed var(--line); padding-top: 16px; font-size: 1.05rem; color: var(--ink); }
+    .card-hint { margin-top: auto; font-size: 0.82rem; color: var(--muted); }
+    
+    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .btn {
+      font: 600 1rem var(--body); padding: 12px 16px; border-radius: 6px; border: 1px solid var(--line);
+      background: var(--surface-card); color: var(--ink); cursor: pointer; text-align: center;
+    }
+    .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+    .btn.miss { color: var(--bad); border-color: var(--bad); }
+    .btn.hit { color: var(--good); border-color: var(--good); }
+
+    .opts { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+    .opt { display: flex; gap: 10px; text-align: left; width: 100%; font: 400 0.95rem var(--body); color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 12px; cursor: pointer; }
+    .opt:hover:not(:disabled) { border-color: var(--accent); }
+    .opt.right { border-color: var(--good); background: rgba(79, 197, 150, 0.1); }
+    .opt.wrong { border-color: var(--bad); background: rgba(240, 112, 122, 0.1); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top-box">
+      <div class="brand">
+        <h1>Recall Deck</h1>
+        <span class="sub">OCR GCSE Computer Science (J277)</span>
+      </div>
+      <div class="header-controls">
+        <div class="pill-picker" id="subjects"></div>
+        <button class="mode-btn" onclick="toggleTheme()" id="themeBtn">Light Mode</button>
+      </div>
+    </div>
+
+    <div class="nav-bar">
+      <nav class="tabs" id="tabs"></nav>
+      <div class="unit-select-wrap">
+        <span>Unit:</span>
+        <select id="unitSelect" onchange="setUnit(this.value)"></select>
+      </div>
+    </div>
+
+    <main id="view"></main>
+  </div>
+
+  <script>
+    (function () {
+      var currentSubj = 'comp1';
+      var currentUnit = 'all';
+      var tab = 'notes';
+      var flipped = false;
+      var qIdx = 0;
+      var quizIdx = 0;
+      var quizSelected = null;
+      var quizScore = 0;
+      var theme = 'dark';
+
+      var DATA = {
+        comp1: {
+          title: "Component 1: Computer Systems",
+          units: [
+            {
+              id: "c1_1",
+              name: "1.1 Systems Architecture",
+              notes: [
+                { t: "The Central Processing Unit (CPU) Architecture", content: "The CPU fetches, decodes, and executes instructions to process data.", points: ["Arithmetic Logic Unit (ALU): Executes arithmetic operations (+, -, *, /) and logical comparisons (AND, OR, NOT, <, >, =).", "Control Unit (CU): Coordinates the F-D-E cycle, decodes machine instructions, and sends control signals along buses.", "Cache Memory: Small, extremely fast static RAM located on or very close to the CPU chip, storing frequently used data/instructions to minimize slow RAM access delays.", "Registers: Tiny, lightning-fast storage locations inside the CPU holding data currently being processed."] },
+                { t: "Von Neumann Architecture & Registers", content: "Von Neumann architecture stores both program instructions and data together in the same primary memory storage.", points: ["Memory Address Register (MAR): Holds the memory address of the instruction or data currently needed to be read from or written to.", "Memory Data Register (MDR): Holds the actual data or instruction fetched from memory, or waiting to be written.", "Program Counter (PC): Holds the exact memory address of the very next instruction to be fetched.", "Accumulator (ACC): Temporarily stores the intermediate results of ALU calculations."] },
+                { t: "CPU Performance Factors", content: "Three core hardware factors dictate overall microprocessor performance and throughput.", points: ["Clock Speed: Measured in Gigahertz (GHz), representing billions of processing cycles per second. Higher clock speed means faster instruction execution.", "Cache Size: Larger cache capacity holds more active instructions locally, reducing latency caused by fetching from main memory.", "Number of Cores: Multi-core processors allow independent tasks or parallelized threads to run simultaneously, multiplying processing capability if software supports it."] }
+              ],
+              cards: [
+                { q: "What is the function of the Program Counter (PC)?", a: "It stores the memory address of the next instruction to be fetched during the F-D-E cycle." },
+                { q: "What does von Neumann architecture store in main memory?", a: "Both program instructions and data share the same unified main memory space." }
+              ],
+              quiz: [
+                { q: "Which CPU component carries out arithmetic operations and logical comparisons?", opts: ["Control Unit", "Cache", "ALU", "MAR"], ans: 2 },
+                { q: "What is the main role of the Control Unit (CU)?", opts: ["Perform addition and subtraction", "Coordinate the F-D-E cycle and decode instructions", "Hold intermediate ALU results", "Store boot-up instructions"], ans: 1 },
+                { q: "Where is Cache memory located relative to the CPU?", opts: ["On a remote cloud server", "Inside secondary solid state storage", "On or very close to the CPU chip", "Inside the optical drive"], ans: 2 },
+                { q: "Why is Cache memory used?", opts: ["To permanently save files when power is cut", "To store frequently used data/instructions and reduce RAM latency", "To increase physical screen resolution", "To generate random encryption keys"], ans: 1 },
+                { q: "What defines Von Neumann Architecture?", opts: ["Data and instructions are stored in separate memory chips", "Data and instructions share the same primary memory storage", "The CPU operates without registers", "Processing occurs exclusively in ROM"], ans: 1 },
+                { q: "Which register holds the memory address of data about to be read or written?", opts: ["MDR", "PC", "MAR", "ACC"], ans: 2 },
+                { q: "Which register holds the actual data or instruction fetched from memory?", opts: ["MAR", "MDR", "PC", "ALU"], ans: 1 },
+                { q: "What is stored inside the Program Counter (PC)?", opts: ["The memory address of the NEXT instruction to be fetched", "The output of an AND logic operation", "The current clock frequency in GHz", "The total size of physical RAM"], ans: 0 },
+                { q: "What does the Accumulator (ACC) temporarily hold?", opts: ["Unread network data packets", "The intermediate results of ALU calculations", "Deleted browser history", "Device driver configuration settings"], ans: 1 },
+                { q: "How is Clock Speed measured?", opts: ["Megabytes (MB)", "Gigahertz (GHz)", "Bits per second (bps)", "Pixels per inch"], ans: 1 },
+                { q: "What does 1 Hertz (Hz) represent in clock speed?", opts: ["1 byte of memory", "1 processing cycle per second", "1 megabit of data", "1 pixel render"], ans: 1 },
+                { q: "How does having multiple CPU cores improve processing capability?", opts: ["It doubles the speed of light", "It allows independent tasks or parallelized threads to run simultaneously", "It replaces the need for RAM", "It prevents malware infections"], ans: 1 },
+                { q: "What is a limitation of multi-core processors?", opts: ["They cannot process integers", "Software must be specially designed to support parallel processing", "They erase cache memory every 5 seconds", "They only work with optical drives"], ans: 1 },
+                { q: "What is a register?", opts: ["A large magnetic storage disk", "A tiny, lightning-fast internal CPU storage location", "A type of network cable", "An external flash memory drive"], ans: 1 },
+                { q: "Which sequence correctly orders the CPU cycle?", opts: ["Decode -> Fetch -> Execute", "Fetch -> Decode -> Execute", "Execute -> Fetch -> Decode", "Store -> Fetch -> Delete"], ans: 1 }
+              ]
+            },
+            {
+              id: "c1_2",
+              name: "1.2 Memory and Storage",
+              notes: [
+                { t: "Primary Storage (RAM & ROM)", content: "Primary storage is directly accessible by the CPU, essential for running active applications.", points: ["RAM (Random Access Memory): Volatile primary storage holding open applications, files, and parts of the OS currently in use. Data is lost when power is cut.", "ROM (Read-Only Memory): Non-volatile memory containing immutable boot-up code (BIOS/firmware) needed to initialize hardware upon startup.", "Virtual Memory: A designated portion of secondary storage utilized as overflow RAM when physical RAM is fully saturated. Slower due to disk read/write latency."] },
+                { t: "Secondary Storage & Data Units", content: "Secondary storage provides non-volatile, permanent retention of programs and files.", points: ["Storage Media Types: Magnetic (HDDs using magnetic platters), Optical (CD/DVD/Blu-ray using lasers), and Solid State (SSDs using flash memory chips; fast, durable, silent).", "Data Storage Units: Bit (0 or 1), Nibble (4 bits), Byte (8 bits), Kilobyte (1,000 bytes), Megabyte, Gigabyte, Terabyte, Petabyte.", "File Calculations: Image size = Width × Height × Colour depth (bits). Sound size = Sample rate × Bit depth × Duration (seconds)."] }
+              ],
+              cards: [
+                { q: "What is the difference between volatile and non-volatile memory?", a: "Volatile memory loses its contents when power is turned off (e.g. RAM); non-volatile memory retains data permanently (e.g. ROM, SSDs)." }
+              ],
+              quiz: [
+                { q: "Why is RAM classified as volatile memory?", opts: ["It cannot be rewritten", "Its contents are lost when power is disconnected", "It uses magnetic platters", "It is located outside the motherboard"], ans: 1 },
+                { q: "What is stored in ROM according to the notes?", opts: ["Open browser tabs", "Immutable boot-up code (BIOS/firmware)", "Temporary graphics cache", "User text documents"], ans: 1 },
+                { q: "When is Virtual Memory used?", opts: ["When the CPU clock speed drops", "When physical RAM is fully saturated, using secondary storage as overflow", "Whenever an email is sent", "To clean up hard drive sectors"], ans: 1 },
+                { q: "Why is Virtual Memory slower than physical RAM?", opts: ["Secondary storage read/write speeds are much slower than RAM", "It relies on wireless radio waves", "It can only process 1 bit per minute", "It requires user permission for every byte"], ans: 0 },
+                { q: "Which storage type uses magnetic platters?", opts: ["Solid State Drive (SSD)", "Hard Disk Drive (HDD)", "Optical Blu-ray", "USB Flash Drive"], ans: 1 },
+                { q: "Which storage technology uses lasers to read microscopic pits and lands?", opts: ["Magnetic", "Optical", "Solid State", "Virtual"], ans: 1 },
+                { q: "What makes Solid State Drives (SSDs) durable and fast?", opts: ["They contain high-speed spinning disks", "They use flash memory chips with no moving mechanical parts", "They use liquid cooling", "They are powered by lasers"], ans: 1 },
+                { q: "How many bits make up a single Nibble?", opts: ["2", "4", "8", "16"], ans: 1 },
+                { q: "How many bits are in a Byte?", opts: ["4", "8", "16", "1024"], ans: 1 },
+                { q: "What unit comes immediately after Megabyte (MB) in data capacity scale?", opts: ["Kilobyte (KB)", "Gigabyte (GB)", "Terabyte (TB)", "Petabyte (PB)"], ans: 1 },
+                { q: "How many Bytes are in 1 Kilobyte (KB) in standard metric notation?", opts: ["8", "100", "1,000", "1,000,000"], ans: 2 },
+                { q: "What formula calculates the uncompressed file size of a digital image in bits?", opts: ["Width × Height × Colour depth", "Sample rate × Duration × Bit depth", "Width × Length × Resolution", "Height × Bytes × 8"], ans: 0 },
+                { q: "What formula calculates the file size of a sound recording?", opts: ["Width × Height × Sample rate", "Sample rate × Bit depth × Duration (seconds)", "Bit depth × Volume × Channels", "Sample rate × Resolution"], ans: 1 },
+                { q: "What happens to the contents of ROM when power is turned off?", opts: ["They are deleted completely", "They are retained (non-volatile)", "They are transferred to RAM", "They are backed up online"], ans: 1 },
+                { q: "Why do computers require secondary storage in addition to primary storage?", opts: ["Primary storage is non-volatile", "To provide non-volatile, permanent storage for files and programs", "To speed up the ALU", "Because RAM has infinite capacity"], ans: 1 }
+              ]
+            },
+            {
+              id: "c1_3",
+              name: "1.3 Networks, Connections & Protocols",
+              notes: [
+                { t: "Network Topologies & Hardware", content: "Networks connect computers to share hardware peripherals, data, and communication channels.", points: ["LAN vs WAN: Local Area Networks cover small geographical sites under single ownership; Wide Area Networks connect distant LANs using leased telecommunication lines (e.g., The Internet).", "Star Topology: Every device connects independently to a central switch or server. Robust against individual cable failure, but the central switch is a single point of failure.", "Hardware Components: Router (directs packets between distinct networks), Switch (directs frames within a LAN), WAP (wireless access point), NIC (Network Interface Card providing physical/wireless connection)."] },
+                { t: "IP/MAC Addressing & Protocols", content: "Data transmission relies on strict standardized rules (protocols) and unique addressing schemes.", points: ["IP Address: Logical, hierarchical address assigned dynamically to devices on a network (IPv4 or IPv6) for routing packets across WANs.", "MAC Address: Unique physical hardware identifier burned into the NIC during manufacturing, operating at the data link layer.", "TCP/IP Protocol Suite: TCP splits data into numbered packets and handles error checking/reassembly; IP routes packets across networks.", "Web & Email Protocols: HTTP/HTTPS (web browsing, HTTPS uses TLS/SSL encryption), FTP (file transfers), SMTP (sending email), IMAP/POP3 (retrieving email)."] }
+              ],
+              cards: [
+                { q: "What is the key difference between an IP address and a MAC address?", a: "An IP address is logical and changes depending on network location; a MAC address is a permanent physical hardware identifier burned into the NIC." }
+              ],
+              quiz: [
+                { q: "What defines a Local Area Network (LAN)?", opts: ["Covers global continents using satellite links", "Covers a small geographical site under single organisation ownership", "Uses leased public telephone lines exclusively", "Is owned entirely by internet service providers"], ans: 1 },
+                { q: "What is the largest example of a Wide Area Network (WAN)?", opts: ["A school computer lab", "The Internet", "A home Wi-Fi network", "A Bluetooth connection"], ans: 1 },
+                { q: "In a Star Topology, what happens if a single client cable breaks?", opts: ["The entire network fails", "Only that specific client device loses connection", "The central switch crashes", "Traffic switches automatically to Bluetooth"], ans: 1 },
+                { q: "What is a main vulnerability of a Star Topology?", opts: ["Individual cables break easily", "The central switch/server is a single point of failure", "Wireless signals cannot reach it", "It cannot connect to the internet"], ans: 1 },
+                { q: "What is the primary function of a Router?", opts: ["Directs data frames within a local LAN", "Directs data packets between distinct, different networks", "Prints hard copies of web pages", "Encodes digital video files"], ans: 1 },
+                { q: "What is the function of a Network Interface Card (NIC)?", opts: ["Stores BIOS boot instructions", "Provides a physical or wireless connection between a device and a network", "Increases CPU clock speed", "Defragments magnetic drives"], ans: 1 },
+                { q: "What type of address is a MAC address?", opts: ["A logical address assigned dynamically by routers", "A unique physical hardware identifier burned into the NIC", "A web domain name like google.com", "A 32-bit email protocol code"], ans: 1 },
+                { q: "How do IP addresses differ from MAC addresses?", opts: ["IP addresses are permanent hardware IDs", "IP addresses are logical and can change depending on network location", "MAC addresses change every time you reboot", "IP addresses are only used for printers"], ans: 1 },
+                { q: "What role does TCP perform in the TCP/IP suite?", opts: ["Routes packets across external networks", "Splits data into numbered packets and handles error checking/reassembly", "Encrypts web page graphics", "Translates domain names to IP addresses"], ans: 1 },
+                { q: "What role does IP perform in the TCP/IP suite?", opts: ["Formats text documents", "Routes data packets across networks to their destination address", "Manages CPU registers", "Connects Bluetooth devices"], ans: 1 },
+                { q: "Which protocol is used for securely transmitting encrypted web pages?", opts: ["HTTP", "HTTPS", "FTP", "SMTP"], ans: 1 },
+                { q: "What added security does HTTPS use compared to HTTP?", opts: ["MAC filtering", "TLS/SSL encryption", "Defragmentation", "Input sanitation"], ans: 1 },
+                { q: "Which protocol is designed specifically for transferring files across networks?", opts: ["FTP", "SMTP", "IMAP", "POP3"], ans: 0 },
+                { q: "Which email protocol is used to SEND messages to a server?", opts: ["POP3", "IMAP", "SMTP", "HTTP"], ans: 2 },
+                { q: "How does IMAP differ from POP3 for email retrieval?", opts: ["IMAP deletes emails from the server after download", "IMAP keeps emails on the central server so they sync across devices", "IMAP only works without internet", "POP3 encrypts all attachments automatically"], ans: 1 }
+              ]
+            },
+            {
+              id: "c1_4",
+              name: "1.4 Network Security",
+              notes: [
+                { t: "Cybersecurity Threats & Vulnerabilities", content: "Networks and standalone systems face diverse digital attacks and social engineering risks.", points: ["Malware: Malicious software including viruses (attaching to host files), worms (self-replicating across networks), trojans (disguised as legitimate software), ransomware (encrypting user files for extortion), and spyware.", "Social Engineering: Psychological manipulation of humans into divulging confidential information (e.g., Phishing via deceptive emails).", "Brute-Force Attacks: Automated software scripts testing every possible password combination until successful.", "SQL Injection: Inserting malicious SQL syntax into web input boxes to bypass authentication or extract database contents."] },
+                { t: "Defensive Measures & Prevention", content: "Robust security frameworks protect enterprise infrastructure from compromise.", points: ["Penetration Testing: Authorized simulated attacks conducted by ethical hackers to identify system vulnerabilities before malicious actors do.", "Firewalls: Hardware or software inspecting incoming and outgoing packet headers against preset security rules.", "User Access Levels: Restricting file permissions so users can only access data necessary for their specific job role.", "Encryption: Scrambling plain text into ciphertext using cryptographic keys, rendering intercepted data unreadable without the decryption key."] }
+              ],
+              cards: [
+                { q: "What is phishing?", a: "A social engineering technique where attackers trick individuals into revealing sensitive data via deceptive emails or websites." }
+              ],
+              quiz: [
+                { q: "How is a Virus defined in the security notes?", opts: ["Self-replicating software that spreads without host files", "Malware that attaches to host files and requires user execution to spread", "Software disguised as a legitimate tool", "An authorized security audit test"], ans: 1 },
+                { q: "How does a Worm differ from a Virus?", opts: ["A worm encrypts files for money", "A worm self-replicates across networks without needing a user to run an infected file", "A worm is harmless", "A worm only targets MAC addresses"], ans: 1 },
+                { q: "What is a Trojan?", opts: ["Malware disguised as legitimate software to trick users into installing it", "A hardware firewall tool", "A strong password generator", "A network routing protocol"], ans: 0 },
+                { q: "What is Ransomware designed to do?", opts: ["Monitor keystrokes secretly", "Encrypt user files and demand payment for the decryption key", "Overclock the CPU", "Clean infected hard drives"], ans: 1 },
+                { q: "What is Spyware?", opts: ["Software that secretly records user activity (e.g. keystrokes) and sends it to an attacker", "A network switch configuration", "An open source browser", "A tool for defragmenting disks"], ans: 0 },
+                { q: "What is Social Engineering?", opts: ["Building physical network switches", "Psychological manipulation of people into revealing confidential information", "Writing code in Python", "Configuring firewall ports"], ans: 1 },
+                { q: "What is Phishing?", opts: ["Scanning open network ports", "Using deceptive emails/websites to trick users into giving away sensitive data", "Decrypting ciphertext", "Testing hardware components"], ans: 1 },
+                { q: "How does a Brute-Force attack operate?", opts: ["Injecting SQL code into search bars", "Using automated scripts to test every possible password combination until correct", "Sending physical malware in the post", "Intercepting wireless radio waves"], ans: 1 },
+                { q: "What is SQL Injection?", opts: ["Inserting malicious SQL syntax into web input boxes to manipulate underlying databases", "Sending mass promotional emails", "Shutting down network routers", "Installing unauthorized operating systems"], ans: 0 },
+                { q: "What is Penetration Testing?", opts: ["Hacking personal bank accounts for profit", "Authorized simulated cyberattacks by ethical hackers to find system vulnerabilities", "Testing network cable speed with a meter", "Installing antivirus updates"], ans: 1 },
+                { q: "What does a Firewall inspect to protect a network?", opts: ["CPU register temperatures", "Incoming and outgoing data packet headers against security rules", "User keyboard typing speed", "Monitor refresh rates"], ans: 1 },
+                { q: "How do User Access Levels enhance security?", opts: ["By speeding up internet connections", "By restricting file permissions so users only access data needed for their job role", "By forcing users to buy SSDs", "By disabling network switches"], ans: 1 },
+                { q: "What is Encryption?", opts: ["Deleting old files permanently", "Scrambling plain text into ciphertext using cryptographic keys", "Translating Python into binary", "Compressing images to JPEG format"], ans: 1 },
+                { q: "What is ciphertext?", opts: ["Unencrypted plain text", "Data that has been scrambled by encryption and requires a key to read", "A type of database command", "An open source operating system"], ans: 1 },
+                { q: "Which threat directly targets human trust rather than software flaws?", opts: ["SQL Injection", "Social Engineering (Phishing)", "Brute-force attack", "Defragmentation failure"], ans: 1 }
+              ]
+            },
+            {
+              id: "c1_5",
+              name: "1.5 Systems Software",
+              notes: [
+                { t: "Operating Systems & Utility Software", content: "Systems software provides a stable platform for application execution and hardware management.", points: ["Operating System (OS) Core Functions: User interface (CLI/GUI), memory management, multitasking (CPU scheduling), peripheral device management, file management, and user security/access control.", "Device Drivers: Specialized software acting as a translator between the operating system and specific peripheral hardware devices.", "Utility Software: Maintenance tools including disk defragmentation (reorganizing fragmented magnetic sectors for faster read speeds), automated backups, compression utilities, and anti-malware scanners."] }
+              ],
+              cards: [
+                { q: "What is the primary role of a device driver?", a: "To act as a translator enabling the operating system to communicate effectively with hardware peripherals." }
+              ],
+              quiz: [
+                { q: "What is Systems Software?", opts: ["Games and word processors", "Software providing a platform for application execution and hardware management", "Websites hosted in the cloud", "Social media applications"], ans: 1 },
+                { q: "Which of the following is a core function of the Operating System?", opts: ["Designing graphics", "Memory management and CPU multitasking", "Writing pseudocode", "Manufacturing RAM chips"], ans: 1 },
+                { q: "What does GUI stand for in user interfaces?", opts: ["General User Instruction", "Graphical User Interface", "Global Unit Integration", "Gigabyte Universal Interface"], ans: 1 },
+                { q: "How does CLI differ from GUI?", opts: ["CLI uses text commands; GUI uses icons and visual elements", "CLI requires a mouse; GUI uses keyboard only", "CLI is slower than wireless networks", "GUI is only used on web servers"], ans: 0 },
+                { q: "What is Multitasking in an operating system?", opts: ["Running multiple CPUs at the same time", "Sharing CPU time between open applications so they seem to run simultaneously", "Installing two antivirus programs", "Connecting two routers"], ans: 1 },
+                { q: "What is the specific role of a Device Driver?", opts: ["To encrypt database records", "To act as a translator between the OS and peripheral hardware devices", "To defragment SSD drives", "To filter incoming network packets"], ans: 1 },
+                { q: "What happens when a new external hardware device is attached without a driver?", opts: ["The OS cannot communicate with or control the device", "The CPU clock speed increases", "RAM is permanently damaged", "The computer automatically shuts down"], ans: 0 },
+                { q: "What is Utility Software?", opts: ["Primary storage memory", "Maintenance software that helps analyze, configure, optimize, or maintain a computer", "Hardware chips inside the CPU", "Web browser extensions"], ans: 1 },
+                { q: "What does Disk Defragmentation do on a magnetic hard drive?", opts: ["Deletes duplicate text files", "Reorganizes fragmented sectors so related file parts are stored contiguously", "Encrypts the entire hard drive", "Installs firmware updates"], ans: 1 },
+                { q: "Why does defragmentation improve magnetic hard drive read speeds?", opts: ["It speeds up the CPU clock", "The read/write head doesn't have to move back and forth across different tracks", "It adds extra cache memory", "It increases network bandwidth"], ans: 1 },
+                { q: "Why should defragmentation NOT be performed on Solid State Drives (SSDs)?", opts: ["SSDs have no moving parts and defrag causes unnecessary read/write wear on flash cells", "SSDs delete files during defrag", "SSDs do not use bytes", "SSDs only store compressed files"], ans: 0 },
+                { q: "What is the purpose of Backup utility software?", opts: ["To speed up processing cycles", "To make copies of data files so they can be restored if lost or damaged", "To block SQL injection attacks", "To convert binary into hex"], ans: 1 },
+                { q: "What is the purpose of Compression utility software?", opts: ["To scramble text into ciphertext", "To reduce file sizes so they take up less storage space and transfer faster", "To remove viruses from RAM", "To create user accounts"], ans: 1 },
+                { q: "Which utility scans secondary storage for known malicious code signatures?", opts: ["Defragmenter", "Anti-malware scanner", "Device driver", "Formatter"], ans: 1 },
+                { q: "What OS function ensures users must log in with credentials to access their files?", opts: ["Peripheral management", "User security and access control", "Defragmentation", "Multitasking"], ans: 1 }
+              ]
+            },
+            {
+              id: "c1_6",
+              name: "1.6 Ethical, Legal, Cultural & Environmental Impacts",
+              notes: [
+                { t: "UK Legislation & Computer Law", content: "Key UK Acts of Parliament govern data privacy, computer misuse, and intellectual property.", points: ["Data Protection Act 2018 (GDPR): Requires personal data to be processed lawfully, fairly, transparently, held securely, kept accurate, and stored no longer than necessary. Grants individuals rights to access and delete their data.", "Computer Misuse Act 1990: Defines 3 criminal offences: 1. Unauthorised access to computer material (hacking). 2. Unauthorised access with intent to commit further offences. 3. Unauthorised modification of computer material (e.g. creating viruses or altering files).", "Copyright Designs and Patents Act 1988: Protects intellectual property rights of creators, making it illegal to copy, modify, or distribute software, music, or media without a license."] },
+                { t: "Ethical, Cultural, Environmental & Licensing Issues", content: "Digital technology profoundly impacts society, privacy, energy, and software distribution.", points: ["Environmental Impacts: E-waste contains toxic heavy metals (lead, mercury) leaking into soil/water. Mining rare earth metals damages ecosystems. High electricity consumption in cloud data centers contributes to carbon emissions.", "Cultural & Privacy Issues: The Digital Divide creates social inequality between those with and without internet access. Concerns over mass surveillance, continuous tracking, and digital footprint loss.", "Open Source vs Proprietary Software: Open Source grants access to source code freely to inspect/modify. Proprietary software keeps source code secret and requires paid licenses."] }
+              ],
+              cards: [
+                { q: "What are the 3 main offences defined by the Computer Misuse Act 1990?", a: "1. Unauthorised access to computer material. 2. Unauthorised access with intent to commit a crime. 3. Unauthorised modification of computer material." },
+                { q: "What is the key difference between Open Source and Proprietary software?", a: "Open Source makes the underlying source code freely available to view and edit; Proprietary keeps code secret and protected under license." }
+              ],
+              quiz: [
+                { q: "Which UK law governs how organizations collect and handle personal user data?", opts: ["Computer Misuse Act 1990", "Data Protection Act 2018 (GDPR)", "Copyright Designs and Patents Act 1988", "Health & Safety Act"], ans: 1 },
+                { q: "Under the Data Protection Act 2018, how long should personal data be kept?", opts: ["Forever", "No longer than necessary for its specified purpose", "Exactly 10 years", "Until the CPU is replaced"], ans: 1 },
+                { q: "Which right is granted to individuals under the Data Protection Act 2018?", opts: ["Right to view all company source code", "Right to access and request deletion of their personal data", "Right to free internet access", "Right to bypass firewalls"], ans: 1 },
+                { q: "What is Offence 1 under the Computer Misuse Act 1990?", opts: ["Unauthorised access to computer material (hacking)", "Distributing open source code", "Recycling old monitors", "Sending commercial spam"], ans: 0 },
+                { q: "What is Offence 3 under the Computer Misuse Act 1990?", opts: ["Selling computer hardware", "Unauthorised modification of computer material (e.g. releasing viruses)", "Using proprietary software", "Failing to set a password"], ans: 1 },
+                { q: "Which law protects the intellectual property rights of software developers and artists?", opts: ["Data Protection Act 2018", "Copyright Designs and Patents Act 1988", "Computer Misuse Act 1990", "Freedom of Information Act"], ans: 1 },
+                { q: "What is illegal under the Copyright Designs and Patents Act 1988?", opts: ["Writing comments in source code", "Copying, modifying, or distributing software/media without a valid license", "Encrypting personal files", "Using Open Source Linux"], ans: 1 },
+                { q: "What environmental danger is caused by improper disposal of e-waste?", opts: ["Excessive plastic recycling", "Toxic heavy metals (lead, mercury) leaking into soil and water supplies", "Depletion of WiFi frequencies", "Increased rainfall"], ans: 1 },
+                { q: "What environmental factor associated with cloud data centers contributes to carbon emissions?", opts: ["High electricity consumption for processing and cooling", "Paper consumption", "Use of optical discs", "Using magnetic tapes"], ans: 0 },
+                { q: "What is 'The Digital Divide'?", opts: ["The gap between primary and secondary storage", "The social inequality between those with full access to digital tech and those without", "The division of code into functions", "The split between IPv4 and IPv6"], ans: 1 },
+                { q: "What cultural issue arises from pervasive digital tracking and smart devices?", opts: ["Loss of privacy and concerns over continuous surveillance", "Faster download speeds", "Cheaper hardware costs", "Lack of programming languages"], ans: 0 },
+                { q: "What defines Open Source software?", opts: ["The source code is compiled and kept secret", "The underlying source code is freely available for anyone to inspect, modify, and redistribute", "It is always illegal to use", "It only runs on embedded systems"], ans: 1 },
+                { q: "What defines Proprietary software?", opts: ["Source code is open to the public", "Source code is kept secret and protected under paid user licenses", "It has no copyright holder", "It is free to modify"], ans: 1 },
+                { q: "What is an advantage of Proprietary software compared to Open Source?", opts: ["It is always free", "It usually comes with official customer support, regular updates, and testing", "You can edit the source code freely", "It requires no installation"], ans: 1 },
+                { q: "What is an advantage of Open Source software?", opts: ["Users can modify and customize the code to fit their exact needs for free", "It guarantees 24/7 paid support", "It never contains bugs", "It prevents e-waste"], ans: 0 }
+              ]
+            }
+          ]
+        },
+        comp2: {
+          title: "Component 2: Computational Thinking, Algorithms & Programming",
+          units: [
+            {
+              id: "c2_1",
+              name: "2.1 Algorithms",
+              notes: [
+                { t: "Computational Thinking & Searching Algorithms", content: "Algorithms are step-by-step logical instructions designed to solve specific problems.", points: ["Computational Thinking Pillars: Abstraction (removing unnecessary detail), Decomposition (breaking complex problems into smaller sub-problems), Algorithmic Thinking (producing ordered steps).", "Binary Search: Requires a sorted list. Examines the middle item; if target is higher/lower, discards half the list repeatedly. Time complexity: O(log n).", "Linear Search: Iterates through a list sequentially from start to finish checking each item. Works on unsorted lists. Time complexity: O(n)."] },
+                { t: "Sorting Algorithms", content: "Sorting arranges datasets into numerical or alphabetical order.", points: ["Bubble Sort: Compares adjacent pairs of items, swapping them if out of order, repeating until no swaps occur. Inefficient for large datasets.", "Merge Sort: Uses divide-and-conquer recursion; splits the list down to single elements, then merges sorted sub-lists back together efficiently (O(n log n))."] }
+              ],
+              cards: [
+                { q: "What condition is strictly required for a binary search to work?", a: "The input dataset must already be sorted in order." }
+              ],
+              quiz: [
+                { q: "What is Abstraction in computational thinking?", opts: ["Breaking a problem into sub-problems", "Filtering out unnecessary details to focus on essential features", "Writing Python loops", "Sorting an array"], ans: 1 },
+                { q: "What is Decomposition?", opts: ["Breaking a complex problem down into smaller, manageable sub-problems", "Removing unused variables", "Converting code to machine language", "Merging two arrays"], ans: 0 },
+                { q: "What is Algorithmic Thinking?", opts: ["Testing code for syntax errors", "Developing step-by-step ordered rules to solve a problem", "Buying multi-core CPUs", "Encrypting files"], ans: 1 },
+                { q: "What condition MUST be met before performing a Binary Search?", opts: ["The list must contain only integers", "The list must be sorted in order", "The list size must be under 10 items", "The CPU must be multi-core"], ans: 1 },
+                { q: "How does a Binary Search locate a target item?", opts: ["Checks every item from start to end one by one", "Examines the middle item and discards half the remaining list repeatedly", "Swaps adjacent pairs until sorted", "Randomly picks elements"], ans: 1 },
+                { q: "How does a Linear Search operate?", opts: ["Splits the array in half repeatedly", "Iterates sequentially through a list from start to finish checking each item", "Merges sub-lists recursively", "Calculates hash values"], ans: 1 },
+                { q: "What is an advantage of Linear Search over Binary Search?", opts: ["It is faster on huge sorted lists", "It works on unsorted lists", "It uses O(1) registers", "It requires no memory"], ans: 1 },
+                { q: "How does Bubble Sort work?", opts: ["Splits the list into individual elements first", "Compares adjacent pairs of items and swaps them if out of order", "Finds the middle item and discards half", "Uses binary logic gates"], ans: 1 },
+                { q: "When does Bubble Sort stop running?", opts: ["After 10 passes", "When a complete pass occurs with zero swaps", "When the CPU clock finishes", "When half the list is checked"], ans: 1 },
+                { q: "What strategy does Merge Sort use?", opts: ["Sequential linear scanning", "Divide-and-conquer recursion", "Adjacent pair swapping", "Random selection"], ans: 1 },
+                { q: "What happens in the first phase of a Merge Sort?", opts: ["Adjacent pairs are swapped", "The list is repeatedly split in half down to single individual elements", "The middle item is checked", "Inputs are validated"], ans: 1 },
+                { q: "Why is Merge Sort preferred over Bubble Sort for large datasets?", opts: ["It uses less code", "It is significantly more efficient with faster time performance on large lists", "It doesn't require RAM", "It works without a CPU"], ans: 1 },
+                { q: "What is an algorithm?", opts: ["A physical CPU chip", "A step-by-step set of logical instructions designed to solve a problem", "An encrypted data packet", "A device driver"], ans: 1 },
+                { q: "Which search algorithm has a time efficiency of checking every item in worst case O(n)?", opts: ["Binary search", "Linear search", "Merge sort", "Bubble sort"], ans: 1 },
+                { q: "What is a disadvantage of Bubble Sort?", opts: ["It cannot sort numbers", "It is inefficient and slow for large datasets", "It requires a sorted list to start", "It requires 64-bit operating systems"], ans: 1 }
+              ]
+            },
+            {
+              id: "c2_2",
+              name: "2.2 Programming Fundamentals",
+              notes: [
+                { t: "Data Types, Constructs & Operations", content: "Programming languages rely on foundational constructs and data representation.", points: ["Common Data Types: Integer (whole numbers), Real/Float (decimals), Boolean (True/False), Character (single alphanumeric), String (text sequence).", "Three Basic Programming Constructs: Sequence (executing code line by line), Selection (conditional branching using IF/ELSE or SWITCH), Iteration (looping via FOR or WHILE loops).", "String Manipulation & Arrays: Extracting substrings, converting case, and indexing 1D/2D arrays to store structured collections of data."] }
+              ],
+              cards: [
+                { q: "What is the difference between integer and float data types?", a: "Integer represents whole numbers without fractions, whereas float (real) numbers contain fractional decimal components." }
+              ],
+              quiz: [
+                { q: "Which data type stores whole numbers without fractional components?", opts: ["Real/Float", "Integer", "String", "Boolean"], ans: 1 },
+                { q: "Which data type stores decimal numbers (e.g. 3.14)?", opts: ["Integer", "Real/Float", "Character", "Boolean"], ans: 1 },
+                { q: "Which data type stores logical values that can only be True or False?", opts: ["String", "Boolean", "Integer", "Character"], ans: 1 },
+                { q: "Which data type stores a single letter, number, or symbol?", opts: ["String", "Character", "Float", "Array"], ans: 1 },
+                { q: "Which data type stores a sequence of text characters inside quotation marks?", opts: ["String", "Integer", "Boolean", "Real"], ans: 0 },
+                { q: "What is Sequence in programming constructs?", opts: ["Conditional branching using IF/ELSE", "Executing code instructions line by line in order", "Looping code block multiple times", "Converting string to integer"], ans: 1 },
+                { q: "What is Selection in programming constructs?", opts: ["Executing code line by line", "Conditional branching where code paths diverge based on a condition (e.g. IF/ELSE)", "Looping a fixed number of times", "Declaring variables"], ans: 1 },
+                { q: "What is Iteration in programming constructs?", opts: ["Executing code line by line once", "Looping or repeating a block of code (e.g. FOR or WHILE loops)", "Creating a 2D array", "Calling a device driver"], ans: 1 },
+                { q: "What type of loop is a FOR loop typically considered?", opts: ["Condition-controlled", "Count-controlled (repeats a set number of times)", "Infinite loop", "Selection loop"], ans: 1 },
+                { q: "What type of loop is a WHILE loop considered?", opts: ["Count-controlled", "Condition-controlled (repeats while a condition remains True)", "Sequence loop", "Casting loop"], ans: 1 },
+                { q: "What operator returns the remainder of an integer division?", opts: ["DIV", "MOD", "AND", "EXP"], ans: 1 },
+                { q: "What operator returns the integer quotient of a division, discarding the remainder?", opts: ["MOD", "DIV", "OR", "NOT"], ans: 1 },
+                { q: "What is Type Casting?", opts: ["Converting a variable value from one data type to another (e.g. string to int)", "Deleting an array element", "Printing text to console", "Creating a WHILE loop"], ans: 0 },
+                { q: "What is an Array?", opts: ["A CPU register", "A data structure storing multiple items of the same data type under one variable name", "A type of network router", "An operating system utility"], ans: 1 },
+                { q: "How are elements indexed in standard 1D arrays?", opts: ["Starting at index 1", "Starting at index 0", "Starting at index 10", "Indexed alphabetically"], ans: 1 }
+              ]
+            },
+            {
+              id: "c2_3",
+              name: "2.3 Producing Robust Programs",
+              notes: [
+                { t: "Defensive Design & Testing", content: "Robust programs anticipate user errors, invalid inputs, and security vulnerabilities.", points: ["Defensive Design Principles: Input validation (checking data format, range, presence, length), authentication checks, maintainability (indentation, meaningful variable names, commenting).", "Syntax vs Logic Errors: Syntax errors violate programming language grammar rules preventing code compilation; logic errors allow code execution but produce incorrect outputs due to flawed algorithm design.", "Test Plans & Data: Using normal, boundary (extreme), and erroneous (invalid) test data to verify software reliability."] }
+              ],
+              cards: [
+                { q: "What is boundary test data?", a: "Data pushed right on the very limits of acceptable valid ranges (e.g., testing age 0 or 120)." }
+              ],
+              quiz: [
+                { q: "What is the primary goal of Defensive Design?", opts: ["To make programs run on multi-core CPUs", "To anticipate user errors, invalid inputs, and prevent program crashes", "To reduce RAM usage to zero", "To convert Python into HTML"], ans: 1 },
+                { q: "What is Input Validation?", opts: ["Checking that input data meets specific rules before processing it", "Encrypting passwords with SSL", "Writing pseudocode", "Sorting arrays in order"], ans: 0 },
+                { q: "Which validation check ensures a text field has been completed and not left blank?", opts: ["Range check", "Presence check", "Type check", "Format check"], ans: 1 },
+                { q: "Which validation check ensures a numerical input falls between allowed minimum and maximum values?", opts: ["Length check", "Range check", "Presence check", "Format check"], ans: 1 },
+                { q: "Which validation check verifies that an input matches a specific pattern (e.g. postcode structure)?", opts: ["Format check", "Range check", "Presence check", "DIV check"], ans: 0 },
+                { q: "Which validation check verifies the number of characters in a string?", opts: ["Presence check", "Length check", "Range check", "Type check"], ans: 1 },
+                { q: "How does Code Maintainability help developers?", opts: ["It prevents hackers from accessing servers", "Using indentation, comments, and clear variable names makes code easier to read and update", "It speeds up network protocols", "It automatically fixes syntax errors"], ans: 1 },
+                { q: "What defines a Syntax Error?", opts: ["Flawed logic that gives the wrong answer", "A violation of the programming language grammar rules preventing compilation/execution", "A hardware disk failure", "An invalid user input"], ans: 1 },
+                { q: "What defines a Logic Error?", opts: ["Code that fails to compile due to missing brackets", "Code that compiles and runs but produces incorrect results due to a flaw in algorithm logic", "A virus corrupting RAM", "A missing device driver"], ans: 1 },
+                { q: "What is Normal Test Data?", opts: ["Invalid data of wrong data type", "Typical, valid data that should be accepted by the program under normal use", "Data right on the edge of allowed limits", "Data that crashes the compiler"], ans: 1 },
+                { q: "What is Boundary Test Data?", opts: ["Data of incorrect data type", "Valid data positioned right at the extreme allowed limits of acceptable ranges", "Completely random strings", "Missing empty data"], ans: 1 },
+                { q: "What is Erroneous Test Data?", opts: ["Data of valid type and within normal range", "Invalid data of incorrect type or outside allowed limits that should be rejected", "Data tested on boundary edges", "Code comments"], ans: 1 },
+                { q: "If an age input accepts 18 to 65, what are the Boundary test values?", opts: ["25 and 40", "18 and 65", "17 and 66", "'Eighteen' and 'Sixty'"], ans: 1 },
+                { q: "If an age input accepts 18 to 65, what is an Erroneous test value?", opts: ["25", "18", "12 (or 'hello')", "65"], ans: 2 },
+                { q: "Why are Authentication Checks implemented in software?", opts: ["To format strings", "To confirm the identity of a user before granting access to features or data", "To sort arrays faster", "To calculate MOD values"], ans: 1 }
+              ]
+            },
+            {
+              id: "c2_4",
+              name: "2.4 Boolean Logic",
+              notes: [
+                { t: "Logic Gates & Truth Tables", content: "Boolean algebra evaluates logical propositions as True (1) or False (0).", points: ["NOT Gate: Inverts input (A=0 becomes Q=1).", "AND Gate: Outputs True only if BOTH inputs are True.", "OR Gate: Outputs True if AT LEAST ONE input is True.", "Logic Expressions & Circuits: Combining logic gates to construct combinational logic circuits for hardware processing."] }
+              ],
+              cards: [
+                { q: "When does an AND gate output a True (1) signal?", a: "Only when both input A and input B are simultaneously True (1)." }
+              ],
+              quiz: [
+                { q: "What values does Boolean algebra evaluate?", opts: ["Any integer from 0 to 255", "True (1) or False (0)", "Fractional floating decimals", "Text strings"], ans: 1 },
+                { q: "What is the output of a NOT gate if the input A is 0?", opts: ["0", "1", "Null", "-1"], ans: 1 },
+                { q: "What is the output of a NOT gate if the input A is 1?", opts: ["0", "1", "2", "True"], ans: 0 },
+                { q: "When does an AND gate output True (1)?", opts: ["When at least one input is True", "Only when BOTH inputs are True (1)", "When both inputs are False (0)", "When inputs are inverted"], ans: 1 },
+                { q: "What is the output of an AND gate if Input A = 1 and Input B = 0?", opts: ["1", "0", "True", "2"], ans: 1 },
+                { q: "What is the output of an AND gate if Input A = 1 and Input B = 1?", opts: ["0", "1", "11", "False"], ans: 1 },
+                { q: "When does an OR gate output True (1)?", opts: ["Only when both inputs are False", "When AT LEAST ONE input is True (1)", "Only when both inputs are True", "When input A is 0"], ans: 1 },
+                { q: "What is the output of an OR gate if Input A = 1 and Input B = 0?", opts: ["0", "1", "False", "Null"], ans: 1 },
+                { q: "What is the output of an OR gate if Input A = 0 and Input B = 0?", opts: ["0", "1", "True", "Undefined"], ans: 0 },
+                { q: "How many inputs does a standard NOT gate have?", opts: ["1", "2", "3", "4"], ans: 0 },
+                { q: "How many inputs does a standard AND or OR gate typically have in basic logic circuits?", opts: ["1", "At least 2", "Exactly 8", "16"], ans: 1 },
+                { q: "What table is used to show all possible input combinations and their resulting outputs for a logic circuit?", opts: ["Frequency table", "Truth table", "Array table", "Defrag table"], ans: 1 },
+                { q: "How many rows (excluding headers) are in a truth table for a 2-input logic gate?", opts: ["2", "4 (representing 00, 01, 10, 11)", "8", "16"], ans: 1 },
+                { q: "What Boolean output results from: NOT(1 AND 1)?", opts: ["1", "0", "True", "Undefined"], ans: 1 },
+                { q: "What Boolean output results from: (0 OR 1) AND 1?", opts: ["0", "1", "False", "2"], ans: 1 }
+              ]
+            },
+            {
+              id: "c2_5",
+              name: "2.5 Programming Languages & IDEs",
+              notes: [
+                { t: "Translators & IDE Facilities", content: "High-level programming code must be translated into machine code (binary) for CPU execution.", points: ["Compilers vs Interpreters: Compilers translate entire source code into machine code all at once, generating an executable file. Interpreters translate and execute source code line by line during runtime.", "IDEd Features: Integrated Development Environments provide error diagnostics, syntax highlighting, auto-indentation, debugging tools, and run-time environments."] }
+              ],
+              cards: [
+                { q: "What is the main difference between a compiler and an interpreter?", a: "A compiler translates the whole program at once before execution; an interpreter translates and executes code line by line." }
+              ],
+              quiz: [
+                { q: "Why must high-level source code be translated before execution?", opts: ["CPUs can only directly execute binary machine code (1s and 0s)", "High-level code uses too much paper", "To encrypt user files under GDPR", "To compress image resolution"], ans: 0 },
+                { q: "What characterises High-Level programming languages?", opts: ["Written entirely in 1s and 0s", "Uses English-like keywords and structure making it easier for humans to read and write", "Directly controls CPU registers without translation", "Only runs on embedded devices"], ans: 1 },
+                { q: "What characterises Low-Level assembly language?", opts: ["Uses mnemonic instructions (e.g. LDA, STA) closely tied to specific CPU architecture", "Uses Python syntax", "Does not require an assembler", "Is designed for web design"], ans: 0 },
+                { q: "How does a Compiler translate code?", opts: ["Translates and executes line by line at runtime", "Translates the entire high-level source code into machine code all at once, producing an executable file", "Translates pseudo-code into HTML", "Translates hex to denary"], ans: 1 },
+                { q: "How does an Interpreter translate code?", opts: ["Translates the whole file all at once before running", "Translates and executes source code line by line during runtime", "Produces a standalone .exe file", "Defragments secondary drives"], ans: 1 },
+                { q: "What is an advantage of compiled programs over interpreted ones?", opts: ["Compiled executable files run faster and do not require the original source code or compiler to run", "Compiled code is easier for beginners to edit line by line", "Compilers never report syntax errors", "Interpreters produce larger executable files"], ans: 0 },
+                { q: "What is an advantage of an Interpreter during software development?", opts: ["It produces a standalone executable file", "It pinpoints errors line by line immediately when encountered, making debugging easier", "It runs faster than machine code", "It requires no CPU RAM"], ans: 1 },
+                { q: "What does IDE stand for?", opts: ["Internal Data Encryption", "Integrated Development Environment", "Integrated Device Engine", "Instruction Decode Execute"], ans: 1 },
+                { q: "Which IDE feature color-codes keywords, strings, and variables to improve readability?", opts: ["Debugger", "Syntax highlighting", "Compiler", "Auto-backup"], ans: 1 },
+                { q: "Which IDE feature allows developers to pause execution and inspect variable values to locate bugs?", opts: ["Syntax highlighting", "Debugging tools (breakpoints / step-through)", "Auto-indentation", "Text editor"], ans: 1 },
+                { q: "Which IDE feature automatically formats block structures like loops and IF statements?", opts: ["Auto-indentation", "Compiler", "Interpreter", "Defragmenter"], ans: 0 },
+                { q: "Which IDE feature alerts the programmer to syntax mistakes as they type?", opts: ["Error diagnostics", "Solid state drive", "Network interface card", "Binary shift"], ans: 0 },
+                { q: "What is a Run-Time Environment in an IDE?", opts: ["A physical cooling fan", "A facility allowing the programmer to execute and test their code directly within the IDE", "A wireless access point", "An operating system driver"], ans: 1 },
+                { q: "What translator is used specifically to convert Low-Level Assembly language into machine code?", opts: ["Compiler", "Interpreter", "Assembler", "Defragmenter"], ans: 2 },
+                { q: "Why is machine code hard for humans to write directly?", opts: ["It consists solely of binary numbers (0s and 1s) representing raw machine instructions", "It uses too many English words", "It requires an IDE to open", "It only runs on optical discs"], ans: 0 }
+              ]
+            }
+          ]
+        }
+      };
+
+      function renderHeader() {
+        var subHtml = '';
+        var keys = ['comp1', 'comp2'];
+        var labels = { comp1: 'Component 1 (Systems)', comp2: 'Component 2 (Programming)' };
+        keys.forEach(function (k) {
+          subHtml += '<button class="pill-btn ' + (currentSubj === k ? 'active' : '') + '" onclick="setSubj(\'' + k + '\')">' + labels[k] + '</button>';
+        });
+        document.getElementById('subjects').innerHTML = subHtml;
+
+        var navHtml = '';
+        var tabs = [
+          { id: 'notes', label: 'Detailed Notes' },
+          { id: 'study', label: 'Flashcards' },
+          { id: 'quiz', label: 'Practice Quiz' }
+        ];
+        tabs.forEach(function (t) {
+          navHtml += '<button aria-selected="' + (tab === t.id) + '" onclick="setTab(\'' + t.id + '\')">' + t.label + '</button>';
+        });
+        document.getElementById('tabs').innerHTML = navHtml;
+
+        var unitOpts = '<option value="all">All Units (' + DATA[currentSubj].title + ')</option>';
+        DATA[currentSubj].units.forEach(function (u) {
+          unitOpts += '<option value="' + u.id + '" ' + (currentUnit === u.id ? 'selected' : '') + '>' + u.name + '</option>';
+        });
+        document.getElementById('unitSelect').innerHTML = unitOpts;
+        document.getElementById('themeBtn').textContent = theme === 'dark' ? 'Light Mode' : 'Dark Mode';
+      }
+
+      window.toggleTheme = function() {
+        theme = theme === 'dark' ? 'light' : 'dark';
+        if (theme === 'light') {
+          document.documentElement.setAttribute('data-theme', 'light');
+        } else {
+          document.documentElement.removeAttribute('data-theme');
+        }
+        renderHeader();
+      };
+
+      window.setSubj = function (s) {
+        currentSubj = s;
+        currentUnit = 'all';
+        qIdx = 0; quizIdx = 0; quizSelected = null; quizScore = 0; flipped = false;
+        render();
+      };
+
+      window.setUnit = function (u) {
+        currentUnit = u;
+        qIdx = 0; quizIdx = 0; quizSelected = null; quizScore = 0; flipped = false;
+        render();
+      };
+
+      window.setTab = function (t) {
+        tab = t;
+        flipped = false;
+        render();
+      };
+
+      function getFilteredUnits() {
+        var units = DATA[currentSubj].units;
+        if (currentUnit === 'all') return units;
+        return units.filter(function (u) { return u.id === currentUnit; });
+      }
+
+      function getCards() {
+        var list = [];
+        getFilteredUnits().forEach(function (u) {
+          u.cards.forEach(function (c) {
+            list.push({ topic: u.name, q: c.q, a: c.a });
+          });
+        });
+        return list;
+      }
+
+      function getQuiz() {
+        var list = [];
+        getFilteredUnits().forEach(function (u) {
+          u.quiz.forEach(function (q) {
+            list.push({ topic: u.name, q: q.q, opts: q.opts, ans: q.ans });
+          });
+        });
+        return list;
+      }
+
+      function renderNotes() {
+        var html = '<div class="panel">';
+        html += '<h2 style="font-family:var(--display); font-size:1.3rem; margin:0;">' + DATA[currentSubj].title + ' — Comprehensive Revision Guide</h2>';
+        getFilteredUnits().forEach(function (u) {
+          html += '<div style="margin-top:20px;">';
+          html += '<div class="unit-title-header"><span>' + u.name + '</span><span class="unit-sub-tag">OCR GCSE J277</span></div>';
+          u.notes.forEach(function (n) {
+            html += '<div class="cognito-card">';
+            html += '<h3>' + n.t + '</h3>';
+            html += '<p>' + n.content + '</p>';
+            if (n.points && n.points.length) {
+              html += '<ul>';
+              n.points.forEach(function (pt) {
+                html += '<li>' + pt + '</li>';
+              });
+              html += '</ul>';
+            }
+            html += '</div>';
+          });
+          html += '</div>';
+        });
+        html += '</div>';
+        return html;
+      }
+
+      function renderStudy() {
+        var cards = getCards();
+        if (cards.length === 0) return '<div class="panel">No flashcards available for this unit.</div>';
+        var c = cards[qIdx % cards.length];
+        var html = '<div class="flashcard" onclick="flipCard()">';
+        html += '<div class="topic-tag"><span>' + c.topic + '</span><span>Card ' + (qIdx + 1) + ' / ' + cards.length + '</span></div>';
+        html += '<div class="q-text">' + c.q + '</div>';
+        if (flipped) {
+          html += '<div class="ans-text">' + c.a + '</div>';
+        } else {
+          html += '<div class="card-hint">Click card to reveal detailed answer</div>';
+        }
+        html += '</div>';
+        html += '<div class="actions">';
+        html += '<button class="btn miss" onclick="nextCard(event)">Missed it</button>';
+        html += '<button class="btn hit" onclick="nextCard(event)">Got it</button>';
+        html += '</div>';
+        return html;
+      }
+
+      window.flipCard = function () {
+        flipped = !flipped;
+        render();
+      };
+
+      window.nextCard = function (e) {
+        e.stopPropagation();
+        flipped = false;
+        qIdx++;
+        render();
+      };
+
+      function renderQuiz() {
+        var quiz = getQuiz();
+        if (quiz.length === 0) return '<div class="panel">No quiz questions available for this unit.</div>';
+        if (quizIdx >= quiz.length) {
+          var html = '<div class="panel" style="text-align:center; padding:32px;">';
+          html += '<h2>Quiz Complete!</h2>';
+          html += '<p style="font-size:1.1rem; margin:12px 0;">Your Score: <b>' + quizScore + ' / ' + quiz.length + '</b></p>';
+          html += '<button class="btn primary" style="max-width:200px; margin:0 auto;" onclick="resetQuiz()">Try Again</button>';
+          html += '</div>';
+          return html;
+        }
+
+        var q = quiz[quizIdx];
+        var html = '<div class="panel">';
+        html += '<div class="topic-tag"><span>' + q.topic + '</span><span>Question ' + (quizIdx + 1) + ' / ' + quiz.length + '</span></div>';
+        html += '<div class="q-text">' + q.q + '</div>';
+        html += '<div class="opts">';
+        q.opts.forEach(function (opt, idx) {
+          var cls = 'opt';
+          if (quizSelected !== null) {
+            if (idx === q.ans) cls += ' right';
+            else if (idx === quizSelected) cls += ' wrong';
+          }
+          html += '<button class="' + cls + '" ' + (quizSelected !== null ? 'disabled' : '') + ' onclick="selectOpt(' + idx + ')">' + opt + '</button>';
+        });
+        html += '</div>';
+        if (quizSelected !== null) {
+          html += '<button class="btn primary" style="margin-top:12px;" onclick="nextQuiz()">Next Question</button>';
+        }
+        html += '</div>';
+        return html;
+      }
+
+      window.selectOpt = function (idx) {
+        quizSelected = idx;
+        if (idx === getQuiz()[quizIdx].ans) quizScore++;
+        render();
+      };
+
+      window.nextQuiz = function () {
+        quizIdx++;
+        quizSelected = null;
+        render();
+      };
+
+      window.resetQuiz = function () {
+        quizIdx = 0; quizSelected = null; quizScore = 0;
+        render();
+      };
+
+      function render() {
+        renderHeader();
+        var main = document.getElementById('view');
+        if (tab === 'notes') main.innerHTML = renderNotes();
+        else if (tab === 'study') main.innerHTML = renderStudy();
+        else if (tab === 'quiz') main.innerHTML = renderQuiz();
+      }
+
+      render();
+    })();
+  </script>
+</body>
+</html>
