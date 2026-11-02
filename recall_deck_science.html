@@ -1,0 +1,1886 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Recall Deck - Science</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --surface: #121820;
+      --surface-card: #18222d;
+      --surface-hover: #1f2c3a;
+      --ink: #f0f4f8;
+      --muted: #8a99a8;
+      --line: #263545;
+      --accent-bio: #10b981;
+      --accent-chem: #3b82f6;
+      --accent-phys: #f59e0b;
+      --accent: #10b981;
+      --accent-ink: #022c22;
+      --good: #10b981;
+      --bad: #ef4444;
+      --warn: #f59e0b;
+      --display: 'Bricolage Grotesque', system-ui, sans-serif;
+      --body: 'IBM Plex Sans', system-ui, sans-serif;
+      --mono: 'IBM Plex Mono', monospace;
+    }
+
+    [data-theme="light"] {
+      --bg: #eef2f6;
+      --surface: #ffffff;
+      --surface-card: #f8fafc;
+      --surface-hover: #e2e8f0;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --line: #cbd5e1;
+      --accent-bio: #059669;
+      --accent-chem: #2563eb;
+      --accent-phys: #d97706;
+      --accent: #059669;
+      --accent-ink: #ffffff;
+      --good: #059669;
+      --bad: #dc2626;
+      --warn: #d97706;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 15px;
+      line-height: 1.6;
+      padding-block: 20px 48px;
+      padding-left: max(16px, env(safe-area-inset-left, 0px));
+      padding-right: max(16px, env(safe-area-inset-right, 0px));
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      background: var(--surface);
+      padding: 18px 24px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+    }
+
+    h1 {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 1.8rem;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      background: linear-gradient(135deg, var(--ink) 30%, var(--muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .controls-top {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .subject-picker {
+      display: flex;
+      background: var(--bg);
+      padding: 4px;
+      border-radius: 30px;
+      border: 1px solid var(--line);
+      gap: 4px;
+    }
+
+    .subj-btn {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 20px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .subj-btn[data-subj="bio"].active { background: var(--accent-bio); color: #fff; }
+    .subj-btn[data-subj="chem"].active { background: var(--accent-chem); color: #fff; }
+    .subj-btn[data-subj="phys"].active { background: var(--accent-phys); color: #fff; }
+
+    .theme-toggle {
+      background: var(--surface-card);
+      border: 1px solid var(--line);
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      padding: 8px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 2px solid var(--line);
+      padding-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    nav {
+      display: flex;
+      gap: 6px;
+    }
+
+    nav button {
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: var(--muted);
+      font: 600 0.95rem var(--body);
+      padding: 8px 14px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color 0.2s, border-color 0.2s;
+      border-radius: 6px 6px 0 0;
+    }
+
+    nav button[aria-selected="true"] {
+      color: var(--ink);
+      border-bottom-color: var(--accent);
+      background: var(--surface);
+    }
+
+    .unit-selector {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .unit-selector label {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    select {
+      font: 500 0.85rem var(--mono);
+      color: var(--ink);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 6px 12px;
+      cursor: pointer;
+      outline: none;
+    }
+
+    select:focus { border-color: var(--accent); }
+
+    /* FLASHCARD VIEW */
+    .card-container {
+      perspective: 1000px;
+      min-height: 320px;
+    }
+
+    .card {
+      background: var(--surface-card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 32px 28px;
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 20px;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+      transition: transform 0.15s ease, border-color 0.2s;
+      position: relative;
+    }
+
+    .card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-auto: 0;
+    }
+
+    .card-q {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 1.45rem;
+      line-height: 1.35;
+      color: var(--ink);
+    }
+
+    .card-a {
+      border-top: 1px dashed var(--line);
+      padding-top: 16px;
+      font-size: 1.05rem;
+      color: var(--ink);
+      line-height: 1.6;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+
+    .card-hint {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      font: 600 0.95rem var(--body);
+      padding: 14px 20px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+    }
+
+    .btn:hover { background: var(--surface-hover); }
+    .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+    .btn.miss { color: var(--bad); border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.05); }
+    .btn.miss:hover { background: rgba(239,68,68,0.15); }
+    .btn.hit { color: var(--good); border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.05); }
+    .btn.hit:hover { background: rgba(16,185,129,0.15); }
+
+    /* REVISION NOTES VIEW */
+    .notes-container {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .unit-panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .unit-title {
+      font-family: var(--display);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--accent);
+      border-bottom: 2px solid var(--line);
+      padding-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .unit-spec-tag {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .note-block {
+      background: var(--surface-card);
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .note-block h4 {
+      font-family: var(--display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .note-block p {
+      font-size: 0.95rem;
+      color: var(--ink);
+    }
+
+    .note-block ul {
+      padding-left: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .note-block li {
+      font-size: 0.93rem;
+      color: var(--ink);
+    }
+
+    .key-term {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--accent);
+    }
+
+    .formula-box {
+      background: var(--bg);
+      border: 1px dashed var(--accent);
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin: 6px 0;
+    }
+
+    /* QUIZ VIEW */
+    .quiz-container {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 10px;
+    }
+
+    .quiz-q {
+      font-family: var(--display);
+      font-size: 1.35rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .opts {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .opt {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      text-align: left;
+      width: 100%;
+      font: 500 0.95rem var(--body);
+      color: var(--ink);
+      background: var(--surface-card);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .opt:hover:not(:disabled) {
+      border-color: var(--accent);
+      background: var(--surface-hover);
+    }
+
+    .opt.right {
+      border-color: var(--good);
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--good);
+    }
+
+    .opt.wrong {
+      border-color: var(--bad);
+      background: rgba(239, 68, 68, 0.12);
+      color: var(--bad);
+    }
+
+    .opt-idx {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 2px 6px;
+      flex-shrink: 0;
+    }
+
+    .explanation {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+
+    .explanation b { color: var(--accent); }
+
+    .score-summary {
+      text-align: center;
+      padding: 30px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .score-circle {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 3.5rem;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 640px) {
+      header { flex-direction: column; align-items: flex-start; }
+      .nav-bar { flex-direction: column; align-items: stretch; gap: 10px; }
+      .actions { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <h1>Recall Deck</h1>
+        <span class="subtitle">OCR GCSE 21st Century Science B</span>
+      </div>
+      <div class="controls-top">
+        <div class="subject-picker" id="subject-picker">
+          <button class="subj-btn active" data-subj="bio" onclick="switchSubject('bio')">Biology</button>
+          <button class="subj-btn" data-subj="chem" onclick="switchSubject('chem')">Chemistry</button>
+          <button class="subj-btn" data-subj="phys" onclick="switchSubject('phys')">Physics</button>
+        </div>
+        <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">Dark Mode</button>
+      </div>
+    </header>
+
+    <div class="nav-bar">
+      <nav role="tablist" id="tabs">
+        <button id="tab-notes" aria-selected="true" onclick="switchTab('notes')">Detailed Notes</button>
+        <button id="tab-study" aria-selected="false" onclick="switchTab('study')">Flashcards</button>
+        <button id="tab-quiz" aria-selected="false" onclick="switchTab('quiz')">Practice Quiz</button>
+      </nav>
+
+      <div class="unit-selector">
+        <label for="unit-select">Unit:</label>
+        <select id="unit-select" onchange="switchUnit(this.value)"></select>
+      </div>
+    </div>
+
+    <main id="view"></main>
+  </div>
+
+  <script>
+    (function () {
+      var currentSubj = 'bio';
+      var currentUnit = 'all';
+      var currentTab = 'notes';
+      var flipped = false;
+      var flashIdx = 0;
+      var quizIdx = 0;
+      var quizSelected = null;
+      var quizScore = 0;
+      var isDark = true;
+
+      // SPEC DATA with exact original notes and 15 flashcards + 15 practice questions per unit
+      var SPEC_DATA = {
+        bio: {
+          title: "OCR GCSE Biology B (B1-B6)",
+          color: "#10b981",
+          units: [
+            {
+              id: "b1",
+              code: "B1",
+              name: "B1: You and Your Genes",
+              notes: [
+                {
+                  t: "Genome, Chromosomes & DNA Structure",
+                  content: "The entire genetic material of an organism is called its genome. In eukaryotic cells, DNA is enclosed in the nucleus packaged as chromosomes. Humans have 46 chromosomes (23 pairs) in diploid somatic cells and 23 single chromosomes in haploid gametes (sperm and egg cells).",
+                  bullets: [
+                    "DNA is a polymer made of two strands twisted into a double helix.",
+                    "Each monomer is a nucleotide consisting of a phosphate group, a deoxyribose sugar molecule, and a nitrogenous base.",
+                    "Complementary base pairing holds strands together: Adenine (A) pairs with Thymine (T) using two hydrogen bonds; Cytosine (C) pairs with Guanine (G) using three hydrogen bonds.",
+                    "A gene is a section of DNA on a chromosome that codes for a specific sequence of amino acids to synthesize a particular protein."
+                  ]
+                },
+                {
+                  t: "Protein Synthesis (Transcription & Translation)",
+                  content: "Proteins are formed from chains of amino acids. The order of bases in a gene determines the order of amino acids in a polypeptide chain.",
+                  bullets: [
+                    "Triplet Code: Every sequence of 3 bases (codon) codes for one specific amino acid.",
+                    "Transcription: In the nucleus, the DNA strand unzips. RNA polymerase uses one strand as a template to synthesize a complementary single-stranded Messenger RNA (mRNA) molecule. (In RNA, Uracil 'U' replaces Thymine 'T').",
+                    "Translation: mRNA leaves the nucleus via nuclear pores and binds to a ribosome in the cytoplasm. Transfer RNA (tRNA) molecules with complementary anticodons deliver specific amino acids to the ribosome. Amino acids are joined by peptide bonds to form a polypeptide chain which folds into a functional protein."
+                  ]
+                },
+                {
+                  t: "Inheritance, Alleles & Monohybrid Crosses",
+                  content: "Alleles are different variants of the same gene. An individual inherits two alleles for each gene (one from each parent).",
+                  bullets: [
+                    "Homozygous: Having two identical alleles (e.g. BB or bb). Heterozygous: Having two different alleles (e.g. Bb).",
+                    "Genotype: The combination of alleles an organism possesses. Phenotype: The physical characteristics expressed as a result of the genotype and environment.",
+                    "Dominant alleles are expressed even if only one copy is present (represented by capital letters). Recessive alleles are only expressed if two copies are present (represented by lower case letters).",
+                    "Codominance occurs when both alleles are equally expressed in the phenotype (e.g. ABO Blood Group AB).",
+                    "Sex Determination: Females have XX chromosomes; Males have XY chromosomes. There is a 50% probability of offspring being male or female."
+                  ]
+                },
+                {
+                  t: "Stem Cells & Differentiation",
+                  content: "Stem cells are undifferentiated cells capable of dividing by mitosis to reproduce themselves or differentiate into specialized cells.",
+                  bullets: [
+                    "Embryonic Stem Cells: Totipotent/Pluripotent; can differentiate into any cell type in the body.",
+                    "Adult Stem Cells: Found in bone marrow; multipotent (can only form limited cell types like blood cells).",
+                    "Meristem Tissue: Found in growing tips of plant roots and shoots; can differentiate into any plant tissue throughout the plant's entire life."
+                  ]
+                }
+              ],
+              cards: [
+                { q: "What is a gene?", a: "A section of DNA on a chromosome that codes for a specific sequence of amino acids to synthesize a specific protein." },
+                { q: "State the complementary base pairing rules for DNA.", a: "Adenine (A) pairs with Thymine (T); Cytosine (C) pairs with Guanine (G)." },
+                { q: "What happens during transcription?", a: "RNA polymerase reads the DNA template strand in the nucleus to produce a complementary single-stranded mRNA molecule." },
+                { q: "Define homozygous and heterozygous.", a: "Homozygous means possessing two identical alleles for a gene; Heterozygous means possessing two different alleles." },
+                { q: "Why are human gametes described as haploid?", a: "Because they contain 23 single chromosomes (half the diploid number of 46)." },
+                { q: "Which nitrogenous base is present in RNA instead of Thymine?", a: "Uracil (U)." },
+                { q: "Where does translation occur inside a cell?", a: "At a ribosome located in the cytoplasm." },
+                { q: "What is a phenotype?", a: "The physical characteristics expressed as a result of an organism's genotype and environment." },
+                { q: "What sex chromosomes do human males possess?", a: "XY chromosomes." },
+                { q: "What is a stem cell?", a: "An undifferentiated cell capable of dividing by mitosis and differentiating into specialized cell types." },
+                { q: "What are embryonic stem cells?", a: "Pluripotent cells derived from early embryos that can differentiate into almost any cell type in the body." },
+                { q: "What are adult stem cells?", a: "Multipotent stem cells (e.g., in bone marrow) that can only form a limited range of specialized cell types." },
+                { q: "What is plant meristem tissue?", a: "Undifferentiated plant tissue found in growing tips of roots and shoots capable of continuous division." },
+                { q: "What is codominance?", a: "When both alleles in a heterozygous organism are equally expressed in the phenotype." },
+                { q: "What is a gene codon?", a: "A triplet sequence of 3 bases on mRNA that codes for one specific amino acid." }
+              ],
+              quiz: [
+                { q: "Which nitrogenous base is present in RNA instead of Thymine?", opts: ["Adenine", "Cytosine", "Uracil", "Guanine"], ans: 2, exp: "RNA replaces Thymine (T) with Uracil (U), which pairs with Adenine (A)." },
+                { q: "If two heterozygous parents (Bb) have a child, what is the probability of the child having the recessive phenotype?", opts: ["0%", "25%", "50%", "75%"], ans: 1, exp: "A Bb x Bb monohybrid cross yields BB, Bb, Bb, bb. 1 in 4 (25%) has the recessive genotype (bb)." },
+                { q: "What type of bonds join complementary base pairs together in DNA?", opts: ["Hydrogen bonds", "Covalent bonds", "Ionic bonds", "Peptide bonds"], ans: 0, exp: "Hydrogen bonds hold complementary base pairs together." },
+                { q: "What is a codon?", opts: ["A triplet of bases on mRNA coding for an amino acid", "A whole chromosome", "A lipid molecule", "A type of enzyme"], ans: 0, exp: "A codon is a sequence of three mRNA bases." },
+                { q: "Which cells are haploid?", opts: ["Skin cells", "Muscle cells", "Gametes (sperm/egg)", "Root hair cells"], ans: 2, exp: "Gametes have 23 single chromosomes (haploid)." },
+                { q: "What enzyme synthesizes mRNA during transcription?", opts: ["DNA polymerase", "RNA polymerase", "Amylase", "Protease"], ans: 1, exp: "RNA polymerase constructs the mRNA transcript." },
+                { q: "Where does translation occur in the cell?", opts: ["Inside the nucleus", "At a ribosome in the cytoplasm", "On the cell membrane", "Inside the vacuole"], ans: 1, exp: "Ribosomes translate mRNA into proteins in the cytoplasm." },
+                { q: "What term describes alleles where both are fully expressed in the phenotype?", opts: ["Recessive", "Dominant", "Codominant", "Mutated"], ans: 2, exp: "Codominance means both alleles are expressed in the phenotype." },
+                { q: "What are plant meristems capable of?", opts: ["Photosynthesis only", "Continuous cell division and differentiation", "Producing antibodies", "Respiration only"], ans: 1, exp: "Meristems divide continuously to allow plant growth." },
+                { q: "What is genetic engineering?", opts: ["Selective breeding over centuries", "Modifying an organism's genome by introducing a gene from another organism", "Cell division by mitosis", "Natural selection"], ans: 1, exp: "Genetic engineering alters genomes directly." },
+                { q: "What is a mutation?", opts: ["A permanent change in the nucleotide sequence of DNA", "A temporary protein fold", "Cell death", "Normal respiration"], ans: 0, exp: "Mutations are alterations in DNA base sequences." },
+                { q: "What do tRNA molecules deliver to the ribosome during translation?", opts: ["mRNA templates", "Specific amino acids", "DNA strands", "Ribosomes"], ans: 1, exp: "tRNA brings specific amino acids matching mRNA codons." },
+                { q: "What does diploid mean?", opts: ["Having single un-paired chromosomes", "Having two complete sets of paired chromosomes", "Having no nucleus", "Having three sets of chromosomes"], ans: 1, exp: "Diploid human somatic cells have 23 pairs (46 total) of chromosomes." },
+                { q: "What sex chromosomes do human females possess?", opts: ["XY", "XX", "YY", "XO"], ans: 1, exp: "Human females possess two X chromosomes (XX)." },
+                { q: "What is the function of a gene?", opts: ["To store energy", "To code for a specific sequence of amino acids forming a protein", "To produce glucose", "To destroy pathogens"], ans: 1, exp: "Genes contain instructions to build specific proteins." }
+              ]
+            },
+            {
+              id: "b2",
+              code: "B2",
+              name: "B2: Keeping Healthy",
+              notes: [
+                {
+                  t: "Pathogens & Disease Transmission",
+                  content: "Communicable diseases are caused by pathogens—microorganisms including bacteria, viruses, fungi, and protists that infect host organisms.",
+                  bullets: [
+                    "Bacteria: Microscopic single-celled organisms that produce toxins that damage tissues (e.g. Salmonella, Gonorrhoea).",
+                    "Viruses: Non-living particles that invade host cells, replicate inside them, and cause the host cells to burst (e.g. HIV, Measles, TMV).",
+                    "Fungi: Hyphae penetrate host skin or plant surfaces (e.g. Rose Black Spot, Athlete's foot).",
+                    "Protists: Microscopic single-celled organisms often carried by vectors (e.g. Plasmodium causing Malaria, carried by Female Anopheles mosquitoes)."
+                  ]
+                },
+                {
+                  t: "Human Defense Systems",
+                  content: "The human body has non-specific defenses to prevent pathogen entry, and a specific immune response if pathogens enter.",
+                  bullets: [
+                    "Non-specific defenses: Skin acts as a physical barrier and secretes antimicrobial sebum; Nose hair and mucus trap particles; Ciliated epithelial cells sweep mucus out of trachea; Stomach acid (HCl) kills ingested microbes.",
+                    "Phagocytosis: Phagocytes engulf and digest pathogens using digestive enzymes.",
+                    "Antibody Production: B-lymphocytes recognize specific antigens on pathogens and produce complementary antibodies that bind to, neutralize, and clump pathogens together.",
+                    "Antitoxin Production: Lymphocytes produce antitoxins that counteract toxins released by bacteria."
+                  ]
+                },
+                {
+                  t: "Vaccination & Herd Immunity",
+                  content: "Vaccination introduces dead, inactive, or weakened forms of a pathogen into the body to stimulate primary immune response without causing illness.",
+                  bullets: [
+                    "White blood cells produce specific antibodies and form memory cells.",
+                    "Upon re-exposure to the live pathogen, memory cells recognize the antigen immediately and produce large quantities of antibodies rapidly (secondary immune response), destroying the pathogen before symptoms occur.",
+                    "Herd Immunity: When a large proportion of the population is vaccinated, the spread of the pathogen is drastically reduced, protecting unvaccinated individuals."
+                  ]
+                },
+                {
+                  t: "Antibiotics, Resistance & Drug Testing",
+                  content: "Antibiotics are drugs that kill bacteria by disrupting bacterial cell wall synthesis or metabolism. They DO NOT kill viruses.",
+                  bullets: [
+                    "Antibiotic Resistance: Random mutations in bacterial DNA can produce resistant strains (e.g. MRSA). Overuse or incomplete courses of antibiotics select for resistant bacteria, which survive and replicate rapidly.",
+                    "Preclinical Testing: Tested on isolated human cells, tissues, and live animals for toxicity and efficacy.",
+                    "Clinical Trials: Phase 1 tests low doses on healthy human volunteers for safety; Phase 2 & 3 test on patients with the disease to determine dosage, efficacy, and side effects using double-blind trials with placebos."
+                  ]
+                }
+              ],
+              cards: [
+                { q: "How do viruses cause tissue damage?", a: "Viruses enter host cells, replicate inside them using cell machinery, and cause the cell to burst." },
+                { q: "What is the function of memory B-cells?", a: "They persist in the blood and rapidly produce antibodies if the same pathogen infects the body again." },
+                { q: "Why do antibiotics not work against viral infections?", a: "Viruses reproduce inside host cells and lack bacterial cell structures like cell walls that antibiotics target." },
+                { q: "What is a double-blind trial?", a: "A clinical trial where neither the patients nor the doctors know who receives the real drug and who receives the placebo." },
+                { q: "What is a pathogen?", a: "A microorganism (bacterium, virus, fungus, or protist) that causes infectious disease." },
+                { q: "How do bacteria cause symptoms of illness?", a: "They divide rapidly and release harmful toxins that damage host cells and tissues." },
+                { q: "What is phagocytosis?", a: "The process where phagocytic white blood cells engulf and digest foreign pathogens." },
+                { q: "What is an antigen?", a: "A unique protein or marker on the surface of a cell or pathogen that triggers an immune response." },
+                { q: "What is an antibody?", a: "A specific Y-shaped protein produced by B-lymphocytes that binds to complementary antigens on pathogens." },
+                { q: "What is herd immunity?", a: "When a large portion of a population is vaccinated, making it difficult for the pathogen to spread to unvaccinated individuals." },
+                { q: "What vector transmits the malaria protist?", a: "The female Anopheles mosquito." },
+                { q: "What non-specific chemical barrier protects the stomach?", a: "Hydrochloric acid (HCl), which kills ingested microorganisms." },
+                { q: "What is a placebo?", a: "A dummy treatment containing no active drug, used as a control in clinical trials." },
+                { q: "What causes antibiotic resistance in bacterial populations?", a: "Random mutations yielding resistance alleles, selected for by improper antibiotic use." },
+                { q: "What white blood cells produce antitoxins?", a: "B-lymphocytes, to neutralize harmful toxins released by bacteria." }
+              ],
+              quiz: [
+                { q: "Which vector transmits the protist Plasmodium causing Malaria?", opts: ["Housefly", "Female Anopheles mosquito", "Tsetse fly", "Flea"], ans: 1, exp: "Malaria is transmitted by female Anopheles mosquitoes when they feed on blood." },
+                { q: "What is the primary function of antitoxins?", opts: ["Kill viruses", "Neutralize bacterial toxins", "Digest cell walls", "Transport oxygen"], ans: 1, exp: "Antitoxins produced by white blood cells neutralize bacterial toxins." },
+                { q: "What do memory cells do upon reinfection?", opts: ["Store water", "Produce rapid secondary antibody responses", "Digest food", "Regulate body temperature"], ans: 1, exp: "Memory cells recognize antigens quickly and produce high levels of antibodies." },
+                { q: "Which clinical trial phase tests low doses on healthy human volunteers?", opts: ["Preclinical testing", "Phase 1 clinical trial", "Phase 3 clinical trial", "Animal testing"], ans: 1, exp: "Phase 1 tests safety and side effects on healthy volunteers." },
+                { q: "What type of pathogen causes Rose Black Spot in plants?", opts: ["Bacterium", "Virus", "Fungus", "Protist"], ans: 2, exp: "Rose black spot is a fungal disease affecting plant leaves." },
+                { q: "What is Gonorrhoea?", opts: ["A viral STI", "A bacterial STI", "A fungal infection", "A genetic disorder"], ans: 1, exp: "Gonorrhoea is a sexually transmitted bacterial infection." },
+                { q: "What chemical barrier in tears destroys bacterial cell walls?", opts: ["Amylase", "Lysozyme", "Pepsin", "Lipase"], ans: 1, exp: "Lysozyme is an antibacterial enzyme in tears and saliva." },
+                { q: "What chemical barrier kills pathogens in the stomach?", opts: ["Hydrochloric acid", "Bile", "Saliva", "Mucus"], ans: 0, exp: "Stomach acid (HCl) creates a hostile pH that destroys pathogens." },
+                { q: "What is a malignant tumor?", opts: ["A non-spreading growth", "A cancerous tumor that invades neighboring tissues and spreads", "A harmless cyst", "A benign mass"], ans: 1, exp: "Malignant tumors spread to secondary locations via the bloodstream." },
+                { q: "Which lifestyle factor is a major cause of lung cancer and cardiovascular disease?", opts: ["Smoking tobacco", "Regular exercise", "Reading", "Sleeping"], ans: 0, exp: "Tobacco smoke contains carcinogens and harms blood vessels." },
+                { q: "What pathogen causes HIV/AIDS?", opts: ["Bacterium", "Virus", "Fungus", "Protist"], ans: 1, exp: "Human Immunodeficiency Virus (HIV) is a retrovirus." },
+                { q: "How is Tobacco Mosaic Virus (TMV) transmitted between plants?", opts: ["Direct contact and vectors", "Water only", "Airborne spores", "Soil pH"], ans: 0, exp: "TMV spreads via physical contact between plants or workers' hands." },
+                { q: "What does 'efficacy' mean in drug testing?", opts: ["How effectively the drug treats the target disease", "The manufacturing cost", "The pill size", "The shelf life"], ans: 0, exp: "Efficacy measures whether a drug produces the intended health effect." },
+                { q: "Which white blood cells perform phagocytosis?", opts: ["Phagocytes", "B-lymphocytes", "Red blood cells", "Platelets"], ans: 0, exp: "Phagocytes engulf and digest foreign microbes." },
+                { q: "What does a vaccine contain?", opts: ["Dead or weakened pathogens", "Live strong bacteria", "Antibiotics", "Antiviral chemicals"], ans: 0, exp: "Vaccines contain dead/inactive pathogens to trigger immunity safely." }
+              ]
+            },
+            {
+              id: "b3",
+              code: "B3",
+              name: "B3: Living Together - Food & Ecosystems",
+              notes: [
+                {
+                  t: "Ecosystems, Abiotic & Biotic Factors",
+                  content: "An ecosystem is the interaction of a community of living organisms (biotic) with the non-living (abiotic) parts of their environment.",
+                  bullets: [
+                    "Abiotic factors: Light intensity, temperature, moisture levels, soil pH and mineral content, wind intensity, carbon dioxide levels, oxygen levels.",
+                    "Biotic factors: Availability of food, new predators, new pathogens, outcompeting species.",
+                    "Interdependence: All species in an ecosystem depend on each other for food, shelter, pollination, and seed dispersal. If one species is removed, it affects the whole community."
+                  ]
+                },
+                {
+                  t: "Pyramids of Biomass & Energy Transfer",
+                  content: "Biomass is the dry mass of biological material in living organisms at a given trophic level.",
+                  bullets: [
+                    "Trophic Level 1: Producers (green plants/algae); Level 2: Primary consumers (herbivores); Level 3: Secondary consumers (carnivores).",
+                    "Only about 10% of biomass is transferred from one trophic level to the next.",
+                    "Biomass is lost because: Not all ingested material is absorbed (egested as faeces); Some absorbed biomass is broken down in respiration to yield energy, producing CO2 and water; Waste is excreted as urea."
+                  ]
+                },
+                {
+                  t: "Nutrient Cycles (Carbon & Nitrogen)",
+                  content: "Elements are recycled through ecosystems to provide building blocks for future organisms.",
+                  bullets: [
+                    "Carbon Cycle: CO2 is removed from atmosphere by photosynthesis. Returning mechanisms: Respiration by plants, animals, and decomposers (fungi/bacteria); Combustion of fossil fuels.",
+                    "Nitrogen Cycle: Nitrogen gas (N2) in air is inert. Nitrogen-fixing bacteria (in root nodules of legumes or soil) turn N2 into nitrates. Nitrifying bacteria turn ammonium into nitrates. Plants absorb nitrates to make proteins. Denitrifying bacteria convert nitrates back to N2 gas under anaerobic conditions."
+                  ]
+                }
+              ],
+              cards: [
+                { q: "Why is biomass lost at each trophic level?", a: "Not all material is digested (faeces), energy is lost in respiration, and lost as excretion (urea)." },
+                { q: "What role do nitrifying bacteria play in the nitrogen cycle?", a: "They convert ammonium ions into nitrites and then into nitrates that plants can absorb." },
+                { q: "What is an ecosystem?", a: "The interaction of a community of living organisms with the non-living (abiotic) elements of their environment." },
+                { q: "Define abiotic factor.", a: "A non-living physical or chemical factor in an ecosystem (e.g., light intensity, temperature, soil pH)." },
+                { q: "Define biotic factor.", a: "A living factor affecting an ecosystem (e.g., availability of food, new predators, pathogens)." },
+                { q: "What is interdependence?", a: "The reliance of species within a community upon each other for food, shelter, pollination, and seed dispersal." },
+                { q: "What process removes carbon dioxide from the atmosphere?", a: "Photosynthesis by green plants and algae." },
+                { q: "What processes return carbon dioxide to the atmosphere?", a: "Cellular respiration by plants, animals, and decomposers, as well as fossil fuel combustion." },
+                { q: "What do nitrogen-fixing bacteria do?", a: "They convert unreactive atmospheric nitrogen gas (N2) into nitrogen compounds like nitrates." },
+                { q: "What do denitrifying bacteria do?", a: "They convert nitrates in waterlogged soil back into nitrogen gas (N2) under anaerobic conditions." },
+                { q: "What organism forms Trophic Level 1?", a: "Producers (green plants and algae)." },
+                { q: "Approximately what percentage of biomass is transferred between trophic levels?", a: "Approximately 10%." },
+                { q: "What is biomass?", a: "The total dry mass of biological material in living organisms at a given trophic level." },
+                { q: "What is egestion?", a: "The removal of undigested food material as faeces from an organism." },
+                { q: "Why does high biodiversity increase ecosystem stability?", a: "It reduces the dependence of species on any single food source or habitat requirement." }
+              ],
+              quiz: [
+                { q: "What percentage of light energy hitting green plants is typically converted into chemical energy via photosynthesis?", opts: ["1%", "10%", "50%", "90%"], ans: 0, exp: "Producers convert roughly 1% of incident light energy into chemical biomass via photosynthesis." },
+                { q: "Which bacteria convert ammonium ions into nitrates in the soil?", opts: ["Nitrogen-fixing bacteria", "Nitrifying bacteria", "Denitrifying bacteria", "Decomposers"], ans: 1, exp: "Nitrifying bacteria oxidize ammonium ions into nitrites and then nitrates." },
+                { q: "What type of factor is light intensity in an ecosystem?", opts: ["Biotic factor", "Abiotic factor", "Genetic factor", "Pathogenic factor"], ans: 1, exp: "Light intensity is a non-living physical (abiotic) factor." },
+                { q: "What proportion of biomass is typically transferred from one trophic level to the next?", opts: ["1%", "10%", "50%", "90%"], ans: 1, exp: "Around 90% is lost, leaving ~10% biomass transfer." },
+                { q: "Which process directly removes CO2 from the atmosphere?", opts: ["Respiration", "Combustion", "Photosynthesis", "Decomposition"], ans: 2, exp: "Photosynthesis absorbs CO2 to form glucose." },
+                { q: "What environmental conditions favor denitrifying bacteria?", opts: ["Aerobic well-drained soil", "Anaerobic waterlogged soil", "Dry desert sand", "High light intensity"], ans: 1, exp: "Denitrifying bacteria break down nitrates in oxygen-poor (anaerobic) soils." },
+                { q: "What is egestion?", opts: ["Excreting urine", "Passing out undigested material as faeces", "Breathing out CO2", "Sweating"], ans: 1, exp: "Egestion is the elimination of undigested waste." },
+                { q: "What organisms occupy Trophic Level 2?", opts: ["Producers", "Primary consumers (herbivores)", "Secondary consumers", "Apex predators"], ans: 1, exp: "Herbivores that feed on producers make up Trophic Level 2." },
+                { q: "What is a quadrat used for in ecology?", opts: ["Measuring wind speed", "Sampling non-motile organisms to estimate population size", "Testing soil pH", "Measuring humidity"], ans: 1, exp: "Square quadrats sample plant or stationary animal populations." },
+                { q: "What role do decomposers play in nutrient cycles?", opts: ["They convert light into glucose", "They break down dead organic matter and release mineral ions", "They eliminate nitrogen gas", "They reduce rainfall"], ans: 1, exp: "Bacteria and fungi recycle organic elements back into the soil/air." },
+                { q: "Which gas makes up 78% of the atmosphere but cannot be absorbed directly by plants?", opts: ["Carbon dioxide", "Oxygen", "Nitrogen (N2)", "Argon"], ans: 2, exp: "Inert N2 gas must be fixed into nitrates before plants can use it." },
+                { q: "What is biodiversity?", opts: ["The total weight of plants", "The variety of all different species of organisms in an ecosystem", "The amount of rainfall", "The number of trees in a forest"], ans: 1, exp: "Biodiversity measures species variation within an ecosystem." },
+                { q: "Why is peat bog destruction harmful to the environment?", opts: ["It releases stored carbon dioxide when peat decays or burns", "It increases global oxygen", "It lowers sea level", "It stops rainfall"], ans: 0, exp: "Peat stores vast carbon; burning/decay releases CO2." },
+                { q: "What is dry mass?", opts: ["Mass of an organism with all water content removed", "Mass including all fluids", "Volume of an organism", "Density of bones"], ans: 0, exp: "Biomass is measured as dry mass to exclude variable water content." },
+                { q: "What is an apex predator?", opts: ["A producer", "A carnivore at the top of the food chain with no natural predators", "An herbivore", "A decomposer"], ans: 1, exp: "Apex predators sit at the top of food pyramids." }
+              ]
+            },
+            {
+              id: "b4",
+              code: "B4",
+              name: "B4: Using Food & Controlling Growth",
+              notes: [
+                {
+                  t: "Photosynthesis & Limiting Factors",
+                  content: "Photosynthesis is an endothermic reaction in which light energy is transferred to chloroplasts to synthesize glucose.",
+                  bullets: [
+                    "Equation: 6CO2 + 6H2O → C6H12O6 + 6O2",
+                    "Uses of Glucose: Respiration, stored as insoluble starch, converted to cellulose for cell walls, converted to lipids for storage in seeds, combined with nitrates to form amino acids.",
+                    "Limiting Factors: Light intensity, Carbon Dioxide concentration, Temperature. Inverse square law applies to light intensity: Light Intensity ∝ 1 / (distance)²."
+                  ]
+                },
+                {
+                  t: "Respiration & Exercise",
+                  content: "Respiration is an exothermic reaction continuously occurring in living cells to supply energy for cellular processes.",
+                  bullets: [
+                    "Aerobic Respiration (with O2): C6H12O6 + 6O2 → 6CO2 + 6H2O (+ 32 ATP). Occurs in mitochondria.",
+                    "Anaerobic Respiration in muscles (without O2): Glucose → Lactic acid (+ 2 ATP). Yields far less energy.",
+                    "Oxygen Debt: The amount of extra oxygen required after exercise to react with accumulated lactic acid in the liver to break it down into CO2 and water."
+                  ]
+                }
+              ],
+              cards: [
+                { q: "State the word and chemical equations for photosynthesis.", a: "Carbon Dioxide + Water → Glucose + Oxygen | 6CO2 + 6H2O → C6H12O6 + 6O2" },
+                { q: "What is oxygen debt?", a: "The volume of extra oxygen needed after exercise to oxidize accumulated lactic acid in the liver." },
+                { q: "Is photosynthesis endothermic or exothermic?", a: "Endothermic (it absorbs light energy from the surroundings)." },
+                { q: "Is cellular respiration endothermic or exothermic?", a: "Exothermic (it releases energy to the cells and surroundings)." },
+                { q: "State the equation for aerobic respiration.", a: "C6H12O6 + 6O2 → 6CO2 + 6H2O" },
+                { q: "State the equation for anaerobic respiration in muscle cells.", a: "Glucose → Lactic acid" },
+                { q: "State the equation for anaerobic respiration in yeast (fermentation).", a: "Glucose → Ethanol + Carbon Dioxide" },
+                { q: "What is the Inverse Square Law for light intensity?", a: "Light Intensity ∝ 1 / (distance)²" },
+                { q: "Name three limiting factors of photosynthesis.", a: "Light intensity, carbon dioxide concentration, and temperature." },
+                { q: "Where does aerobic respiration occur in eukaryotic cells?", a: "Inside the mitochondria." },
+                { q: "How do plant cells store excess glucose?", a: "As insoluble starch in leaves, roots, and tubers." },
+                { q: "What structural carbohydrate in plant cell walls is built from glucose?", a: "Cellulose." },
+                { q: "What ion must plants absorb from soil to combine with glucose to make amino acids?", a: "Nitrate ions." },
+                { q: "Why does anaerobic respiration yield less ATP than aerobic respiration?", a: "Because glucose is incomplete oxidized without oxygen." },
+                { q: "What green pigment in chloroplasts absorbs light energy?", a: "Chlorophyll." }
+              ],
+              quiz: [
+                { q: "If the distance between a lamp and a plant is doubled, what happens to the light intensity?", opts: ["Halved", "Doubled", "Quartered", "Multiplied by 4"], ans: 2, exp: "According to the Inverse Square Law, doubling distance reduces light intensity to (1/2)² = 1/4." },
+                { q: "Where does aerobic respiration take place in animal and plant cells?", opts: ["Nucleus", "Mitochondria", "Ribosome", "Cytoplasm"], ans: 1, exp: "Mitochondria contain the enzymes required for aerobic respiration." },
+                { q: "What product is formed during anaerobic respiration in human muscle cells?", opts: ["Lactic acid", "Ethanol", "Carbon dioxide", "Water"], ans: 0, exp: "Anaerobic breakdown of glucose in muscles produces lactic acid." },
+                { q: "What products are formed during fermentation in yeast?", opts: ["Lactic acid only", "Ethanol and Carbon Dioxide", "Oxygen and Glucose", "Water and Urea"], ans: 1, exp: "Anaerobic respiration in yeast produces ethanol and CO2." },
+                { q: "Why do plants store glucose as starch?", opts: ["Starch is insoluble so it does not affect osmotic balance in cells", "Starch dissolves easily", "Starch is smaller than glucose", "Starch provides instant light"], ans: 0, exp: "Insoluble starch prevents water from entering cells by osmosis." },
+                { q: "What type of reaction is photosynthesis?", opts: ["Exothermic", "Endothermic", "Combustion", "Neutralization"], ans: 1, exp: "Photosynthesis takes in energy from light (endothermic)." },
+                { q: "What carbohydrate strengthens plant cell walls?", opts: ["Cellulose", "Chitin", "Starch", "Glycogen"], ans: 0, exp: "Glucose monomers form structural cellulose chains." },
+                { q: "Which organ breaks down lactic acid after vigorous exercise?", opts: ["Heart", "Liver", "Kidney", "Lungs"], ans: 1, exp: "Lactic acid travels in blood to the liver to be oxidized back to glucose." },
+                { q: "What happens to photosynthetic enzymes if temperature exceeds their optimum?", opts: ["They work faster", "They denature and rate drops to zero", "They freeze", "They produce starch"], ans: 1, exp: "High temperatures alter active sites, denaturing enzymes." },
+                { q: "What reagent tests for the presence of starch in leaves?", opts: ["Benedict's reagent", "Iodine solution", "Biuret reagent", "Ethanol"], ans: 1, exp: "Iodine solution turns from orange-brown to blue-black in the presence of starch." },
+                { q: "What byproduct of photosynthesis is released into the atmosphere?", opts: ["Carbon dioxide", "Oxygen (O2)", "Nitrogen", "Methane"], ans: 1, exp: "Oxygen gas is released as a byproduct." },
+                { q: "How many ATP molecules are produced per glucose in aerobic respiration approximately?", opts: ["2", "32", "100", "0"], ans: 1, exp: "Aerobic respiration yields ~32 ATP compared to 2 in anaerobic." },
+                { q: "What factor limits photosynthesis on a bright, freezing winter day?", opts: ["Light intensity", "Temperature", "Chlorophyll", "Oxygen"], ans: 1, exp: "Low temperature slows enzyme activity, becoming the limiting factor." },
+                { q: "What microscopic leaf pores control gas exchange?", opts: ["Stomata", "Xylem", "Phloem", "Cuticle"], ans: 0, exp: "Stomata open and close to allow CO2 entry and O2 exit." },
+                { q: "What is the primary role of chlorophyll?", opts: ["To store water", "To absorb light energy for photosynthesis", "To transport sugars", "To protect against pests"], ans: 1, exp: "Chlorophyll transfers light energy into chemical energy." }
+              ]
+            },
+            {
+              id: "b5",
+              code: "B5",
+              name: "B5: Staying in Balance",
+              notes: [
+                {
+                  t: "Homeostasis & Negative Feedback",
+                  content: "Homeostasis is the regulation of internal conditions of a cell or organism to maintain optimum conditions for function in response to internal and external changes.",
+                  bullets: [
+                    "Negative Feedback Loop: Detects deviation from normal set point -> Receptor sends signal -> Coordination centre processes -> Effector produces response to counteract change."
+                  ]
+                },
+                {
+                  t: "Control of Blood Glucose (Insulin & Glucagon)",
+                  content: "The pancreas controls blood glucose levels using two antagonist hormones.",
+                  bullets: [
+                    "High Blood Glucose: Pancreas releases Insulin. Insulin causes liver and muscle cells to take up glucose and convert it into stored Glycogen.",
+                    "Low Blood Glucose: Pancreas releases Glucagon. Glucagon causes liver to convert stored Glycogen back into Glucose and release it into the bloodstream.",
+                    "Type 1 Diabetes: Autoimmune destruction of pancreatic beta cells; pancreas produces insufficient insulin. Treated with insulin injections.",
+                    "Type 2 Diabetes: Body cells no longer respond to insulin. Controlled with carbohydrate-restricted diet and exercise."
+                  ]
+                },
+                {
+                  t: "Thermoregulation & Kidney Function",
+                  content: "Body temperature is monitored by the thermoregulatory centre in the hypothalamus.",
+                  bullets: [
+                    "Too Hot: Vasodilation (arterioles dilate bringing blood near skin surface); Sweating (evaporative cooling).",
+                    "Too Cold: Vasoconstriction (arterioles constrict reducing blood flow to capillaries); Shivering (skeletal muscle contraction increases metabolic respiration rate).",
+                    "Kidney Function: Nephrons filter blood under pressure (ultrafiltration), selectively reabsorb useful substances (all glucose, required water and ions), and excrete excess water, urea, and salts as urine.",
+                    "ADH (Anti-Diuretic Hormone): Released by pituitary gland when blood is too concentrated. Increases permeability of kidney collecting ducts so more water is reabsorbed back into blood."
+                  ]
+                }
+              ],
+              cards: [
+                { q: "What happens when blood glucose concentration is too high?", a: "The pancreas secretes insulin, causing liver and muscle cells to absorb glucose and store it as glycogen." },
+                { q: "How does ADH affect kidney collecting ducts?", a: "It increases their permeability to water, causing more water to be reabsorbed into the bloodstream." },
+                { q: "Define homeostasis.", a: "The regulation of internal conditions of a cell or organism to maintain optimum function." },
+                { q: "What hormone is secreted by the pancreas when blood glucose drops too low?", a: "Glucagon." },
+                { q: "What is Type 1 diabetes?", a: "An autoimmune condition where the pancreas fails to produce sufficient insulin." },
+                { q: "What is Type 2 diabetes?", a: "A condition where body cells become resistant and fail to respond to insulin." },
+                { q: "Which region of the brain regulates core body temperature?", a: "The thermoregulatory centre in the hypothalamus." },
+                { q: "What is vasodilation?", a: "Arterioles supplying skin surface capillaries dilate, increasing blood flow to radiate heat." },
+                { q: "What is vasoconstriction?", a: "Arterioles supplying skin capillaries constrict, reducing blood flow to conserve heat." },
+                { q: "How does shivering help raise body temperature?", a: "Involuntary muscle contractions increase respiration rate, releasing thermal energy." },
+                { q: "Where is ADH (Anti-Diuretic Hormone) produced and released?", a: "Produced in hypothalamus and released from the pituitary gland." },
+                { q: "What nitrogenous waste product is formed from the breakdown of excess amino acids in the liver?", a: "Urea." },
+                { q: "What process in the liver converts excess amino acids into ammonia and then urea?", a: "Deamination." },
+                { q: "What useful substance is 100% selectively reabsorbed by healthy nephrons in the kidney?", a: "Glucose." },
+                { q: "What type of feedback control mechanism restores physiological conditions to a normal set point?", a: "Negative feedback." }
+              ],
+              quiz: [
+                { q: "Which hormone is released by the pancreas when blood glucose levels fall too low?", opts: ["Insulin", "Glucagon", "ADH", "Adrenaline"], ans: 1, exp: "Glucagon is released when blood glucose drops, stimulating glycogen breakdown into glucose." },
+                { q: "Which organ produces insulin and glucagon?", opts: ["Liver", "Pancreas", "Kidney", "Brain"], ans: 1, exp: "The pancreas monitors blood glucose and secretes insulin and glucagon." },
+                { q: "What happens during vasodilation in response to heat?", opts: ["Skin arterioles constrict", "Skin arterioles dilate to increase blood flow near the surface", "Sweating stops", "Muscles shiver"], ans: 1, exp: "Arterioles widen so more blood flows near the skin, increasing heat loss by radiation." },
+                { q: "Where is Anti-Diuretic Hormone (ADH) released into the blood?", opts: ["Pituitary gland", "Pancreas", "Adrenal gland", "Thyroid"], ans: 0, exp: "The pituitary gland secretes ADH into the bloodstream." },
+                { q: "How is Type 1 diabetes primarily treated?", opts: ["Carbohydrate diet only", "Insulin injections", "Antibiotics", "Kidney dialysis"], ans: 1, exp: "Type 1 patients require daily insulin therapy because their pancreas cannot make insulin." },
+                { q: "What effect does high ADH level have on urine production?", opts: ["Produces a low volume of concentrated urine", "Produces a large volume of dilute urine", "Excretes all glucose", "Stops kidney filtration"], ans: 0, exp: "High ADH causes more water reabsorption, concentrating the urine." },
+                { q: "What waste product is produced by the liver from excess amino acids?", opts: ["Urea", "Glucose", "Protein", "Starch"], ans: 0, exp: "Deamination of amino acids in the liver produces urea." },
+                { q: "What process occurs in the liver to remove amino groups from excess proteins?", opts: ["Deamination", "Ultrafiltration", "Selective reabsorption", "Glycolysis"], ans: 0, exp: "Deamination removes nitrogenous amino groups." },
+                { q: "What control mechanism counteracts changes away from a set point?", opts: ["Positive feedback", "Negative feedback", "Open loop control", "Manual control"], ans: 1, exp: "Negative feedback mechanisms reverse deviations back to normal." },
+                { q: "What vascular response occurs when the body gets too cold?", opts: ["Vasodilation", "Vasoconstriction", "Increased sweating", "High perspiration"], ans: 1, exp: "Vasoconstriction narrows skin arterioles to reduce heat loss." },
+                { q: "How does shivering generate heat?", opts: ["Muscle contractions increase cellular respiration releasing heat", "Cools blood flow", "Increases urine", "Dilates vessels"], ans: 0, exp: "Respiration during muscle contraction is exothermic." },
+                { q: "What substance should NOT be present in the urine of a healthy person?", opts: ["Glucose", "Urea", "Water", "Sodium ions"], ans: 0, exp: "All glucose is selectively reabsorbed by healthy kidney tubules." },
+                { q: "What is a major risk factor for developing Type 2 diabetes?", opts: ["Obesity and physical inactivity", "Bacterial infection", "Vitamin C deficiency", "High salt intake"], ans: 0, exp: "Excess body fat and low activity increase insulin resistance." },
+                { q: "What occurs during ultrafiltration in the kidney?", opts: ["Small molecules like water, glucose, and urea are filtered under high pressure into the capsule", "Red blood cells are excreted", "Proteins enter urine", "Glucose is destroyed"], ans: 0, exp: "High blood pressure forces small molecules out of glomerulus capillaries." },
+                { q: "Where are temperature receptors located in the human body?", opts: ["Hypothalamus and skin", "Liver and stomach", "Pancreas", "Eyes"], ans: 0, exp: "Receptors in the hypothalamus monitor blood temp; skin receptors monitor external temp." }
+              ]
+            },
+            {
+              id: "b6",
+              code: "B6",
+              name: "B6: Life on Earth - Past, Present & Future",
+              notes: [
+                {
+                  t: "Evolution by Natural Selection",
+                  content: "Individual organisms within a species show phenotypic variation caused by differences in their genes.",
+                  bullets: [
+                    "Organisms produce more offspring than can survive, leading to competition for resources.",
+                    "Individuals with characteristics best adapted to their environment have a higher chance of surviving and reproducing ('survival of the fittest').",
+                    "These individuals pass on their advantageous alleles to their offspring.",
+                    "Over generations, the frequency of the advantageous allele increases in the population."
+                  ]
+                },
+                {
+                  t: "Selective Breeding & Genetic Engineering",
+                  content: "Human intervention to modify genome characteristics.",
+                  bullets: [
+                    "Selective Breeding: Humans breed plants or animals with desired characteristics over multiple generations (Risk: Inbreeding reduces gene pool and increases risk of genetic diseases).",
+                    "Genetic Engineering Steps: 1. Identify desired gene; 2. Cut gene out of DNA using restriction enzymes, leaving sticky ends; 3. Cut vector (plasmid or virus) DNA with same restriction enzyme; 4. Join gene and vector DNA using DNA ligase enzyme to create recombinant DNA; 5. Transfer vector into host cell at early stage of development."
+                  ]
+                }
+              ],
+              cards: [
+                { q: "Outline the key steps of genetic engineering.", a: "Isolate desired gene with restriction enzyme -> Cut plasmid vector with same enzyme -> Join with DNA ligase -> Insert vector into target cell." },
+                { q: "What is natural selection?", a: "The process whereby organisms better adapted to their environment tend to survive and produce more offspring." },
+                { q: "What enzyme cuts DNA at specific base sequences?", a: "A restriction enzyme." },
+                { q: "What enzyme joins separate DNA fragments together?", a: "DNA ligase." },
+                { q: "What is a vector in genetic engineering?", a: "A carrier (such as a bacterial plasmid or virus) used to transfer foreign genetic material into a cell." },
+                { q: "What is selective breeding?", a: "The process by which humans breed plants or animals for particular genetic traits over generations." },
+                { q: "What is a major downside of selective breeding?", a: "Inbreeding narrows the gene pool, increasing vulnerability to diseases and inherited defects." },
+                { q: "What is speciation?", a: "The evolutionary formation of new and distinct species from a parent population." },
+                { q: "What role does geographic isolation play in speciation?", a: "It physically separates populations, preventing gene flow so natural selection acts independently." },
+                { q: "What are fossils?", a: "The preserved remains or traces of ancient organisms found in rocks." },
+                { q: "Why is the fossil record incomplete?", a: "Many early soft-bodied organisms decayed completely without fossilizing, and many fossils were destroyed." },
+                { q: "What is extinction?", a: "The permanent demise and disappearance of an entire species." },
+                { q: "Who proposed the theory of evolution by natural selection?", a: "Charles Darwin." },
+                { q: "What classification system names organisms by Genus and Species?", a: "The binomial system (e.g., Homo sapiens)." },
+                { q: "What is recombinant DNA?", a: "DNA constructed artificially by joining DNA fragments from different organisms." }
+              ],
+              quiz: [
+                { q: "Which enzyme is used to join the sticky ends of DNA fragments in genetic engineering?", opts: ["RNA Polymerase", "Restriction Enzyme", "DNA Ligase", "Amylase"], ans: 2, exp: "DNA Ligase seals the phosphate-sugar backbone, joining the gene to the vector plasmid." },
+                { q: "Which enzyme cuts out a specific desired gene from human DNA?", opts: ["Restriction enzyme", "DNA ligase", "Lipase", "Protease"], ans: 0, exp: "Restriction enzymes isolate specific gene sequences leaving sticky ends." },
+                { q: "What is used as a vector to transfer genes into bacteria?", opts: ["Plasmid", "Ribosome", "Cell wall", "Mitochondria"], ans: 0, exp: "Bacterial plasmids act as vectors to carry foreign genes." },
+                { q: "Who proposed the theory of evolution by natural selection?", opts: ["Jean-Baptiste Lamarck", "Charles Darwin", "Gregor Mendel", "James Watson"], ans: 1, exp: "Charles Darwin published the theory of evolution by natural selection." },
+                { q: "What is a primary danger associated with selective breeding?", opts: ["Inbreeding reducing the gene pool", "Increased genetic diversity", "Extinction of all crops", "Excessive mutations"], ans: 0, exp: "Selective breeding reduces genetic variation, increasing inherited disease risk." },
+                { q: "What are Archaea in the 3-domain classification system?", opts: ["Primitive bacteria adapted to extreme environments", "Eukaryotic plants", "Viruses", "Fungi"], ans: 0, exp: "Archaea are extremophile prokaryotic organisms." },
+                { q: "What event typically triggers the start of speciation?", opts: ["Geographic isolation of populations", "Selective breeding", "Cloning", "Fertilization"], ans: 0, exp: "Physical barriers isolate populations, preventing interbreeding." },
+                { q: "Why are soft-bodied animal fossils rare?", opts: ["Soft tissues decay rapidly before fossilization can occur", "They contained gold", "They dissolved in air", "They lived underground"], ans: 0, exp: "Soft tissue decays easily unless preserved in special conditions." },
+                { q: "What is tissue culture in plant propagation?", opts: ["Growing plant clones from tiny tissue samples on sterile nutrient agar", "Selective breeding", "Genetic engineering", "Sexual reproduction"], ans: 0, exp: "Tissue culture produces identical plant clones quickly." },
+                { q: "What is a gene pool?", opts: ["The total sum of all alleles in a population", "A swimming pool", "DNA in one cell", "A vector plasmid"], ans: 0, exp: "The gene pool represents all genetic variants in a breeding population." },
+                { q: "Which scientist established the binomial naming system?", opts: ["Carl Linnaeus", "Charles Darwin", "Alfred Russel Wallace", "Carl Woese"], ans: 0, exp: "Linnaeus created the Genus species binomial naming system." },
+                { q: "What process led to the emergence of MRSA superbugs?", opts: ["Natural selection driven by antibiotic overuse", "Selective breeding", "Tissue culture", "Extinction"], ans: 0, exp: "Antibiotics kill non-resistant bacteria, selecting for resistant strains." },
+                { q: "What is another term for selective breeding?", opts: ["Artificial selection", "Genetic engineering", "Cloning", "Mitosis"], ans: 0, exp: "Artificial selection is human-guided selective breeding." },
+                { q: "What was Lamarck's incorrect evolutionary hypothesis?", opts: ["Inheritance of acquired characteristics during an organism's lifetime", "Natural selection", "DNA mutation", "Genetic drift"], ans: 0, exp: "Lamarck wrongly believed acquired traits were passed to offspring." },
+                { q: "What nutrient is GM 'Golden Rice' engineered to synthesize?", opts: ["Beta-carotene (precursor to Vitamin A)", "Vitamin C", "Penicillin", "Insulin"], ans: 0, exp: "Golden Rice produces beta-carotene to prevent Vitamin A deficiency." }
+              ]
+            }
+          ]
+        },
+        chem: {
+          title: "OCR GCSE Chemistry B (C1-C6)",
+          color: "#3b82f6",
+          units: [
+            {
+              id: "c1",
+              code: "C1",
+              name: "C1: Air & Atmosphere",
+              notes: [
+                {
+                  t: "Atmospheric Composition & Evolution",
+                  content: "Earth's atmosphere has evolved over 4.6 billion years due to volcanic activity and biological processes.",
+                  bullets: [
+                    "Current Composition: 78% Nitrogen (N2), 21% Oxygen (O2), 0.9% Argon (Ar), 0.04% Carbon Dioxide (CO2), trace water vapour.",
+                    "Phase 1: Intense volcanic activity released large amounts of CO2, water vapour, N2, methane, and ammonia. Virtually no O2 (similar to Mars today).",
+                    "Phase 2: Oceans formed as water vapour condensed. CO2 dissolved in oceans forming carbonate precipitates and marine sediments.",
+                    "Phase 3: Algae and green plants evolved ~2.7 billion years ago, undergoing photosynthesis (6CO2 + 6H2O → C6H12O6 + 6O2), taking in CO2 and releasing O2."
+                  ]
+                },
+                {
+                  t: "Atmospheric Pollutants & Global Warming",
+                  content: "Combustion of fossil fuels releases harmful pollutants and greenhouse gases.",
+                  bullets: [
+                    "Carbon Monoxide (CO): Toxic, odourless, colourless gas from incomplete combustion; binds irreversibly to haemoglobin.",
+                    "Sulfur Dioxide (SO2): Formed from sulfur impurities in fuel reacting with O2. Causes acid rain (damages buildings, trees, aquatic life).",
+                    "Nitrogen Oxides (NOx): Formed inside high-temperature engines. Causes respiratory problems and acid rain.",
+                    "Particulates (Soot/C): Incomplete combustion. Causes global dimming and respiratory damage.",
+                    "Greenhouse Effect: Short-wavelength UV/visible radiation from sun passes through atmosphere and warms Earth. Earth re-radiates long-wavelength infrared (IR) radiation. Greenhouse gases (CO2, CH4, H2O) absorb outgoing IR radiation and re-emit it in all directions, trapping thermal energy."
+                  ]
+                }
+              ],
+              cards: [
+                { q: "What were the main gases in Earth's early atmosphere?", a: "Carbon dioxide, water vapour, nitrogen, with little to no oxygen." },
+                { q: "How does sulfur dioxide cause acid rain?", a: "Sulfur impurities in fuel burn to form SO2, which dissolves in rain clouds to produce dilute sulfuric acid." },
+                { q: "What percentage of modern dry air is Nitrogen?", a: "78%." },
+                { q: "What percentage of modern dry air is Oxygen?", a: "21%." },
+                { q: "How did oxygen levels increase in Earth's atmosphere?", a: "Through photosynthesis by evolving algae and green plants." },
+                { q: "Why is carbon monoxide gas dangerous?", a: "It is a toxic, odorless, colorless gas that binds to hemoglobin, reducing blood oxygen capacity." },
+                { q: "What condition leads to the formation of nitrogen oxides (NOx) in car engines?", a: "High combustion temperatures cause atmospheric N2 and O2 to react." },
+                { q: "What wavelength radiation is absorbed by greenhouse gases?", a: "Long-wavelength Infrared (IR) thermal radiation re-radiated by Earth." },
+                { q: "Name three primary greenhouse gases.", a: "Carbon dioxide (CO2), methane (CH4), and water vapour (H2O)." },
+                { q: "What environmental problem is caused by carbon particulates (soot)?", a: "Global dimming and human respiratory problems." },
+                { q: "What is incomplete combustion?", a: "Burning hydrocarbon fuels in limited oxygen, producing carbon monoxide, soot, and water." },
+                { q: "How were oceans formed on early Earth?", a: "Water vapour released by volcanoes condensed as the Earth cooled." },
+                { q: "How was CO2 removed from early Earth's atmosphere?", a: "Dissolved into oceans forming carbonate sediments, locked in sedimentary rocks, and absorbed by photosynthesis." },
+                { q: "What is a carbon footprint?", a: "The total amount of greenhouse gases emitted over the full life cycle of a product, service, or event." },
+                { q: "Write the balanced equation for complete combustion of methane.", a: "CH4 + 2O2 → CO2 + 2H2O" }
+              ],
+              quiz: [
+                { q: "Which type of radiation is absorbed by greenhouse gases in the atmosphere?", opts: ["Short-wavelength Ultraviolet", "Gamma rays", "Long-wavelength Infrared", "X-rays"], ans: 2, exp: "Greenhouse gases absorb long-wavelength infrared thermal radiation emitted by Earth." },
+                { q: "What proportion of modern dry air is Nitrogen?", opts: ["21%", "50%", "78%", "99%"], ans: 2, exp: "Nitrogen gas makes up ~78% of the atmosphere." },
+                { q: "Which gas is produced during incomplete combustion of hydrocarbons?", opts: ["Carbon dioxide", "Carbon monoxide", "Oxygen", "Sulfur dioxide"], ans: 1, exp: "Incomplete combustion with limited oxygen produces toxic carbon monoxide." },
+                { q: "Which pollutant dissolves in rain clouds to form acid rain?", opts: ["Sulfur dioxide", "Methane", "Argon", "Helium"], ans: 0, exp: "SO2 reacts with water to form sulfuric acid rain." },
+                { q: "What was the main source of gases in Earth's early atmosphere?", opts: ["Volcanic activity", "Comets", "Photosynthesis", "Ocean evaporation"], ans: 0, exp: "Volcanoes erupted releasing water vapour, CO2, and nitrogen." },
+                { q: "How did oxygen gas first enter the atmosphere ~2.7 billion years ago?", opts: ["Volcanoes", "Photosynthesis by algae", "Ocean evaporation", "Meteors"], ans: 1, exp: "Photosynthesizing algae released oxygen into oceans and atmosphere." },
+                { q: "What effect do solid carbon particulates cause in the atmosphere?", opts: ["Global dimming", "Acid rain", "Eutrophication", "Ozone creation"], ans: 0, exp: "Particulates reflect sunlight back into space, causing global dimming." },
+                { q: "What chemical test confirms the presence of carbon dioxide gas?", opts: ["Relights a glowing splint", "Turns limewater milky/cloudy", "Makes a squeaky pop with a lit splint", "Bleaches damp litmus paper"], ans: 1, exp: "CO2 reacts with limewater (calcium hydroxide) to form white calcium carbonate precipitate." },
+                { q: "What was the dominant gas in Earth's early atmosphere?", opts: ["Oxygen", "Carbon dioxide", "Nitrogen", "Methane"], ans: 1, exp: "Early atmosphere was predominantly CO2." },
+                { q: "Why are nitrogen oxides (NOx) formed inside car engines?", opts: ["Engine heat allows N2 and O2 from air to react", "Fuel contains nitrogen", "Catalytic converters release it", "Air is pure nitrogen"], ans: 0, exp: "High engine temperatures force N2 and O2 to combine." },
+                { q: "What is potable water?", opts: ["Distilled laboratory water", "Water that is safe to drink", "Pure H2O with no dissolved solids", "Sea water"], ans: 1, exp: "Potable water is safe for human consumption." },
+                { q: "Which water purification method uses membranes under high pressure to remove salt?", opts: ["Distillation", "Reverse osmosis", "Chlorination", "Sedimentation"], ans: 1, exp: "Reverse osmosis forces sea water through selective membranes." },
+                { q: "Why is chlorine added to drinking water supplies?", opts: ["To remove salt", "To kill harmful bacteria and microbes", "To improve taste", "To soften hard water"], ans: 1, exp: "Chlorine sterilizes water by killing micro-organisms." },
+                { q: "What chemical test identifies water?", opts: ["Anhydrous copper sulfate turns from white to blue", "Limewater turns cloudy", "Squeaky pop test", "Flame test"], ans: 0, exp: "Water hydrates anhydrous copper sulfate, turning it blue." },
+                { q: "What is the chemical formula for methane gas?", opts: ["CH4", "CO2", "C2H6", "NH3"], ans: 0, exp: "Methane is CH4." }
+              ]
+            },
+            {
+              id: "c2",
+              code: "C2",
+              name: "C2: Material Choices",
+              notes: [
+                {
+                  t: "Crude Oil & Fractional Distillation",
+                  content: "Crude oil is a finite complex mixture of hydrocarbons (mostly alkanes).",
+                  bullets: [
+                    "Fractional Distillation Column: Crude oil is heated and vaporized before entering the fractionating column which is hot at the bottom and cool at the top.",
+                    "Vapours rise up the column. Hydrocarbons condense at different heights depending on their boiling points.",
+                    "Long-chain hydrocarbons have high boiling points, high viscosity, low flammability -> condense near the bottom.",
+                    "Short-chain hydrocarbons have low boiling points, low viscosity, high flammability -> condense near top."
+                  ]
+                },
+                {
+                  t: "Polymers, Ceramics & Composites",
+                  content: "Materials possess properties tailored for specific functions.",
+                  bullets: [
+                    "Addition Polymers: Made from alkenes (monomers with C=C double bonds) opening up to form long single-bonded chains.",
+                    "Thermosoftening Polymers: Weak intermolecular forces between polymer chains; melt easily when heated and can be remoulded.",
+                    "Thermosetting Polymers: Strong covalent cross-links between polymer chains; do not melt when heated, char at high temperatures.",
+                    "Composites: Consist of a reinforcement material embedded in a matrix/binder (e.g. Concrete, Carbon Fibre)."
+                  ]
+                }
+              ],
+              cards: [
+                { q: "Why do short-chain hydrocarbons condense near the top of a fractionating column?", a: "Because they have lower boiling points due to weaker intermolecular forces." },
+                { q: "Explain the structural difference between thermosoftening and thermosetting polymers.", a: "Thermosoftening polymers have weak intermolecular forces between chains; Thermosetting polymers have strong covalent cross-links." },
+                { q: "What is a hydrocarbon?", a: "A compound consisting ONLY of carbon and hydrogen atoms." },
+                { q: "What is the general formula for alkanes?", a: "CnH2n+2" },
+                { q: "What is the general formula for alkenes?", a: "CnH2n" },
+                { q: "What is cracking?", a: "Thermal decomposition breaking long-chain alkanes into smaller, more useful alkanes and alkenes." },
+                { q: "What is the chemical test for alkenes (unsaturated hydrocarbons)?", a: "Bromine water turns from orange to colorless." },
+                { q: "What is a monomer?", a: "A small reactive molecule containing a C=C double bond that joins to form a polymer." },
+                { q: "What is a composite material?", a: "A material made of a reinforcement material embedded in a matrix/binder." },
+                { q: "State three properties of short-chain hydrocarbons.", a: "Low boiling point, low viscosity (runny), and high flammability." },
+                { q: "State three properties of long-chain hydrocarbons.", a: "High boiling point, high viscosity (thick), and low flammability." },
+                { q: "Name the first four alkane molecules.", a: "Methane, Ethane, Propane, Butane." },
+                { q: "What type of chemical bond connects carbon atoms in alkanes?", a: "Single covalent bonds (saturated)." },
+                { q: "What functional group makes alkenes reactive?", a: "A carbon-carbon double bond (C=C)." },
+                { q: "Why do thermosetting polymers not melt when heated?", a: "Strong covalent cross-links hold the polymer chains firmly together." }
+              ],
+              quiz: [
+                { q: "What type of chemical bond holds together the monomers in an addition polymer chain?", opts: ["Ionic", "Covalent", "Metallic", "Hydrogen"], ans: 1, exp: "Polymer backbones consist of strong covalent bonds between carbon atoms." },
+                { q: "What is the general formula for alkanes?", opts: ["CnH2n", "CnH2n+2", "CnH2n-2", "CnHn"], ans: 1, exp: "Alkanes follow the general formula CnH2n+2." },
+                { q: "What color change occurs when an alkene is shaken with bromine water?", opts: ["Stays orange", "Turns from orange to colorless", "Turns blue", "Forms a white precipitate"], ans: 1, exp: "Unsaturated C=C bonds react with bromine, decolorizing bromine water." },
+                { q: "What structural feature allows monomers to undergo addition polymerization?", opts: ["A C=C double bond", "An O-H alcohol group", "A triple bond", "An ionic charge"], ans: 0, exp: "The C=C double bond opens up to form single covalent polymer bonds." },
+                { q: "Where in the fractionating column do long-chain hydrocarbons condense?", opts: ["Top", "Middle", "Near the hot bottom", "They do not condense"], ans: 2, exp: "Long-chain hydrocarbons have high boiling points, condensing near the bottom." },
+                { q: "What property is characteristic of thermosoftening polymers?", opts: ["They melt when heated and can be remoulded", "They char without melting", "They possess covalent cross-links", "They conduct electricity"], ans: 0, exp: "Weak intermolecular forces allow thermosoftening polymers to melt easily." },
+                { q: "What catalyst is used during industrial catalytic cracking?", opts: ["Hot zeolite / alumina catalyst", "Iron", "Nickel", "Copper"], ans: 0, exp: "Alumina or zeolite catalysts speed up thermal cracking." },
+                { q: "What is the chemical formula for propane?", opts: ["CH4", "C2H6", "C3H8", "C4H10"], ans: 2, exp: "Propane has 3 carbons: C3H(2*3+2) = C3H8." },
+                { q: "What type of reaction is cracking?", opts: ["Combustion", "Thermal decomposition", "Neutralization", "Oxidation"], ans: 1, exp: "Cracking uses heat to decompose long-chain hydrocarbons." },
+                { q: "What is the reinforcement material in reinforced concrete composite?", opts: ["Steel rods embedded in a concrete matrix", "Glass fibres", "Wood in resin", "Clay"], ans: 0, exp: "Steel rods provide tensile strength inside concrete." },
+                { q: "What does 'saturated' mean regarding hydrocarbons?", opts: ["Contains C=C double bonds", "Contains only single C-C covalent bonds", "Dissolved in water", "Full of hydrogen gas"], ans: 1, exp: "Saturated hydrocarbons contain only single C-C bonds." },
+                { q: "What is the chemical formula for ethene?", opts: ["C2H4", "C2H6", "CH4", "C3H6"], ans: 0, exp: "Ethene is an alkene with 2 carbons: C2H4." },
+                { q: "Why are short-chain alkanes preferred as fuels?", opts: ["They are highly flammable and ignite easily", "They have high boiling points", "They are viscous", "They do not burn"], ans: 0, exp: "Short alkanes burn cleanly and ignite readily." },
+                { q: "What is a biodegradable polymer?", opts: ["A polymer that breaks down naturally via microorganisms", "An indestructible plastic", "A plastic that melts at 1000°C", "A metal alloy"], ans: 0, exp: "Biodegradable plastics are decomposed by natural microbes." },
+                { q: "What property forms the basis of fractional distillation of crude oil?", opts: ["Density", "Boiling point", "Solubility", "Melting point"], ans: 1, exp: "Fractions condense at different levels based on boiling points." }
+              ]
+            },
+            {
+              id: "c3",
+              code: "C3",
+              name: "C3: Chemical Reactions",
+              notes: [
+                {
+                  t: "Conservation of Mass & Redox",
+                  content: "Mass is conserved in all chemical reactions. Total mass of reactants equals total mass of products.",
+                  bullets: [
+                    "Redox in terms of electrons: OIL RIG -> Oxidation Is Loss of electrons; Reduction Is Gain of electrons.",
+                    "Oxidizing agent: Accepts electrons (gets reduced). Reducing agent: Donates electrons (gets oxidized)."
+                  ]
+                },
+                {
+                  t: "Acids, Bases, Neutralization & Titrations",
+                  content: "Acids produce H+ ions in aqueous solutions; Alkalis produce OH- ions.",
+                  bullets: [
+                    "Neutralization ionic equation: H+(aq) + OH-(aq) → H2O(l).",
+                    "Strong acids (e.g. HCl, HNO3, H2SO4) completely ionize in water; Weak acids (e.g. CH3COOH) only partially ionize.",
+                    "pH Scale: Each decrease of 1 pH unit represents a 10-fold increase in [H+] ion concentration."
+                  ]
+                }
+              ],
+              cards: [
+                { q: "Define oxidation and reduction in terms of electrons.", a: "Oxidation is the loss of electrons; Reduction is the gain of electrons (OIL RIG)." },
+                { q: "Write the general ionic equation for a neutralization reaction.", a: "H+(aq) + OH-(aq) → H2O(l)" },
+                { q: "What ion causes acidity in aqueous solutions?", a: "Hydrogen ion (H+)." },
+                { q: "What ion causes alkalinity in aqueous solutions?", a: "Hydroxide ion (OH-)." },
+                { q: "What is the difference between a strong acid and a weak acid?", a: "Strong acids completely ionize in water; weak acids only partially ionize." },
+                { q: "Name three common strong acids.", a: "Hydrochloric acid (HCl), Sulfuric acid (H2SO4), and Nitric acid (HNO3)." },
+                { q: "Give an example of a weak acid.", a: "Ethanoic acid (CH3COOH)." },
+                { q: "How does [H+] concentration change when pH decreases by 1 unit?", a: "The [H+] ion concentration increases by a factor of 10." },
+                { q: "What is an oxidizing agent?", a: "A substance that takes electrons from another species (and is reduced itself)." },
+                { q: "What is a reducing agent?", a: "A substance that donates electrons to another species (and is oxidized itself)." },
+                { q: "What products are formed when an acid reacts with a metal carbonate?", a: "Salt + Water + Carbon Dioxide." },
+                { q: "What products are formed when an acid reacts with a metal?", a: "Salt + Hydrogen gas." },
+                { q: "What products are formed when an acid reacts with a base?", a: "Salt + Water." },
+                { q: "What is a displacement reaction?", a: "A reaction where a more reactive element displaces a less reactive element from its compound." },
+                { q: "State the Law of Conservation of Mass.", a: "Total mass of reactants equals total mass of products in a closed chemical reaction." }
+              ],
+              quiz: [
+                { q: "If solution A has a pH of 3 and solution B has a pH of 5, how much higher is the [H+] concentration in solution A?", opts: ["2 times", "10 times", "20 times", "100 times"], ans: 3, exp: "A difference of 2 pH units corresponds to 10^2 = 100 times higher H+ concentration." },
+                { q: "What is the ionic equation representing neutralization?", opts: ["H+(aq) + OH-(aq) → H2O(l)", "Na+ + Cl- → NaCl", "2H2 + O2 → 2H2O", "CO2 + H2O → H2CO3"], ans: 0, exp: "Neutralization involves H+ from acid combining with OH- from alkali to form water." },
+                { q: "What does OIL RIG stand for in electrochemistry?", opts: ["Oxidation Is Loss, Reduction Is Gain of electrons", "Oil in rigs", "Organic Is Living", "Oxygen Is Light"], ans: 0, exp: "OIL RIG: Oxidation Is Loss, Reduction Is Gain of electrons." },
+                { q: "What gas is evolved when an acid reacts with a metal carbonate?", opts: ["Oxygen", "Hydrogen", "Carbon dioxide", "Nitrogen"], ans: 2, exp: "Carbonates react with acids to produce salt, water, and CO2 gas." },
+                { q: "What gas is evolved when a reactive metal reacts with acid?", opts: ["Oxygen", "Hydrogen", "Carbon dioxide", "Chlorine"], ans: 1, exp: "Metals react with acids producing a salt and hydrogen gas." },
+                { q: "What is the pH of a strongly alkaline solution?", opts: ["1", "7", "9", "14"], ans: 3, exp: "pH 14 represents a strongly alkaline solution." },
+                { q: "Which acid produces chloride salts?", opts: ["Hydrochloric acid", "Sulfuric acid", "Nitric acid", "Ethanoic acid"], ans: 0, exp: "HCl forms chloride salts." },
+                { q: "Which acid produces sulfate salts?", opts: ["Hydrochloric acid", "Sulfuric acid", "Nitric acid", "Citric acid"], ans: 1, exp: "H2SO4 forms sulfate salts." },
+                { q: "What color is phenolphthalein indicator in an alkaline solution?", opts: ["Colorless", "Pink / Magenta", "Red", "Yellow"], ans: 1, exp: "Phenolphthalein turns pink in alkalis." },
+                { q: "What color is methyl orange in an acidic solution?", opts: ["Red", "Yellow", "Blue", "Colorless"], ans: 0, exp: "Methyl orange turns red in acids." },
+                { q: "If Magnesium displaces Copper from Copper Sulfate, which species is reduced?", opts: ["Magnesium", "Copper ions (Cu2+)", "Sulfate ions", "Water"], ans: 1, exp: "Cu2+ ions gain 2 electrons (reduction) to form Cu metal." },
+                { q: "What is a precipitation reaction?", opts: ["A reaction that forms an insoluble solid product", "Boiling a liquid", "Dissolving salt", "Gas expansion"], ans: 0, exp: "Precipitation forms an insoluble solid from aqueous reactants." },
+                { q: "Why might mass appear to decrease in an open flask reaction?", opts: ["A gas product escaped into the air", "Atoms were destroyed", "Balance error", "Energy turned to light"], ans: 0, exp: "Gaseous products escape open containers, reducing measured mass." },
+                { q: "What is an alkali?", opts: ["A soluble base that produces OH- ions in water", "An insoluble acid", "A gas", "A metal"], ans: 0, exp: "Alkalis are bases that dissolve in water releasing OH- ions." },
+                { q: "What is the formula for concentration in g/dm³?", opts: ["Concentration = Mass (g) / Volume (dm³)", "Volume / Mass", "Mass * Volume", "Moles * Mass"], ans: 0, exp: "Concentration (g/dm³) = Mass of solute (g) / Volume of solution (dm³)." }
+              ]
+            },
+            {
+              id: "c4",
+              code: "C4",
+              name: "C4: Predicting & Controlling Reactions",
+              notes: [
+                {
+                  t: "Collision Theory & Reaction Rates",
+                  content: "Chemical reactions can only occur when reacting particles collide with sufficient energy (Activation Energy).",
+                  bullets: [
+                    "Factors increasing reaction rate: 1. Increased Temperature (particles move faster, collide more frequently, and more collisions have energy ≥ Ea); 2. Increased Concentration/Pressure (more particles per unit volume, higher collision frequency); 3. Increased Surface Area (more exposed particles for collisions); 4. Catalysts (provide alternative pathway with lower activation energy)."
+                  ]
+                },
+                {
+                  t: "Reversible Reactions & Le Chatelier's Principle",
+                  content: "In a closed system, reversible reactions reach dynamic equilibrium when forward and reverse reaction rates are equal.",
+                  bullets: [
+                    "Le Chatelier's Principle: If a system at equilibrium is subjected to a change in conditions, the system alters to counteract that change.",
+                    "Temperature increase: Shifts equilibrium in endothermic direction to absorb heat.",
+                    "Pressure increase: Shifts equilibrium to the side with fewer gas molecules."
+                  ]
+                }
+              ],
+              cards: [
+                { q: "How does a catalyst increase reaction rate without being used up?", a: "By providing an alternative reaction pathway with a lower activation energy." },
+                { q: "According to Le Chatelier's Principle, what happens when pressure is increased on a gas equilibrium?", a: "Equilibrium shifts towards the side with fewer moles of gas." },
+                { q: "What is activation energy?", a: "The minimum energy colliding particles must possess for a reaction to occur." },
+                { q: "How does increasing temperature increase reaction rate?", a: "Particles gain kinetic energy, moving faster and colliding more frequently, with a higher fraction having E ≥ Ea." },
+                { q: "How does increasing concentration increase reaction rate?", a: "There are more reacting particles per unit volume, increasing collision frequency." },
+                { q: "How does increasing surface area increase reaction rate?", a: "More reactant particles are exposed to collisions at the surface." },
+                { q: "What is dynamic equilibrium?", a: "A closed system state where forward and reverse reaction rates are equal, keeping concentrations constant." },
+                { q: "What happens to an equilibrium if temperature is increased?", a: "The equilibrium shifts in the endothermic direction to absorb heat." },
+                { q: "What is an exothermic reaction?", a: "A reaction that releases thermal energy to surroundings (temperature rises)." },
+                { q: "What is an endothermic reaction?", a: "A reaction that absorbs thermal energy from surroundings (temperature drops)." },
+                { q: "Is bond breaking endothermic or exothermic?", a: "Endothermic (requires energy input to break chemical bonds)." },
+                { q: "Is bond making endothermic or exothermic?", a: "Exothermic (releases energy when new chemical bonds form)." },
+                { q: "State the equation for the Haber process.", a: "N2(g) + 3H2(g) ⇌ 2NH3(g)" },
+                { q: "What catalyst is used in the Haber process?", a: "Iron catalyst." },
+                { q: "What happens to equilibrium position if a catalyst is added?", a: "No shift occurs; it speeds up both forward and reverse reactions equally." }
+              ],
+              quiz: [
+                { q: "In the Haber process: N2(g) + 3H2(g) ⇌ 2NH3(g) (exothermic forward), what shift occurs if temperature is increased?", opts: ["Shifts right to yield more NH3", "Shifts left to absorb heat", "No shift occurs", "Reaction stops completely"], ans: 1, exp: "Increasing temperature favors the endothermic reverse reaction, shifting equilibrium left." },
+                { q: "How does a catalyst affect the activation energy of a chemical reaction?", opts: ["Increases activation energy", "Lowers activation energy", "Has no effect", "Removes activation energy completely"], ans: 1, exp: "Catalysts provide a lower activation energy pathway." },
+                { q: "What is a common unit for reaction rate?", opts: ["g/s or cm³/s", "Joules", "Volts", "Meters"], ans: 0, exp: "Rate measures mass or volume of product formed per second." },
+                { q: "In an exothermic reaction profile, products are at:", opts: ["Higher energy than reactants", "Lower energy than reactants", "Equal energy", "Zero energy"], ans: 1, exp: "Exothermic reactions release energy, placing products lower than reactants." },
+                { q: "In an endothermic reaction profile, the overall energy change ΔH is:", opts: ["Positive", "Negative", "Zero", "Infinite"], ans: 0, exp: "Endothermic reactions absorb energy, giving a positive ΔH." },
+                { q: "What effect does increasing pressure have on: N2(g) + 3H2(g) ⇌ 2NH3(g)?", opts: ["Shifts right (4 gas moles -> 2 gas moles)", "Shifts left", "No shift", "Reduces reaction speed"], ans: 0, exp: "Higher pressure shifts equilibrium to the side with fewer gas moles (right)." },
+                { q: "Why does powdered marble react faster with acid than large marble chips?", opts: ["Powder has a larger surface area to volume ratio", "Powder has higher temperature", "Powder contains a catalyst", "Powder has higher concentration"], ans: 0, exp: "Larger surface area increases collision frequency." },
+                { q: "What requirement must be met for dynamic equilibrium to be established?", opts: ["Open container", "Closed system", "High temperature", "Pure oxygen"], ans: 1, exp: "Reversible reactions require a closed system to reach equilibrium." },
+                { q: "How is overall energy change calculated from bond energies?", opts: ["Energy = Bonds broken - Bonds formed", "Energy = Bonds formed - Bonds broken", "Energy = Mass / Volume", "Energy = Temperature * 100"], ans: 0, exp: "Overall energy change = Energy absorbed to break bonds - Energy released forming bonds." },
+                { q: "If the forward reaction is exothermic, the reverse reaction must be:", opts: ["Endothermic", "Exothermic", "Neutral", "Combustion"], ans: 0, exp: "Reversible reactions have opposite energy changes in reverse." },
+                { q: "How can the rate of a reaction producing gas be measured?", opts: ["Using a gas syringe or balance over time", "Using a thermometer", "Using a pH meter", "Using a ruler"], ans: 0, exp: "Gas syringes measure gas volume generated over time." },
+                { q: "Why do catalysts remain chemically unchanged at the end of a reaction?", opts: ["They are not consumed in the overall reaction", "They turn to water", "They evaporate", "They freeze"], ans: 0, exp: "Catalysts participate without being permanently altered." },
+                { q: "What compromise temperature is used in the industrial Haber process?", opts: ["450°C", "20°C", "1000°C", "0°C"], ans: 0, exp: "450°C strikes a compromise between reaction rate and yield." },
+                { q: "What compromise pressure is used in the Haber process?", opts: ["200 atm", "1 atm", "1000 atm", "10 atm"], ans: 0, exp: "200 atmospheres balances yield, speed, and equipment cost." },
+                { q: "What observation indicates an exothermic reaction in a beaker?", opts: ["A temperature increase recorded on a thermometer", "A temperature drop", "Color turning clear", "Beaker melting"], ans: 0, exp: "Exothermic reactions release thermal energy, raising temperature." }
+              ]
+            },
+            {
+              id: "c5",
+              code: "C5",
+              name: "C5: Chemical Analysis",
+              notes: [
+                {
+                  t: "Purity & Chromatography",
+                  content: "A pure substance consists of a single element or compound with a specific melting and boiling point.",
+                  bullets: [
+                    "Paper Chromatography: Separates mixtures based on solubilities. Stationary phase = paper; Mobile phase = solvent.",
+                    "Rf Value Calculation: Rf = (Distance moved by spot) / (Distance moved by solvent front). Rf value is always ≤ 1."
+                  ]
+                },
+                {
+                  t: "Chemical Tests for Gases & Ions",
+                  content: "Qualitative analysis tests for cations and anions.",
+                  bullets: [
+                    "Gas Tests: Oxygen (relights a glowing splint); Hydrogen (squeaky pop with lighted splint); Carbon Dioxide (turns limewater milky/cloudy); Chlorine (bleaches damp litmus paper white).",
+                    "Flame Tests (Cations): Lithium = Crimson; Sodium = Yellow; Potassium = Lilac; Calcium = Orange-Red; Copper = Green.",
+                    "Anion Tests: Halides (add dilute HNO3 then AgNO3): Chloride = White precipitate; Bromide = Cream; Iodide = Yellow. Sulfates (add dilute HCl then BaCl2) = White precipitate of BaSO4."
+                  ]
+                }
+              ],
+              cards: [
+                { q: "How do you calculate the Rf value in paper chromatography?", a: "Rf = Distance moved by spot / Distance moved by solvent front." },
+                { q: "What color flame does Potassium produce in a flame test?", a: "Lilac." },
+                { q: "What color flame does Lithium produce in a flame test?", a: "Crimson." },
+                { q: "What color flame does Sodium produce in a flame test?", a: "Yellow." },
+                { q: "What color flame does Calcium produce in a flame test?", a: "Orange-red." },
+                { q: "What color flame does Copper(II) produce in a flame test?", a: "Green." },
+                { q: "State the reagents and results for halide ion tests.", a: "Add dilute HNO3 + AgNO3: Chloride = White ppt; Bromide = Cream ppt; Iodide = Yellow ppt." },
+                { q: "State the reagents and result for the sulfate ion test.", a: "Add dilute HCl + BaCl2 -> White precipitate of Barium Sulfate (BaSO4)." },
+                { q: "State the test and positive result for carbonate ions.", a: "Add dilute acid -> Effervescence; evolved gas turns limewater cloudy." },
+                { q: "What is the gas test for Hydrogen?", a: "A lit splint makes a squeaky pop sound." },
+                { q: "What is the gas test for Oxygen?", a: "Relights a glowing splint." },
+                { q: "What is the gas test for Chlorine?", a: "Bleaches damp blue litmus paper white." },
+                { q: "What is the gas test for Carbon Dioxide?", a: "Bubbled through limewater, turning it milky/cloudy." },
+                { q: "Define a pure substance in chemistry.", a: "A single element or compound not mixed with any other substance, having sharp melting/boiling points." },
+                { q: "What is a formulation?", a: "A complex mixture designed as a useful product with precise proportions of ingredients." }
+              ],
+              quiz: [
+                { q: "Which chemical reagent test confirms the presence of Sulfate (SO4^2-) ions?", opts: ["Silver Nitrate + Nitric Acid", "Barium Chloride + Hydrochloric Acid", "Sodium Hydroxide", "Limewater"], ans: 1, exp: "Barium chloride reacts with sulfate ions to form an insoluble white precipitate of Barium Sulfate." },
+                { q: "What flame color is characteristic of Sodium ions?", opts: ["Lilac", "Crimson", "Yellow", "Green"], ans: 2, exp: "Sodium ions produce a bright yellow flame." },
+                { q: "What color precipitate is formed when Silver Nitrate is added to Chloride ions?", opts: ["White", "Cream", "Yellow", "Brown"], ans: 0, exp: "Silver chloride is a white precipitate." },
+                { q: "What color precipitate is formed when Silver Nitrate is added to Iodide ions?", opts: ["White", "Cream", "Yellow", "Black"], ans: 2, exp: "Silver iodide forms a yellow precipitate." },
+                { q: "Which gas relights a glowing wooden splint?", opts: ["Hydrogen", "Oxygen", "Carbon dioxide", "Chlorine"], ans: 1, exp: "Oxygen gas supports combustion, relighting a glowing splint." },
+                { q: "Which gas bleaches damp blue litmus paper white?", opts: ["Chlorine", "Ammonia", "Oxygen", "Hydrogen"], ans: 0, exp: "Chlorine gas acts as a bleaching agent." },
+                { q: "What is the maximum possible value for an Rf calculation?", opts: ["0.5", "1.0", "10.0", "Infinite"], ans: 1, exp: "Rf values are fractions ≤ 1.0 because spots cannot travel further than the solvent front." },
+                { q: "What is the stationary phase in paper chromatography?", opts: ["The paper", "The solvent", "The beaker", "The ink spot"], ans: 0, exp: "Chromatography paper is the stationary phase." },
+                { q: "What is the mobile phase in paper chromatography?", opts: ["The paper", "The liquid solvent", "The sample spot", "The pencil line"], ans: 1, exp: "The liquid solvent moves up the paper, carrying dissolved substances." },
+                { q: "Why must the baseline in chromatography be drawn in pencil?", opts: ["Pencil lead is insoluble and won't dissolve in the solvent", "Pencil is darker", "Ink is cheap", "Pencil is permanent"], ans: 0, exp: "Graphite pencil does not dissolve and contaminate chromatograms." },
+                { q: "What flame color is produced by Calcium ions?", opts: ["Crimson", "Orange-red", "Green", "Lilac"], ans: 1, exp: "Calcium gives an orange-red flame test result." },
+                { q: "What flame color is produced by Copper(II) ions?", opts: ["Yellow", "Lilac", "Green", "White"], ans: 2, exp: "Copper(II) ions produce a green flame." },
+                { q: "How does a pure substance behave when melting?", opts: ["Melts sharply at one fixed temperature", "Melts over a broad temperature range", "Does not melt", "Boils first"], ans: 0, exp: "Pure substances have sharp, specific melting points." },
+                { q: "What precipitate forms when Sodium Hydroxide is added to Copper(II) solution?", opts: ["Blue precipitate", "White precipitate", "Green precipitate", "Brown precipitate"], ans: 0, exp: "Copper(II) hydroxide forms a blue precipitate." },
+                { q: "What precipitate forms when Sodium Hydroxide is added to Iron(II) solution?", opts: ["Green precipitate", "Red-brown precipitate", "Blue precipitate", "White precipitate"], ans: 0, exp: "Iron(II) hydroxide forms a green precipitate." }
+              ]
+            },
+            {
+              id: "c6",
+              code: "C6",
+              name: "C6: Global Challenges",
+              notes: [
+                {
+                  t: "Potable Water & Waste Water Treatment",
+                  content: "Potable water is water that is safe to drink. It is not pure H2O because it contains dissolved minerals.",
+                  bullets: [
+                    "Freshwater Treatment: 1. Pass through wire mesh filters (screening); 2. Sand filtration; 3. Sterilization using Chlorine gas, Ozone, or UV light to kill microbes.",
+                    "Desalination of Sea Water: Reverse osmosis (high energy/pressure) or Thermal Distillation (expensive)."
+                  ]
+                },
+                {
+                  t: "Extracting Metals (Phytomining & Bioleaching)",
+                  content: "Alternative methods for extracting metals from low-grade copper ores.",
+                  bullets: [
+                    "Phytomining: Plants are grown on land containing low-grade copper ore. Plants absorb copper ions into roots and accumulate them in leaves. Plants are harvested and burned. The ash contains high concentrations of copper compounds which are reacted with sulfuric acid to form copper sulfate solution.",
+                    "Bioleaching: Bacteria break down low-grade copper ore, producing an acidic solution called a leachate containing copper ions. Copper is then displaced using scrap iron or extracted via electrolysis."
+                  ]
+                }
+              ],
+              cards: [
+                { q: "Describe the process of phytomining.", a: "Plants absorb copper ions from low-grade soil -> Plants harvested & burned -> Ash dissolved in acid -> Copper extracted via displacement with iron or electrolysis." },
+                { q: "Describe bioleaching.", a: "Bacteria process low-grade copper ore, producing an acidic leachate solution containing copper ions." },
+                { q: "Why is scrap iron used to displace copper from leachate solutions?", a: "Iron is more reactive than copper and very inexpensive." },
+                { q: "What is a Life Cycle Assessment (LCA)?", a: "An evaluation of the environmental impact of a product across four key life stages." },
+                { q: "State the four stages evaluated in a Life Cycle Assessment.", a: "1. Extracting raw materials; 2. Manufacturing & packaging; 3. Product use; 4. Disposal." },
+                { q: "State two advantages of recycling metals.", a: "Saves energy, preserves finite ore reserves, and reduces landfill waste and habitat destruction." },
+                { q: "What is corrosion?", a: "The destruction of materials by chemical reactions with environmental substances (e.g., rusting)." },
+                { q: "What two conditions are required for iron to rust?", a: "Oxygen AND Water." },
+                { q: "What is galvanizing?", a: "Coating iron or steel with a protective layer of sacrificial zinc metal." },
+                { q: "What is sacrificial protection against rusting?", a: "Attaching a more reactive metal (e.g., zinc/magnesium) to protect iron from oxidizing." },
+                { q: "What raw material supplies Nitrogen for the Haber process?", a: "Air." },
+                { q: "What raw material supplies Hydrogen for the Haber process?", a: "Methane (natural gas) reacted with steam." },
+                { q: "What three essential elements are supplied by NPK fertilizers?", a: "Nitrogen, Phosphorus, and Potassium." },
+                { q: "Why are NPK fertilizers applied to agricultural soil?", a: "To replace missing nutrients and increase crop yields." },
+                { q: "What is an alloy?", a: "A mixture of two or more metals (or a metal with carbon) designed to improve physical properties." }
+              ],
+              quiz: [
+                { q: "Why is scrap iron used to displace copper from leachate solutions?", opts: ["Iron is more reactive than copper and cheap", "Iron is less reactive than copper", "Iron acts as a catalyst", "Iron absorbs water"], ans: 0, exp: "Iron is more reactive than copper, displacing it from copper sulfate solution economically." },
+                { q: "What is the first stage evaluated in a product Life Cycle Assessment (LCA)?", opts: ["Extracting and processing raw materials", "Product disposal", "Product use", "Packaging"], ans: 0, exp: "LCAs start by measuring environmental impacts of raw material extraction." },
+                { q: "What two substances must be present for iron to rust?", opts: ["Oxygen and Water", "Oxygen only", "Water only", "Nitrogen and Water"], ans: 0, exp: "Rusting requires both oxygen gas and liquid water." },
+                { q: "What metal is applied to iron during galvanization?", opts: ["Zinc", "Copper", "Tin", "Gold"], ans: 0, exp: "Zinc is coated onto iron for sacrificial physical protection." },
+                { q: "What organisms extract copper during bioleaching?", opts: ["Bacteria", "Plants", "Electromagnets", "Fungi"], ans: 0, exp: "Bacteria break down low-grade ore producing copper leachate." },
+                { q: "What three elements are supplied by NPK fertilizers?", opts: ["Nitrogen, Phosphorus, Potassium", "Nickel, Lead, Krypton", "Sodium, Potassium, Calcium", "Nitrogen, Pyrite, Carbon"], ans: 0, exp: "NPK fertilizers supply Nitrogen, Phosphorus, and Potassium." },
+                { q: "Why are alloys typically harder than pure metals?", opts: ["Different sized atoms distort regular layer structures, preventing layers sliding", "Alloys are lighter", "Alloys contain rubber", "Pure metals have no bonds"], ans: 0, exp: "Distorted atomic layers cannot slide over each other easily." },
+                { q: "What is brass an alloy of?", opts: ["Copper and Zinc", "Copper and Tin", "Iron and Carbon", "Aluminum and Lead"], ans: 0, exp: "Brass is an alloy of copper and zinc." },
+                { q: "What is bronze an alloy of?", opts: ["Copper and Tin", "Copper and Zinc", "Iron and Nickel", "Lead and Gold"], ans: 0, exp: "Bronze is an alloy of copper and tin." },
+                { q: "What is steel an alloy of?", opts: ["Iron and Carbon", "Copper and Zinc", "Gold and Silver", "Tin and Lead"], ans: 0, exp: "Steel consists of iron alloyed with carbon." },
+                { q: "What is the primary benefit of recycling aluminum?", opts: ["Saves 95% of the energy required to extract aluminum from bauxite ore", "Turns it into gold", "Destroys carbon", "Eliminates mass"], ans: 0, exp: "Recycling aluminum requires only ~5% of the energy of primary extraction." },
+                { q: "What acid is reacted with phosphate rock to produce superphosphate fertilizer?", opts: ["Sulfuric acid", "Nitric acid", "Hydrochloric acid", "Ethanoic acid"], ans: 0, exp: "Sulfuric acid converts insoluble phosphate rock into soluble superphosphate." },
+                { q: "Why is aluminum corrosion self-limiting?", opts: ["A thin protective layer of aluminum oxide forms on its surface", "Aluminum does not react", "It dissolves", "It shrinks"], ans: 0, exp: "Al2O3 layer forms an impermeable barrier preventing further oxidation." },
+                { q: "Why can LCAs be subjective?", opts: ["Evaluating environmental impacts requires personal judgments and estimates", "Computers crash", "Calculations take 100 years", "No formulas exist"], ans: 0, exp: "Numerical weighting of environmental damage involves human judgment." },
+                { q: "What defines sustainable development?", opts: ["Meeting present needs without compromising future generations' ability to meet theirs", "Using resources fast", "Burning oil", "Exporting waste"], ans: 0, exp: "Sustainability balances present consumption with future security." }
+              ]
+            }
+          ]
+        },
+        phys: {
+          title: "OCR GCSE Physics B (P1-P6)",
+          color: "#f59e0b",
+          units: [
+            {
+              id: "p1",
+              code: "P1",
+              name: "P1: Radiation & Waves",
+              notes: [
+                {
+                  t: "Electromagnetic Spectrum & Wave Properties",
+                  content: "Transverse waves oscillate perpendicular to the direction of energy transfer. All EM waves travel at the speed of light (3 x 10^8 m/s) in a vacuum.",
+                  bullets: [
+                    "EM Spectrum in order of INCREASING FREQUENCY / DECREASING WAVELENGTH: Radio waves -> Microwaves -> Infrared -> Visible light -> Ultraviolet -> X-rays -> Gamma rays.",
+                    "Wave Equations: Wave speed (v) = Frequency (f) × Wavelength (λ) [v = f λ]; Time Period (T) = 1 / Frequency (f).",
+                    "Refraction: When a wave enters a denser medium, it slows down and bends TOWARDS the normal line. When entering a less dense medium, it speeds up and bends AWAY from the normal."
+                  ]
+                }
+              ],
+              cards: [
+                { q: "State the EM spectrum in order of increasing frequency.", a: "Radio waves, Microwaves, Infrared, Visible light, Ultraviolet, X-rays, Gamma rays." },
+                { q: "What equation links wave speed, frequency, and wavelength?", a: "v = f × λ (Wave speed = frequency × wavelength)." },
+                { q: "What is a transverse wave?", a: "A wave where oscillations are perpendicular to the direction of energy transfer." },
+                { q: "What is a longitudinal wave?", a: "A wave where oscillations are parallel to the direction of energy transfer." },
+                { q: "Give an example of a longitudinal wave.", a: "Sound waves / Ultrasound / Seismic P-waves." },
+                { q: "Give an example of a transverse wave.", a: "Light waves / Electromagnetic waves / Water ripples / Seismic S-waves." },
+                { q: "What is refraction?", a: "The change in wave speed and direction when passing into a medium of different optical density." },
+                { q: "What happens when light enters a denser glass block?", a: "It slows down and bends TOWARDS the normal line." },
+                { q: "What speed do all electromagnetic waves travel at in a vacuum?", a: "3 × 10^8 m/s (speed of light)." },
+                { q: "Which EM waves possess high enough energy to be ionizing radiation?", a: "Ultraviolet, X-rays, and Gamma rays." },
+                { q: "What hazard is associated with exposure to ionizing radiation?", a: "Cell mutations, tissue damage, and cancer." },
+                { q: "What wave property determines the loudness of a sound?", a: "Amplitude." },
+                { q: "What wave property determines the pitch of a sound?", a: "Frequency." },
+                { q: "What is ultrasound?", a: "Sound waves with a frequency greater than 20,000 Hz (the upper limit of human hearing)." },
+                { q: "What is the formula for wave period (T)?", a: "Period T = 1 / Frequency (f)" }
+              ],
+              quiz: [
+                { q: "Which electromagnetic wave has the shortest wavelength and highest frequency?", opts: ["Radio waves", "Visible light", "Ultraviolet", "Gamma rays"], ans: 3, exp: "Gamma rays have the highest frequency, shortest wavelength, and highest photon energy." },
+                { q: "What formula relates wave speed, frequency, and wavelength?", opts: ["v = f / λ", "v = f × λ", "v = λ / f", "v = f + λ"], ans: 1, exp: "Wave speed equals frequency multiplied by wavelength." },
+                { q: "Which of the following is a longitudinal wave?", opts: ["Light wave", "Sound wave", "Water wave", "Microwave"], ans: 1, exp: "Sound waves are longitudinal with compressions and rarefactions." },
+                { q: "What happens to light when it enters a denser medium like glass?", opts: ["Speeds up", "Slows down and bends towards normal", "Stops completely", "Bends away from normal"], ans: 1, exp: "Light slows down in denser media, bending towards the normal." },
+                { q: "What is the speed of light in a vacuum?", opts: ["300 m/s", "3 x 10^8 m/s", "3 x 10^5 m/s", "Infinite"], ans: 1, exp: "All EM waves travel at 3 x 10^8 m/s in vacuum." },
+                { q: "Which EM waves are used for satellite communication?", opts: ["Microwaves / Radio waves", "Gamma rays", "Visible light", "Ultraviolet"], ans: 0, exp: "Microwaves pass through Earth's atmosphere to satellites." },
+                { q: "What is the SI unit of frequency?", opts: ["Hertz (Hz)", "Metres", "Seconds", "Joules"], ans: 0, exp: "Frequency is measured in Hertz (cycles per second)." },
+                { q: "What is the audible frequency range of human hearing?", opts: ["20 Hz to 20,000 Hz", "0 to 10 Hz", "100k to 1M Hz", "50 to 500 Hz"], ans: 0, exp: "Human ears detect frequencies between 20 Hz and 20 kHz." },
+                { q: "What wave distance measures height from undisturbed position to crest?", opts: ["Amplitude", "Wavelength", "Period", "Frequency"], ans: 0, exp: "Amplitude is maximum displacement from rest position." },
+                { q: "What wave property measures distance from crest to adjacent crest?", opts: ["Amplitude", "Wavelength", "Frequency", "Speed"], ans: 1, exp: "Wavelength is distance between corresponding points on consecutive waves." },
+                { q: "What damage is caused by overexposure to Ultraviolet (UV) light?", opts: ["Sunburn and skin cancer", "Blindness only", "Hearing loss", "Bone fractures"], ans: 0, exp: "UV damages skin cell DNA, causing premature aging and cancer." },
+                { q: "Why are X-rays suited for bone fracture diagnosis?", opts: ["X-rays pass through soft tissue but are absorbed by dense bone", "X-rays are colorful", "X-rays heat the body", "X-rays create sound"], ans: 0, exp: "Dense bones absorb X-rays while soft tissues transmit them." },
+                { q: "What is specular reflection?", opts: ["Reflection from a smooth flat surface like a mirror", "Scattered reflection", "Refraction", "Diffraction"], ans: 0, exp: "Smooth surfaces produce clear specular reflection." },
+                { q: "What is diffuse reflection?", opts: ["Scattered reflection from a rough surface", "Mirror image", "Prism rainbow", "Absorption"], ans: 0, exp: "Irregular surfaces scatter light rays in all directions." },
+                { q: "What is the period of a 50 Hz AC wave?", opts: ["0.02 seconds", "0.5 seconds", "2 seconds", "50 seconds"], ans: 0, exp: "T = 1 / f = 1 / 50 = 0.02 s." }
+              ]
+            },
+            {
+              id: "p2",
+              code: "P2",
+              name: "P2: Sustainable Energy",
+              notes: [
+                {
+                  t: "Work Done, Power & Efficiency",
+                  content: "Energy cannot be created or destroyed, only transferred usefully, stored, or dissipated.",
+                  bullets: [
+                    "Work Done (J) = Force (N) × Distance moved in direction of force (m) [W = F d].",
+                    "Power (W) = Energy transferred (J) / Time taken (s) [P = E / t]. 1 Watt = 1 Joule per second.",
+                    "Efficiency = (Useful Energy Output / Total Energy Input) × 100%.",
+                    "National Grid: Uses Step-Up Transformers to increase voltage to ~400kV for transmission (reducing current and heat loss in cables), then Step-Down Transformers to decrease voltage to 230V for safe domestic use."
+                  ]
+                }
+              ],
+              cards: [
+                { q: "Why does the National Grid use step-up transformers?", a: "To increase voltage, which decreases current, thereby reducing thermal energy loss in cables." },
+                { q: "What is the formula for Work Done?", a: "Work Done (J) = Force (N) × Distance moved in direction of force (m) [W = F d]" },
+                { q: "What is the formula for Power?", a: "Power (W) = Energy transferred (J) / Time taken (s) [P = E / t]" },
+                { q: "What is the formula for Efficiency?", a: "Efficiency = (Useful Energy Output / Total Energy Input) × 100%" },
+                { q: "State the Law of Conservation of Energy.", a: "Energy cannot be created or destroyed, only transferred usefully, stored, or dissipated." },
+                { q: "What is dissipated energy?", a: "Wasted energy that spreads out into surroundings (usually as thermal energy)." },
+                { q: "Name three non-renewable energy resources.", a: "Coal, Oil, Natural Gas (Fossil fuels) and Uranium (Nuclear)." },
+                { q: "Name five renewable energy resources.", a: "Solar, Wind, Hydroelectric, Tidal, Biofuel, and Geothermal." },
+                { q: "What is the role of step-down transformers in the National Grid?", a: "To decrease voltage to 230V for safe domestic use in homes." },
+                { q: "What is the formula for Gravitational Potential Energy?", a: "Ep = m g h" },
+                { q: "What is the formula for Kinetic Energy?", a: "Ek = 0.5 × m × v²" },
+                { q: "What is the unit of Power?", a: "Watt (W), equivalent to 1 Joule per second." },
+                { q: "State one advantage of nuclear power stations over coal power stations.", a: "Nuclear power produces no carbon dioxide greenhouse gas emissions during operation." },
+                { q: "State one disadvantage of wind power.", a: "Unreliable; energy generation depends on wind availability." },
+                { q: "State one disadvantage of nuclear energy.", a: "Produces hazardous radioactive waste that requires safe long-term storage." }
+              ],
+              quiz: [
+                { q: "A motor consumes 500J of electrical energy and outputs 400J of useful kinetic energy. What is its efficiency?", opts: ["20%", "75%", "80%", "90%"], ans: 2, exp: "Efficiency = (Useful / Total) * 100 = (400 / 500) * 100 = 80%." },
+                { q: "Why are step-up transformers used in the National Grid?", opts: ["To lower current and reduce heat loss in cables", "To increase current", "To store electricity", "To measure power"], ans: 0, exp: "High voltage decreases current, lowering I^2 R heating losses in cables." },
+                { q: "What is the equation for kinetic energy?", opts: ["mgh", "0.5 m v²", "F d", "m v"], ans: 1, exp: "Ek = 1/2 m v²." },
+                { q: "What is the UK domestic mains voltage?", opts: ["12 V", "110 V", "230 V", "400 kV"], ans: 2, exp: "UK household electricity supply is 230V AC." },
+                { q: "What is the unit of Work Done?", opts: ["Joule (J)", "Watt (W)", "Newton (N)", "Ampere (A)"], ans: 0, exp: "Work done measures energy transferred in Joules." },
+                { q: "What is the equation for Gravitational Potential Energy?", opts: ["m g h", "0.5 m v²", "V I", "I² R"], ans: 0, exp: "Ep = mass * g * height." },
+                { q: "Which energy source is non-renewable but reliable?", opts: ["Coal", "Wind", "Solar", "Tidal"], ans: 0, exp: "Fossil fuels like coal are finite (non-renewable) but available on demand." },
+                { q: "What is a main disadvantage of solar panels?", opts: ["No electricity produced at night", "Produces CO2 gas", "High fuel costs", "Produces nuclear waste"], ans: 0, exp: "Solar generation depends on sunlight availability." },
+                { q: "What power is developed when 100J of energy is transferred in 2 seconds?", opts: ["50 W", "200 W", "100 W", "25 W"], ans: 0, exp: "Power = Energy / Time = 100 / 2 = 50 W." },
+                { q: "How can energy loss due to friction in moving machine parts be reduced?", opts: ["Using lubrication (oil)", "Increasing load", "Roughening surfaces", "Heating parts"], ans: 0, exp: "Lubricants reduce friction between moving components." },
+                { q: "How can heat loss from house walls be minimized?", opts: ["Installing cavity wall insulation", "Opening windows", "Single glazing", "Thin wooden doors"], ans: 0, exp: "Cavity insulation traps air pockets, reducing conduction and convection." },
+                { q: "What thermal conductivity value is desirable for building insulation materials?", opts: ["Low thermal conductivity", "High thermal conductivity", "Infinite", "Zero"], ans: 0, exp: "Low thermal conductivity minimizes heat transfer rates." },
+                { q: "What form of wasted energy is released by a traditional filament light bulb?", opts: ["Thermal (heat)", "Sound", "Kinetic", "Chemical"], ans: 0, exp: "Filament bulbs waste most input energy as heat." },
+                { q: "What voltage is typically used for National Grid overhead power line transmission?", opts: ["400,000 V (400kV)", "230 V", "12 V", "100 V"], ans: 0, exp: "High transmission voltages (~400kV) maximize efficiency." },
+                { q: "What does 'carbon neutral' mean for biofuel energy sources?", opts: ["CO2 absorbed during plant growth equals CO2 released during burning", "No CO2 emitted", "Made of coal", "Zero energy output"], ans: 0, exp: "Plant growth absorbs as much CO2 as combustion releases." }
+              ]
+            },
+            {
+              id: "p3",
+              code: "P3",
+              name: "P3: Electric Circuits",
+              notes: [
+                {
+                  t: "Current, Voltage, Resistance & Mains Electricity",
+                  content: "Charge flow (Q = I t). Potential difference is the work done per unit charge (V = W / Q).",
+                  bullets: [
+                    "Ohm's Law: V = I R (Potential Difference = Current × Resistance).",
+                    "I-V Characteristics: Resistor (straight line through origin = fixed resistance); Filament Lamp (S-curve = resistance increases as temperature increases); Diode (current flows in one direction only).",
+                    "Series vs Parallel: In Series, Current is equal everywhere, Total Voltage is shared; In Parallel, Voltage is equal across branches, Total Current splits.",
+                    "Three-pin plug: Live wire (Brown, 230V); Neutral wire (Blue, 0V); Earth wire (Green/Yellow stripes, safety wire connected to appliance metal casing)."
+                  ]
+                }
+              ],
+              cards: [
+                { q: "What equation links Potential Difference, Current, and Resistance?", a: "V = I × R" },
+                { q: "Identify the colors of the Live, Neutral, and Earth wires in a UK plug.", a: "Live = Brown; Neutral = Blue; Earth = Green/Yellow stripes." },
+                { q: "What equation links Charge flow, Current, and Time?", a: "Q = I × t" },
+                { q: "What equation links Electrical Energy, Potential Difference, and Charge?", a: "E = V × Q" },
+                { q: "What equation links Electrical Power, Potential Difference, and Current?", a: "P = V × I" },
+                { q: "What happens to the resistance of a Light Dependent Resistor (LDR) as light intensity increases?", a: "Resistance decreases." },
+                { q: "What happens to the resistance of a Thermistor as temperature increases?", a: "Resistance decreases." },
+                { q: "What is the current rule in a series circuit?", a: "Current is identical through all components in series." },
+                { q: "What is the voltage rule in a series circuit?", a: "Total supply voltage is split across series components." },
+                { q: "What is the voltage rule in a parallel circuit?", a: "Potential difference across each branch is equal to the source voltage." },
+                { q: "What happens to total resistance when resistors are added in parallel?", a: "Total resistance decreases to less than the smallest branch resistance." },
+                { q: "Describe the I-V graph for an Ohmic resistor at constant temperature.", a: "A straight line passing through the origin (current is directly proportional to voltage)." },
+                { q: "Describe the I-V graph for a filament lamp.", a: "An S-shaped curve because filament resistance increases as temperature rises." },
+                { q: "What is the function of a diode in a circuit?", a: "Allows electrical current to flow in one direction only." },
+                { q: "What safety purpose does the Earth wire serve in a three-pin plug?", a: "Provides a low resistance path to earth if a fault connects the live wire to the metal casing." }
+              ],
+              quiz: [
+                { q: "If two 10 Ω resistors are connected in parallel, what is their total combined resistance?", opts: ["5 Ω", "10 Ω", "20 Ω", "100 Ω"], ans: 0, exp: "Connecting resistors in parallel reduces total resistance to half: 1/R = 1/10 + 1/10 = 2/10 -> R = 5 Ω." },
+                { q: "What color insulation identifies the Live wire in a UK plug?", opts: ["Brown", "Blue", "Green and Yellow stripes", "Red"], ans: 0, exp: "The Live wire is insulated in brown plastic (230V)." },
+                { q: "What color insulation identifies the Neutral wire?", opts: ["Blue", "Brown", "Green and Yellow stripes", "Black"], ans: 0, exp: "The Neutral wire is insulated in blue plastic (0V)." },
+                { q: "What color insulation identifies the Earth safety wire?", opts: ["Green and Yellow stripes", "Brown", "Blue", "White"], ans: 0, exp: "Earth wire has green and yellow stripes." },
+                { q: "What voltage is required to push a 2A current through a 4 Ω resistor?", opts: ["8 V", "2 V", "0.5 V", "6 V"], ans: 0, exp: "V = I * R = 2 A * 4 Ω = 8 V." },
+                { q: "How much electric charge passes a point in 10 seconds with a current of 3 A?", opts: ["30 C", "0.3 C", "3.3 C", "300 C"], ans: 0, exp: "Q = I * t = 3 A * 10 s = 30 Coulombs." },
+                { q: "What is the frequency of UK domestic AC electricity supply?", opts: ["50 Hz", "60 Hz", "100 Hz", "230 Hz"], ans: 0, exp: "UK mains current alternates at 50 cycles per second (50 Hz)." },
+                { q: "How must an ammeter be connected to measure current through a component?", opts: ["In series with the component", "In parallel across the component", "Ohmmeter", "Galvanometer"], ans: 0, exp: "Ammeters are always wired in series." },
+                { q: "How must a voltmeter be connected to measure potential difference?", opts: ["In parallel across the component", "In series", "Wattmeter", "Barometer"], ans: 0, exp: "Voltmeters are wired in parallel across components." },
+                { q: "What component restricts current flow to a single direction?", opts: ["Diode", "Fixed resistor", "LDR", "Thermistor"], ans: 0, exp: "Diodes have high resistance in reverse direction, allowing one-way current." },
+                { q: "What happens to thermistor resistance when ambient temperature rises?", opts: ["Decreases", "Increases", "Stays constant", "Becomes negative"], ans: 0, exp: "Thermistors have negative temperature coefficients: hotter = lower resistance." },
+                { q: "What happens to LDR resistance under bright light?", opts: ["Decreases", "Increases", "Infinite", "Zero"], ans: 0, exp: "LDR resistance drops sharply in bright light." },
+                { q: "How does a fuse protect an electrical appliance?", opts: ["Melts and breaks the circuit if current exceeds safe rating", "Stores energy", "Steps up voltage", "Cools plug"], ans: 0, exp: "Fuses melt on overload, breaking circuit." },
+                { q: "What is Alternating Current (AC)?", opts: ["Current that continuously reverses its direction of flow", "Direct current from batteries", "Static charge", "Low voltage current"], ans: 0, exp: "AC continuously changes direction." },
+                { q: "What is Direct Current (DC)?", opts: ["Current that flows in one constant direction only", "AC current", "Mains supply", "High voltage AC"], ans: 0, exp: "DC flows continuously in one direction (e.g. cells/batteries)." }
+              ]
+            },
+            {
+              id: "p4",
+              code: "P4",
+              name: "P4: Explaining Motion",
+              notes: [
+                {
+                  t: "Kinematics & Newton's Laws",
+                  content: "Study of forces and motion.",
+                  bullets: [
+                    "Distance-Time Graphs: Gradient = Speed.",
+                    "Velocity-Time Graphs: Gradient = Acceleration; Area under graph = Distance travelled.",
+                    "Newton's First Law: Object remains at rest or constant velocity unless acted on by a resultant force.",
+                    "Newton's Second Law: Resultant Force = Mass × Acceleration (F = m a).",
+                    "Momentum: p = m v. Total momentum before a collision equals total momentum after collision (Conservation of Momentum)."
+                  ]
+                }
+              ],
+              cards: [
+                { q: "What does the area under a velocity-time graph represent?", a: "The total distance travelled by the object." },
+                { q: "What does the gradient of a distance-time graph represent?", a: "The speed of the object." },
+                { q: "What does the gradient of a velocity-time graph represent?", a: "The acceleration of the object." },
+                { q: "State the equation for Newton's Second Law.", a: "F = m × a (Resultant Force = mass × acceleration)" },
+                { q: "State the equation for momentum.", a: "p = m × v (Momentum = mass × velocity)" },
+                { q: "State Newton's First Law of Motion.", a: "An object remains at rest or constant velocity unless acted on by a resultant force." },
+                { q: "State Newton's Third Law of Motion.", a: "When two objects interact, they exert equal and opposite forces on each other." },
+                { q: "What is terminal velocity?", a: "The constant maximum velocity reached when air resistance equals the weight of a falling object." },
+                { q: "What is inertia?", a: "The tendency of an object to resist any change in its state of motion." },
+                { q: "State the equation for Weight.", a: "W = m × g (Weight = mass × gravitational field strength)" },
+                { q: "State the equation for total stopping distance.", a: "Stopping Distance = Thinking Distance + Braking Distance" },
+                { q: "Name two factors that increase thinking distance.", a: "Tiredness, alcohol/drugs, distraction, higher speed." },
+                { q: "Name two factors that increase braking distance.", a: "Icy/wet roads, worn brakes/tires, higher speed, heavier vehicle." },
+                { q: "State the Law of Conservation of Momentum.", a: "Total momentum before a collision equals total momentum after the collision in a closed system." },
+                { q: "State Hooke's Law formula for a stretched spring.", a: "F = k × e (Force = spring constant × extension)" }
+              ],
+              quiz: [
+                { q: "What resultant force is required to accelerate a 1200 kg car at 3 m/s²?", opts: ["400 N", "1200 N", "3600 N", "4800 N"], ans: 2, exp: "F = m * a = 1200 kg * 3 m/s² = 3600 N." },
+                { q: "What quantity is calculated by finding the area under a velocity-time graph?", opts: ["Acceleration", "Distance travelled", "Speed", "Resultant force"], ans: 1, exp: "Area under a v-t graph equals total distance travelled." },
+                { q: "What property is represented by the gradient of a distance-time graph?", opts: ["Speed", "Acceleration", "Distance", "Time"], ans: 0, exp: "Gradient (rise over run) on a distance-time graph equals speed." },
+                { q: "What property is represented by the gradient of a velocity-time graph?", opts: ["Speed", "Acceleration", "Distance", "Force"], ans: 1, exp: "Gradient on a velocity-time graph represents acceleration." },
+                { q: "What is the weight of a 70 kg person on Earth where g = 10 N/kg?", opts: ["70 N", "700 N", "7 N", "7000 N"], ans: 1, exp: "W = m * g = 70 kg * 10 N/kg = 700 N." },
+                { q: "What is the resultant force on a falling skydiver at terminal velocity?", opts: ["Equal to weight", "Zero N", "Equal to drag", "1000 N"], ans: 1, exp: "At terminal velocity, drag equals weight, making resultant force zero." },
+                { q: "What is the momentum of a 2 kg ball rolling at 5 m/s?", opts: ["10 kg m/s", "2.5 kg m/s", "0.4 kg m/s", "25 kg m/s"], ans: 0, exp: "p = m * v = 2 kg * 5 m/s = 10 kg m/s." },
+                { q: "Which driver factor increases thinking distance?", opts: ["Consuming alcohol", "Installing new brakes", "Driving on dry roads", "Good tire tread"], ans: 0, exp: "Alcohol slows reaction time, increasing thinking distance." },
+                { q: "Which environmental factor increases vehicle braking distance?", opts: ["Icy road surface", "Driver tiredness", "Phone distraction", "Radio volume"], ans: 0, exp: "Ice reduces tire friction, increasing braking distance." },
+                { q: "What equation represents Hooke's Law for elastic extension?", opts: ["F = k e", "F = m a", "p = m v", "W = F d"], ans: 0, exp: "F = k e (Force = spring constant * extension)." },
+                { q: "What is the limit of proportionality on a force-extension graph?", opts: ["The point beyond which extension is no longer directly proportional to force", "The breaking point", "Zero point", "Maximum mass point"], ans: 0, exp: "Beyond this point, Hooke's law fails and linear behavior ends." },
+                { q: "What is the SI unit of acceleration?", opts: ["m/s", "m/s²", "N/kg", "J/s"], ans: 1, exp: "Acceleration is measured in meters per second squared (m/s²)." },
+                { q: "A car travels 100 meters in 5 seconds at a steady speed. What is its speed?", opts: ["20 m/s", "500 m/s", "0.05 m/s", "50 m/s"], ans: 0, exp: "Speed = Distance / Time = 100 m / 5 s = 20 m/s." },
+                { q: "How is force related to momentum change?", opts: ["Force = Rate of change of momentum (F = Δp / t)", "F = m g", "F = k e", "F = m v t"], ans: 0, exp: "Resultant force equals momentum change divided by time taken." },
+                { q: "Why do vehicle crumple zones reduce passenger injury during collisions?", opts: ["They increase collision time, reducing the rate of momentum change and force", "They are rigid", "They decrease time", "They stop car instantly"], ans: 0, exp: "Increasing collision duration reduces impact force on occupants." }
+              ]
+            },
+            {
+              id: "p5",
+              code: "P5",
+              name: "P5: Radioactive Materials",
+              notes: [
+                {
+                  t: "Nuclear Radiation, Half-Life & Fission/Fusion",
+                  content: "Radioactive decay is random as unstable nuclei emit radiation to become stable.",
+                  bullets: [
+                    "Alpha (α): Helium nucleus (2 protons, 2 neutrons); Highly ionizing; Stopped by paper/skin; Low penetration.",
+                    "Beta (β): High-speed electron; Medium ionizing; Stopped by 5mm aluminum.",
+                    "Gamma (γ): High frequency EM wave; Low ionizing; Stopped by thick lead or concrete.",
+                    "Half-Life: The time taken for the number of radioactive nuclei in a sample to halve, or for the count rate to halve.",
+                    "Nuclear Fission: Splitting of a heavy nucleus (e.g. Uranium-235) into smaller daughter nuclei, releasing neutrons and energy.",
+                    "Nuclear Fusion: Joining of two light nuclei (e.g. Hydrogen) to form a heavier nucleus (Helium), releasing huge energy. Requires extreme temperature and pressure."
+                  ]
+                }
+              ],
+              cards: [
+                { q: "Define the half-life of a radioactive isotope.", a: "The time it takes for half of the unstable nuclei in a sample to decay, or for the count rate to drop by 50%." },
+                { q: "What is an Alpha particle?", a: "A Helium nucleus consisting of 2 protons and 2 neutrons." },
+                { q: "What is a Beta particle?", a: "A high-speed electron emitted from the nucleus when a neutron decays into a proton." },
+                { q: "What is Gamma radiation?", a: "High-energy electromagnetic radiation emitted from an unstable nucleus." },
+                { q: "What material stops Alpha radiation?", a: "A single sheet of paper or a few cm of air." },
+                { q: "What material stops Beta radiation?", a: "A thin (~5mm) sheet of aluminum." },
+                { q: "What material absorbs most Gamma radiation?", a: "Thick lead or meters of concrete." },
+                { q: "Which type of nuclear radiation is most ionizing?", a: "Alpha radiation." },
+                { q: "Which type of nuclear radiation is least ionizing?", a: "Gamma radiation." },
+                { q: "What is nuclear fission?", a: "The splitting of a large, unstable heavy nucleus into smaller daughter nuclei, releasing neutrons and energy." },
+                { q: "What is nuclear fusion?", a: "The joining together of two light atomic nuclei to form a heavier nucleus, releasing vast energy." },
+                { q: "Where does nuclear fusion naturally power stars?", a: "In the core of stars like our Sun." },
+                { q: "What is radioactive contamination?", a: "The unwanted presence of materials containing radioactive atoms on or inside an object or body." },
+                { q: "What is radioactive irradiation?", a: "Exposing an object to nuclear radiation without the object becoming radioactive itself." },
+                { q: "What particle absorbs into Uranium-235 to initiate nuclear fission?", a: "A slow-moving neutron." }
+              ],
+              quiz: [
+                { q: "Which type of nuclear radiation is most ionizing but least penetrating?", opts: ["Alpha", "Beta", "Gamma", "Neutron"], ans: 0, exp: "Alpha particles have a +2 charge and large mass, making them highly ionizing but easily absorbed by paper." },
+                { q: "A radioactive sample's count rate drops from 800 Bq to 100 Bq in 12 hours. What is its half-life?", opts: ["4 hours", "3 hours", "6 hours", "12 hours"], ans: 0, exp: "800 -> 400 (1) -> 200 (2) -> 100 (3 half-lives). 12 hours / 3 = 4 hours." },
+                { q: "What process powers the Sun by joining hydrogen nuclei into helium?", opts: ["Nuclear fusion", "Nuclear fission", "Alpha decay", "Chemical combustion"], ans: 0, exp: "Nuclear fusion joins light nuclei under immense core heat and pressure." },
+                { q: "What thin material is sufficient to absorb Alpha particles completely?", opts: ["A sheet of paper", "5mm Aluminum", "Thick lead", "Water"], ans: 0, exp: "Alpha particles have low penetration and are stopped by paper." },
+                { q: "What material is required to stop Beta particles?", opts: ["Sheet of paper", "Thin sheet of aluminum (~5mm)", "Air only", "Cardboard"], ans: 1, exp: "Beta particles pass through paper but are stopped by aluminum." },
+                { q: "What is the composition of an Alpha particle?", opts: ["2 protons and 2 neutrons", "1 electron", "High frequency EM wave", "1 proton"], ans: 0, exp: "Alpha particles are identical to Helium-4 nuclei." },
+                { q: "What particle is emitted from the nucleus during Beta decay?", opts: ["A high-speed electron", "An alpha particle", "A positron", "A neutron"], ans: 0, exp: "Beta decay releases a high-speed electron as a neutron turns into a proton." },
+                { q: "Which fissile isotope is commonly used as fuel in nuclear fission reactors?", opts: ["Uranium-235", "Carbon-12", "Hydrogen-1", "Iron-56"], ans: 0, exp: "Uranium-235 nuclei split under neutron bombardment." },
+                { q: "Why is controlled nuclear fusion difficult to achieve on Earth?", opts: ["It requires extreme temperatures and pressures to overcome electrostatic proton repulsion", "No hydrogen exists", "Fusion causes instant explosion", "Too cold"], ans: 0, exp: "Positive nuclei repel; high kinetic energy (heat) is needed for fusion." },
+                { q: "What is the difference between irradiation and radioactive contamination?", opts: ["Contamination puts radioactive source inside/on object; Irradiation is ray exposure", "They are identical", "Irradiation turns things to gold", "Contamination is safe"], ans: 0, exp: "Irradiated items do not become radioactive; contaminated items contain radioisotopes." },
+                { q: "Which radioisotope is used for radiocarbon dating of ancient organic material?", opts: ["Carbon-14", "Uranium-238", "Iodine-131", "Technetium-99"], ans: 0, exp: "Carbon-14 decays with a known half-life of 5,730 years." },
+                { q: "What property is ideal for a medical radioactive tracer in the human body?", opts: ["Short half-life gamma emitter", "Long half-life alpha emitter", "Beta emitter", "Toxic chemical"], ans: 0, exp: "Gamma rays escape the body safely, and short half-lives minimize dose." },
+                { q: "What is background radiation?", opts: ["Low-level ionizing radiation present constantly in the environment", "Solar radiation only", "Fallout from bombs", "X-ray machine noise"], ans: 0, exp: "Background radiation comes from natural rocks, cosmic rays, and artificial sources." },
+                { q: "What SI unit measures radioactive source activity?", opts: ["Becquerel (Bq)", "Joule", "Sievert", "Watt"], ans: 0, exp: "1 Becquerel = 1 decay per second." },
+                { q: "What SI unit measures radiation dose risk to human tissue?", opts: ["Sievert (Sv)", "Becquerel", "Gray", "Ohm"], ans: 0, exp: "Sievert measures biological radiation damage risk." }
+              ]
+            },
+            {
+              id: "p6",
+              code: "P6",
+              name: "P6: Matter - Explaining Properties",
+              notes: [
+                {
+                  t: "Density, Thermal Energy & Gas Laws",
+                  content: "States of matter and internal thermal energy equations.",
+                  bullets: [
+                    "Density (ρ) = Mass (m) / Volume (V) [ρ = m / V].",
+                    "Specific Heat Capacity (c): Energy required to raise temperature of 1kg of a substance by 1°C. ΔE = m c Δθ.",
+                    "Specific Latent Heat (L): Energy required to change state of 1kg of a substance with NO change in temperature. E = m L.",
+                    "Boyle's Law (Gas Pressure): For a fixed mass of gas at constant temperature, Pressure × Volume = Constant (P1 V1 = P2 V2)."
+                  ]
+                }
+              ],
+              cards: [
+                { q: "What is specific latent heat?", a: "The amount of energy required to change the state of 1kg of a substance without changing its temperature." },
+                { q: "State the equation for density.", a: "Density (ρ) = Mass (m) / Volume (V)" },
+                { q: "State the equation for Specific Heat Capacity.", a: "ΔE = m × c × Δθ" },
+                { q: "State the equation for Specific Latent Heat.", a: "E = m × L" },
+                { q: "State Boyle's Law equation for gas pressure.", a: "P1 × V1 = P2 × V2 (at constant temperature)" },
+                { q: "Define Specific Heat Capacity.", a: "The energy required to raise the temperature of 1kg of a substance by 1°C." },
+                { q: "What is Absolute Zero?", a: "-273°C or 0 Kelvin (the temperature at which particles have zero kinetic energy)." },
+                { q: "How do you convert temperature from Celsius (°C) to Kelvin (K)?", a: "Temperature (K) = Temperature (°C) + 273" },
+                { q: "What causes gas pressure inside a container?", a: "Gas particles colliding with container walls, exerting a force per unit area." },
+                { q: "What happens to gas pressure when temperature increases at constant volume?", a: "Pressure increases as particles move faster, colliding more frequently and forcefully." },
+                { q: "What is latent heat of fusion?", a: "The energy required to change 1kg of a substance from solid to liquid at melting point." },
+                { q: "What is latent heat of vaporization?", a: "The energy required to change 1kg of a substance from liquid to gas at boiling point." },
+                { q: "Describe particle arrangement in a solid.", a: "Particles arranged in a regular lattice, tightly packed, vibrating around fixed positions." },
+                { q: "Describe particle arrangement in a liquid.", a: "Particles close together, randomly arranged, able to move past one another." },
+                { q: "Describe particle arrangement in a gas.", a: "Particles far apart, randomly arranged, moving rapidly in all directions." }
+              ],
+              quiz: [
+                { q: "A gas occupies a volume of 4 m³ at a pressure of 100 kPa. If compressed to 2 m³ at constant temperature, what is the new pressure?", opts: ["50 kPa", "100 kPa", "200 kPa", "400 kPa"], ans: 2, exp: "P1 V1 = P2 V2 -> (100 * 4) = P2 * 2 -> P2 = 200 kPa." },
+                { q: "What is the formula for calculating density?", opts: ["Density = Mass / Volume", "Volume / Mass", "Mass * Volume", "Mass * Gravity"], ans: 0, exp: "ρ = m / V." },
+                { q: "What equation calculates thermal energy stored using Specific Heat Capacity?", opts: ["ΔE = m c Δθ", "E = m L", "P = E / t", "F = m a"], ans: 0, exp: "ΔE = m c Δθ." },
+                { q: "What temperature represents Absolute Zero in degrees Celsius?", opts: ["-273°C", "0°C", "-100°C", "100°C"], ans: 0, exp: "0 Kelvin corresponds to -273°C." },
+                { q: "What is 27°C expressed in Kelvin?", opts: ["300 K", "273 K", "246 K", "327 K"], ans: 0, exp: "27°C + 273 = 300 Kelvin." },
+                { q: "What is happening during a flat horizontal section of a heating temperature graph?", opts: ["A change of state is taking place at constant temperature", "Rapid heating", "Cooling", "Gas expansion"], ans: 0, exp: "Latent heat is absorbed to break bonds during state changes without temperature rise." },
+                { q: "What is the standard SI unit of density?", opts: ["kg/m³", "J/kg", "N/m²", "kg m"], ans: 0, exp: "Density is mass in kg divided by volume in m³ (kg/m³)." },
+                { q: "What is the unit for Specific Heat Capacity?", opts: ["J/(kg °C)", "J/kg", "Watts", "Joules"], ans: 0, exp: "Specific Heat Capacity is measured in Joules per kilogram per °C." },
+                { q: "Why does liquid density decrease slightly when heated?", opts: ["Thermal expansion increases volume for the same mass", "Mass decreases", "Particles shrink", "Atoms evaporate"], ans: 0, exp: "Heating increases particle spacing, expanding volume and reducing density." },
+                { q: "What constitutes the internal energy of a system?", opts: ["Total kinetic energy and potential energy of all its particles", "Temperature only", "Heat output", "Atomic mass"], ans: 0, exp: "Internal energy = Kinetic energy + Potential energy stored in bonds." },
+                { q: "What is sublimation?", opts: ["A solid changing directly into a gas without turning liquid", "Liquid to solid", "Gas to liquid", "Melting"], ans: 0, exp: "Sublimation bypasses the liquid phase." },
+                { q: "What phenomenon provides evidence for the random motion of gas molecules?", opts: ["Brownian motion of pollen/smoke particles", "Boiling water", "Melting ice", "Magnetism"], ans: 0, exp: "Brownian motion shows larger visible particles bombarded by invisible gas molecules." },
+                { q: "Why does doing work on an enclosed gas increase its temperature?", opts: ["Work transfers kinetic energy to gas particles", "Cools container", "Decreases pressure", "Destroys atoms"], ans: 0, exp: "Compressing a gas transfers mechanical energy into particle kinetic energy." },
+                { q: "What pressure unit is equivalent to 1 Newton per square meter (1 N/m²)?", opts: ["Pascal (Pa)", "Joule", "Watt", "Newton"], ans: 0, exp: "1 Pascal = 1 N/m²." },
+                { q: "Why does temperature remain constant while pure ice melts into water?", opts: ["Energy breaks intermolecular bonds rather than increasing particle kinetic energy", "Thermometer stops", "Heat stops", "Water freezes"], ans: 0, exp: "Latent heat of fusion breaks lattice bonds without raising kinetic energy." }
+              ]
+            }
+          ]
+        }
+      };
+
+      // UI CONTROLLER FUNCTIONS
+      window.toggleTheme = function () {
+        isDark = !isDark;
+        if (isDark) {
+          document.documentElement.removeAttribute('data-theme');
+          document.getElementById('theme-btn').innerText = 'Dark Mode';
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+          document.getElementById('theme-btn').innerText = 'Light Mode';
+        }
+      };
+
+      window.switchSubject = function (subjKey) {
+        currentSubj = subjKey;
+        currentUnit = 'all';
+        flashIdx = 0;
+        quizIdx = 0;
+        quizSelected = null;
+        quizScore = 0;
+        flipped = false;
+
+        document.querySelectorAll('.subj-btn').forEach(function (btn) {
+          btn.classList.toggle('active', btn.getAttribute('data-subj') === subjKey);
+        });
+
+        document.documentElement.style.setProperty('--accent', SPEC_DATA[subjKey].color);
+        updateUnitDropdown();
+        render();
+      };
+
+      window.switchUnit = function (unitVal) {
+        currentUnit = unitVal;
+        flashIdx = 0;
+        quizIdx = 0;
+        quizSelected = null;
+        quizScore = 0;
+        flipped = false;
+        render();
+      };
+
+      window.switchTab = function (tabKey) {
+        currentTab = tabKey;
+        flipped = false;
+        document.querySelectorAll('nav button').forEach(function (btn) {
+          btn.setAttribute('aria-selected', btn.id === 'tab-' + tabKey);
+        });
+        render();
+      };
+
+      function updateUnitDropdown() {
+        var select = document.getElementById('unit-select');
+        var html = '<option value="all">All Units (' + currentSubj.toUpperCase() + ')</option>';
+        SPEC_DATA[currentSubj].units.forEach(function (u) {
+          html += '<option value="' + u.id + '">' + u.name + '</option>';
+        });
+        select.innerHTML = html;
+        select.value = currentUnit;
+      }
+
+      function getFilteredUnits() {
+        var units = SPEC_DATA[currentSubj].units;
+        if (currentUnit === 'all') return units;
+        return units.filter(function (u) { return u.id === currentUnit; });
+      }
+
+      function getFilteredCards() {
+        var list = [];
+        getFilteredUnits().forEach(function (u) {
+          u.cards.forEach(function (c) {
+            list.push({ unitName: u.name, q: c.q, a: c.a });
+          });
+        });
+        return list;
+      }
+
+      function getFilteredQuiz() {
+        var list = [];
+        getFilteredUnits().forEach(function (u) {
+          if (u.quiz) {
+            u.quiz.forEach(function (q) {
+              list.push({ unitName: u.name, q: q.q, opts: q.opts, ans: q.ans, exp: q.exp });
+            });
+          }
+        });
+        return list;
+      }
+
+      // RENDER FUNCTIONS
+      function renderNotes() {
+        var units = getFilteredUnits();
+        var html = '<div class="notes-container">';
+        units.forEach(function (u) {
+          html += '<div class="unit-panel">';
+          html += '<div class="unit-title"><span>' + u.name + '</span><span class="unit-spec-tag">OCR GCSE 21st Century</span></div>';
+          u.notes.forEach(function (n) {
+            html += '<div class="note-block">';
+            html += '<h4>' + n.t + '</h4>';
+            if (n.content) html += '<p>' + n.content + '</p>';
+            if (n.bullets && n.bullets.length) {
+              html += '<ul>';
+              n.bullets.forEach(function (b) {
+                html += '<li>' + b + '</li>';
+              });
+              html += '</ul>';
+            }
+            html += '</div>';
+          });
+          html += '</div>';
+        });
+        html += '</div>';
+        return html;
+      }
+
+      function renderStudy() {
+        var cards = getFilteredCards();
+        if (cards.length === 0) return '<div class="unit-panel">No flashcards available for this filter.</div>';
+
+        var c = cards[flashIdx % cards.length];
+        var html = '<div class="card-container">';
+        html += '<div class="card" onclick="flipCard()">';
+        html += '<div class="card-head"><span>' + c.unitName + '</span><span>Card ' + (flashIdx + 1) + ' of ' + cards.length + '</span></div>';
+        html += '<div class="card-body">';
+        html += '<div class="card-q">' + c.q + '</div>';
+        if (flipped) {
+          html += '<div class="card-a">' + c.a + '</div>';
+        }
+        html += '</div>';
+        html += '<div class="card-hint">' + (flipped ? '✓ Tap card to flip back' : '💡 Tap card to reveal answer') + '</div>';
+        html += '</div>';
+        html += '</div>';
+
+        html += '<div class="actions">';
+        html += '<button class="btn miss" onclick="nextCard(event, false)">❌ Need Practice</button>';
+        html += '<button class="btn hit" onclick="nextCard(event, true)">✅ Got It!</button>';
+        html += '</div>';
+        return html;
+      }
+
+      window.flipCard = function () {
+        flipped = !flipped;
+        render();
+      };
+
+      window.nextCard = function (e, hit) {
+        if (e) e.stopPropagation();
+        flipped = false;
+        flashIdx++;
+        render();
+      };
+
+      function renderQuiz() {
+        var quizList = getFilteredQuiz();
+        if (quizList.length === 0) return '<div class="unit-panel">No quiz questions available for this unit filter.</div>';
+
+        if (quizIdx >= quizList.length) {
+          var html = '<div class="quiz-container"><div class="score-summary">';
+          html += '<h2>Quiz Completed!</h2>';
+          html += '<div class="score-circle">' + quizScore + ' / ' + quizList.length + '</div>';
+          html += '<p>Great job reviewing your OCR Science material!</p>';
+          html += '<button class="btn primary" onclick="resetQuiz()">Restart Quiz</button>';
+          html += '</div></div>';
+          return html;
+        }
+
+        var q = quizList[quizIdx];
+        var html = '<div class="quiz-container">';
+        html += '<div class="quiz-header"><span>' + q.unitName + '</span><span>Question ' + (quizIdx + 1) + ' of ' + quizList.length + '</span></div>';
+        html += '<div class="quiz-q">' + q.q + '</div>';
+        html += '<div class="opts">';
+        q.opts.forEach(function (opt, idx) {
+          var cls = 'opt';
+          if (quizSelected !== null) {
+            if (idx === q.ans) cls += ' right';
+            else if (idx === quizSelected) cls += ' wrong';
+          }
+          html += '<button class="' + cls + '" ' + (quizSelected !== null ? 'disabled' : '') + ' onclick="selectQuizOpt(' + idx + ')">';
+          html += '<span class="opt-idx">' + String.fromCharCode(65 + idx) + '</span>';
+          html += '<span>' + opt + '</span>';
+          html += '</button>';
+        });
+        html += '</div>';
+
+        if (quizSelected !== null) {
+          html += '<div class="explanation"><b>Explanation:</b> ' + q.exp + '</div>';
+          html += '<button class="btn primary" style="margin-top:10px;" onclick="nextQuizQ()">Next Question →</button>';
+        }
+        html += '</div>';
+        return html;
+      }
+
+      window.selectQuizOpt = function (idx) {
+        quizSelected = idx;
+        if (idx === getFilteredQuiz()[quizIdx].ans) quizScore++;
+        render();
+      };
+
+      window.nextQuizQ = function () {
+        quizIdx++;
+        quizSelected = null;
+        render();
+      };
+
+      window.resetQuiz = function () {
+        quizIdx = 0;
+        quizSelected = null;
+        quizScore = 0;
+        render();
+      };
+
+      function render() {
+        var main = document.getElementById('view');
+        if (currentTab === 'notes') main.innerHTML = renderNotes();
+        else if (currentTab === 'study') main.innerHTML = renderStudy();
+        else if (currentTab === 'quiz') main.innerHTML = renderQuiz();
+      }
+
+      // Initial initialization
+      updateUnitDropdown();
+      render();
+    })();
+  </script>
+</body>
+</html>
