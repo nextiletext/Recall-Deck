@@ -643,7 +643,7 @@
                 { q: "What is the purpose of ROM in a computer system?", opts: ["To store user documents", "To hold boot-up instructions (BIOS) permanently", "To speed up video games", "To run virus scans"], ans: 1, exp: "ROM is non-volatile and stores permanent startup routines." },
                 { q: "What is an actuator used for in automated systems?", opts: ["To measure temperature", "To convert control signals into physical movement", "To type text documents", "To display images"], ans: 1, exp: "Actuators perform physical actions like turning valves or motors." },
                 { q: "Which interface is generally most suitable for novice, everyday computer users?", opts: ["Command Line Interface", "Graphical User Interface", "Batch Interface", "Hexadecimal prompt"], ans: 1, exp: "GUIs use intuitive visual icons and menus for ease of use." },
-                { q: "What does volatile memory mean?", Memory that retains data permanently", "Memory that requires regular cleaning", "Memory that is erased when power is lost", "Memory made of glass"], ans: 2, exp: "Volatile memory requires continuous electrical power to store data." },
+                { q: "What does volatile memory mean?", opts: ["Memory that retains data permanently", "Memory that requires regular cleaning", "Memory that is erased when power is lost", "Memory made of glass"], ans: 2, exp: "Volatile memory requires continuous electrical power to store data." },
                 { q: "Which input device is best suited for scanning automated stock prices at a supermarket checkout?", opts: ["Microphone", "Barcode reader", "Graphics tablet", "Webcam"], ans: 1, exp: "Barcode readers optically scan product codes rapidly at checkout." },
                 { q: "What is open-source software?", opts: ["Software locked behind high subscription fees", "Software with freely available source code for modification", "Software that cannot be copied", "Illegal software"], ans: 1, exp: "Open-source software permits users to study and alter source code freely." },
                 { q: "What does BIOS stand for in computer boot sequences?", opts: ["Basic Input Output System", "Binary Integrated Operating System", "Built-in Optical Storage", "Broadband Internet Open Standard"], ans: 0, exp: "BIOS initializes hardware components when powering on." },
@@ -895,14 +895,17 @@
       function updateUnitDropdown() {
         var select = document.getElementById('unit-select');
         var html = '<option value="all">All Units (' + currentSubj.toUpperCase() + ')</option>';
-        SPEC_DATA[currentSubj].units.forEach(function (u) {
-          html += '<option value="' + u.id + '">' + u.name + '</option>';
-        });
+        if (SPEC_DATA[currentSubj] && SPEC_DATA[currentSubj].units) {
+          SPEC_DATA[currentSubj].units.forEach(function (u) {
+            html += '<option value="' + u.id + '">' + u.name + '</option>';
+          });
+        }
         select.innerHTML = html;
         select.value = currentUnit;
       }
 
       function getFilteredUnits() {
+        if (!SPEC_DATA[currentSubj]) return [];
         var units = SPEC_DATA[currentSubj].units;
         if (currentUnit === 'all') return units;
         return units.filter(function (u) { return u.id === currentUnit; });
@@ -911,9 +914,11 @@
       function getFilteredCards() {
         var list = [];
         getFilteredUnits().forEach(function (u) {
-          u.cards.forEach(function (c) {
-            list.push({ unitName: u.name, q: c.q, a: c.a });
-          });
+          if (u.cards) {
+            u.cards.forEach(function (c) {
+              list.json ? null : list.push({ unitName: u.name, q: c.q, a: c.a });
+            });
+          }
         });
         return list;
       }
@@ -936,19 +941,21 @@
         units.forEach(function (u) {
           html += '<div class="unit-panel">';
           html += '<div class="unit-title"><span>' + u.name + '</span><span class="unit-spec-tag">OCR GCSE IT</span></div>';
-          u.notes.forEach(function (n) {
-            html += '<div class="note-block">';
-            html += '<h4>' + n.t + '</h4>';
-            if (n.content) html += '<p>' + n.content + '</p>';
-            if (n.bullets && n.bullets.length) {
-              html += '<ul>';
-              n.bullets.forEach(function (b) {
-                html += '<li>' + b + '</li>';
-              });
-              html += '</ul>';
-            }
-            html += '</div>';
-          });
+          if (u.notes) {
+            u.notes.forEach(function (n) {
+              html += '<div class="note-block">';
+              html += '<h4>' + n.t + '</h4>';
+              if (n.content) html += '<p>' + n.content + '</p>';
+              if (n.bullets && n.bullets.length) {
+                html += '<ul>';
+                n.bullets.forEach(function (b) {
+                  html += '<li>' + b + '</li>';
+                });
+                html += '</ul>';
+              }
+              html += '</div>';
+            });
+          }
           html += '</div>';
         });
         html += '</div>';
@@ -1053,6 +1060,7 @@
 
       function render() {
         var main = document.getElementById('view');
+        if (!main) return;
         if (currentTab === 'notes') main.innerHTML = renderNotes();
         else if (currentTab === 'study') main.innerHTML = renderStudy();
         else if (currentTab === 'quiz') main.innerHTML = renderQuiz();
