@@ -53,6 +53,26 @@
     
     .header-controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
     
+    .back-btn {
+      font-family: var(--body);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: var(--surface-card);
+      color: var(--ink);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .back-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
     .pill-picker { display: flex; background: var(--bg); border: 1px solid var(--line); border-radius: 30px; padding: 4px; gap: 4px; }
     .pill-btn {
       font-family: var(--body); font-size: 0.85rem; padding: 6px 14px; border-radius: 20px;
@@ -127,6 +147,7 @@
         <span class="sub">OCR GCSE Computer Science (J277)</span>
       </div>
       <div class="header-controls">
+        <a href="index.html" class="back-btn">← Back to Portal</a>
         <div class="pill-picker" id="subjects"></div>
         <button class="mode-btn" onclick="toggleTheme()" id="themeBtn">Light Mode</button>
       </div>
