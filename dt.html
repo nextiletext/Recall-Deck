@@ -1,0 +1,1072 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Recall Deck - AQA GCSE Design & Technology</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --surface: #121820;
+      --surface-card: #18222d;
+      --surface-hover: #1f2c3a;
+      --ink: #f0f4f8;
+      --muted: #8a99a8;
+      --line: #263545;
+      --accent-core: #f97316;
+      --accent-mat: #eab308;
+      --accent-des: #06b6d4;
+      --accent: #f97316;
+      --accent-ink: #ffffff;
+      --good: #10b981;
+      --bad: #ef4444;
+      --display: 'Bricolage Grotesque', system-ui, sans-serif;
+      --body: 'IBM Plex Sans', system-ui, sans-serif;
+      --mono: 'IBM Plex Mono', monospace;
+    }
+
+    [data-theme="light"] {
+      --bg: #eef2f6;
+      --surface: #ffffff;
+      --surface-card: #f8fafc;
+      --surface-hover: #e2e8f0;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --line: #cbd5e1;
+      --accent-core: #ea580c;
+      --accent-mat: #ca8a04;
+      --accent-des: #0891b2;
+      --accent: #ea580c;
+      --accent-ink: #ffffff;
+      --good: #059669;
+      --bad: #dc2626;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 15px;
+      line-height: 1.6;
+      padding-block: 20px 48px;
+      padding-left: max(16px, env(safe-area-inset-left, 0px));
+      padding-right: max(16px, env(safe-area-inset-right, 0px));
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      background: var(--surface);
+      padding: 18px 24px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+    }
+
+    h1 {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 1.8rem;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      background: linear-gradient(135deg, var(--ink) 30%, var(--muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .controls-top {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .back-btn {
+      font-family: var(--body);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: var(--surface-card);
+      color: var(--ink);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .back-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .subject-picker {
+      display: flex;
+      background: var(--bg);
+      padding: 4px;
+      border-radius: 30px;
+      border: 1px solid var(--line);
+      gap: 4px;
+    }
+
+    .subj-btn {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .subj-btn[data-subj="core"].active { background: var(--accent-core); color: #fff; }
+    .subj-btn[data-subj="mat"].active { background: var(--accent-mat); color: #fff; }
+    .subj-btn[data-subj="des"].active { background: var(--accent-des); color: #fff; }
+
+    .theme-toggle {
+      background: var(--surface-card);
+      border: 1px solid var(--line);
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      padding: 8px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 2px solid var(--line);
+      padding-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    nav {
+      display: flex;
+      gap: 6px;
+    }
+
+    nav button {
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: var(--muted);
+      font: 600 0.95rem var(--body);
+      padding: 8px 14px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color 0.2s, border-color 0.2s;
+      border-radius: 6px 6px 0 0;
+    }
+
+    nav button[aria-selected="true"] {
+      color: var(--ink);
+      border-bottom-color: var(--accent);
+      background: var(--surface);
+    }
+
+    .unit-selector {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .unit-selector label {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    select {
+      font: 500 0.85rem var(--mono);
+      color: var(--ink);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 6px 12px;
+      cursor: pointer;
+      outline: none;
+    }
+
+    select:focus { border-color: var(--accent); }
+
+    /* FLASHCARD VIEW */
+    .card-container {
+      perspective: 1000px;
+      min-height: 320px;
+    }
+
+    .card {
+      background: var(--surface-card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 32px 28px;
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 20px;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+      transition: transform 0.15s ease, border-color 0.2s;
+    }
+
+    .card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card-q {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 1.45rem;
+      line-height: 1.35;
+      color: var(--ink);
+    }
+
+    .card-a {
+      border-top: 1px dashed var(--line);
+      padding-top: 16px;
+      font-size: 1.05rem;
+      color: var(--ink);
+      line-height: 1.6;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+
+    .card-hint {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      font: 600 0.95rem var(--body);
+      padding: 14px 20px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+    }
+
+    .btn:hover { background: var(--surface-hover); }
+    .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+    .btn.miss { color: var(--bad); border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.05); }
+    .btn.miss:hover { background: rgba(239,68,68,0.15); }
+    .btn.hit { color: var(--good); border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.05); }
+    .btn.hit:hover { background: rgba(16,185,129,0.15); }
+
+    /* REVISION NOTES VIEW */
+    .notes-container {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .unit-panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .unit-title {
+      font-family: var(--display);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--accent);
+      border-bottom: 2px solid var(--line);
+      padding-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .unit-spec-tag {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .note-block {
+      background: var(--surface-card);
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .note-block h4 {
+      font-family: var(--display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .note-block p {
+      font-size: 0.95rem;
+      color: var(--ink);
+    }
+
+    .note-block ul {
+      padding-left: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .note-block li {
+      font-size: 0.93rem;
+      color: var(--ink);
+    }
+
+    /* QUIZ VIEW */
+    .quiz-container {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 10px;
+    }
+
+    .quiz-q {
+      font-family: var(--display);
+      font-size: 1.35rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .opts {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .opt {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      text-align: left;
+      width: 100%;
+      font: 500 0.95rem var(--body);
+      color: var(--ink);
+      background: var(--surface-card);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .opt:hover:not(:disabled) {
+      border-color: var(--accent);
+      background: var(--surface-hover);
+    }
+
+    .opt.right {
+      border-color: var(--good);
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--good);
+    }
+
+    .opt.wrong {
+      border-color: var(--bad);
+      background: rgba(239, 68, 68, 0.12);
+      color: var(--bad);
+    }
+
+    .opt-idx {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 2px 6px;
+      flex-shrink: 0;
+    }
+
+    .explanation {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+
+    .explanation b { color: var(--accent); }
+
+    .score-summary {
+      text-align: center;
+      padding: 30px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .score-circle {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 3.5rem;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 640px) {
+      header { flex-direction: column; align-items: flex-start; }
+      .nav-bar { flex-direction: column; align-items: stretch; gap: 10px; }
+      .actions { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <h1>Recall Deck</h1>
+        <span class="subtitle">AQA GCSE Design & Technology (8552)</span>
+      </div>
+      <div class="controls-top">
+        <a href="index.html" class="back-btn">← Back to Portal</a>
+        <div class="subject-picker" id="subject-picker">
+          <button class="subj-btn active" data-subj="core" onclick="switchSubject('core')">Core Technical</button>
+          <button class="subj-btn" data-subj="mat" onclick="switchSubject('mat')">Specialist Materials</button>
+          <button class="subj-btn" data-subj="des" onclick="switchSubject('des')">Designing & Making</button>
+        </div>
+        <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">Dark Mode</button>
+      </div>
+    </header>
+
+    <div class="nav-bar">
+      <nav role="tablist" id="tabs">
+        <button id="tab-notes" aria-selected="true" onclick="switchTab('notes')">Detailed Notes</button>
+        <button id="tab-study" aria-selected="false" onclick="switchTab('study')">Flashcards</button>
+        <button id="tab-quiz" aria-selected="false" onclick="switchTab('quiz')">Practice Quiz</button>
+      </nav>
+
+      <div class="unit-selector">
+        <label for="unit-select">Unit:</label>
+        <select id="unit-select" onchange="switchUnit(this.value)"></select>
+      </div>
+    </div>
+
+    <main id="view"></main>
+  </div>
+
+  <script>
+    (function () {
+      var currentSubj = 'core';
+      var currentUnit = 'all';
+      var currentTab = 'notes';
+      var flipped = false;
+      var flashIdx = 0;
+      var quizIdx = 0;
+      var quizSelected = null;
+      var quizScore = 0;
+      var isDark = true;
+
+      var SPEC_DATA = {
+        core: {
+          title: "Section 3.1: Core Technical Principles",
+          color: "#f97316",
+          units: [
+            {
+              id: "dt_core",
+              code: "DT1",
+              name: "Unit 1: Systems, Smart Materials & Sustainability",
+              notes: [
+                {
+                  t: "New and Emerging Technologies (AQA 3.1.1)",
+                  content: "AQA requires knowledge of industry developments and their impact on work, society, and the environment:",
+                  bullets: [
+                    "Automation & Robotics: Modern factories use Computer Integrated Manufacturing (CIM). While this improves precision and 24/7 output, it causes de-skilling and job displacement.",
+                    "Enterprise & Industry: Small scale start-ups use crowd funding (e.g. Kickstarter) and virtual marketing to bypass traditional high-street retail costs.",
+                    "The 6 Rs: Rethink, Reuse, Recycle, Repair, Reduce, Refuse. Life Cycle Assessments (LCA) audit environmental impact from raw extraction through to end-of-life disposal."
+                  ]
+                },
+                {
+                  t: "Energy Generation & Storage Systems (AQA 3.1.2 & 3.1.5)",
+                  content: "Understanding power generation and electronic systems:",
+                  bullets: [
+                    "Energy Sources: Fossil fuels (coal, gas) vs Renewables (solar PV, wind, hydro, geothermal). Nuclear provides reliable baseload power but creates radioactive waste.",
+                    "Systems Architecture: Inputs (sensors like LDRs, thermistors), Process (microcontrollers like PICs), and Outputs (buzzers, LEDs, actuators).",
+                    "Mechanical Devices: Motion types (Rotary, Linear, Reciprocating, Oscillating). Mechanical Advantage (MA) = Load ÷ Effort."
+                  ]
+                },
+                {
+                  t: "Smart & Modern Materials (AQA 3.1.3)",
+                  content: "Materials engineered to change properties dynamically under external stimuli:",
+                  bullets: [
+                    "Thermochromic Pigments: Change color with temperature variations (e.g., medical thermometers, mug indicators).",
+                    "Photochromic Pigments: React to UV light intensity (e.g., self-tinting eyeglass lenses).",
+                    "Shape Memory Alloys (Nitinol): Nickel-titanium alloy that returns to a pre-set shape upon heating (used in dental braces and arterial stents)."
+                  ]
+                }
+              ],
+              cards: [
+                { q: "What is Computer Integrated Manufacturing (CIM)?", a: "Using computers to control the entire production process and integrate all factory operations." },
+                { q: "List the 6 Rs of Sustainability required by AQA.", a: "Rethink, Reuse, Recycle, Repair, Reduce, Refuse." },
+                { q: "What is a Life Cycle Assessment (LCA)?", a: "An environmental audit evaluating a product's impact from raw material extraction to final disposal." },
+                { q: "What is a Thermochromic pigment?", a: "A smart material that changes color in response to temperature changes." },
+                { q: "What is a Photochromic pigment?", a: "A smart material that changes color when exposed to UV light." },
+                { q: "What is Nitinol?", a: "A Shape Memory Alloy (SMA) made of nickel and titanium that recovers its preset shape when heated." },
+                { q: "What is CAD?", a: "Computer-Aided Design: using software to create 2D/3D digital drawings." },
+                { q: "What is CAM?", a: "Computer-Aided Manufacture: using computer-controlled machinery (CNC lasers, 3D printers) to make parts." },
+                { q: "What is an LDR?", a: "Light Dependent Resistor: an input sensor whose resistance decreases as light level increases." },
+                { q: "What is a Thermistor?", a: "A temperature-dependent resistor whose resistance changes with heat." },
+                { q: "What is a finite energy resource?", a: "An energy source that cannot be replenished on a human timescale (e.g., coal, oil, natural gas)." },
+                { q: "What is a renewable energy resource?", a: "An energy source replenished naturally at a rate faster than it is consumed (e.g., wind, solar)." },
+                { q: "What is Just-In-Time (JIT) production?", a: "A lean production method where materials arrive at the factory exactly when needed on the assembly line." },
+                { q: "What is Crowd Funding?", a: "Raising capital for a product launch from a large online audience contributing small amounts." },
+                { q: "What is Planned Obsolescence?", a: "Deliberately designing a product to fail or become outdated after a specified timeframe." },
+                { q: "What is Market Pull?", a: "Designing new products driven by direct consumer demand and market trends." },
+                { q: "What is Technology Push?", a: "Designing products driven by scientific R&D breakthroughs without prior market demand." },
+                { q: "What is Polymorph?", a: "A smart polymer granule that softens in hot water at 62°C and can be hand-molded." },
+                { q: "What is Quantum Tunneling Composite (QTC)?", a: "A smart pressure-sensing material that acts as an insulator normally, but becomes a conductor when squashed." },
+                { q: "What is Carbon Footprint?", a: "The total volume of greenhouse gases produced by an individual, event, or product lifecycle." },
+                { q: "What is Continuous Production?", a: "24/7 automated manufacturing running non-stop for high-demand uniform goods." },
+                { q: "What is Batch Production?", a: "Manufacturing a fixed quantity of identical items before retooling the machinery for another product." },
+                { q: "What is One-Off Production?", a: "Manufacturing a single, bespoke item tailored specifically to an individual client's order." },
+                { q: "What is Mechanical Advantage (MA)?", a: "The ratio of Load to Effort (MA = Load ÷ Effort)." },
+                { q: "What is a Microcontroller (e.g., PIC chip)?", a: "A programmable integrated circuit acting as the 'brain' (process block) in electronic systems." }
+              ],
+              quiz: [
+                { q: "Which of the 6 Rs involves fixing broken items to extend product life?", opts: ["Reduce", "Refuse", "Repair", "Recycle"], ans: 2, exp: "Repairing restores functionality, preventing premature disposal to landfill." },
+                { q: "Which smart material changes color when exposed to UV sunlight?", opts: ["Thermochromic pigment", "Photochromic pigment", "Nitinol", "QTC"], ans: 1, exp: "Photochromic pigments alter optical properties when struck by ultraviolet light." },
+                { q: "What happens to Nitinol when it is heated above its transition temperature?", opts: ["It melts", "It returns to its original pre-set shape", "It turns black", "It generates electricity"], ans: 1, exp: "Nitinol is an SMA that restores its preset crystalline structure upon heating." },
+                { q: "What is the primary goal of Just-In-Time (JIT) production?", opts: ["Stockpiling huge raw material inventories", "Eliminating warehouse storage costs by scheduling parts to arrive precisely as needed", "Manufacturing products slowly", "Exporting goods"], ans: 1, exp: "JIT reduces lean manufacturing waste and eliminates costly raw material storage." },
+                { q: "Which of the following is classified as a finite energy resource?", opts: ["Solar power", "Wind energy", "Natural Gas", "Hydroelectric power"], ans: 2, exp: "Fossil fuels like natural gas are non-renewable and exhaustible." },
+                { q: "What is technology push?", opts: ["Consumer demand calling for new features", "Research and development breakthroughs enabling new product concepts", "Government sales mandates", "Lowering retail prices"], ans: 1, exp: "Tech push originates from scientific discoveries pushed out into commercial markets." },
+                { q: "What does an LDR (Light Dependent Resistor) do when light levels increase?", opts: ["Resistance increases", "Resistance decreases", "Voltage drops to zero", "It melts"], ans: 1, exp: "In an LDR, higher light intensity causes electrical resistance to drop." },
+                { q: "What smart material changes from an electrical insulator to a conductor under pressure?", opts: ["Thermochromic paint", "Quantum Tunneling Composite (QTC)", "Polymorph", "Photochromic film"], ans: 1, exp: "QTC contains conductive nickel particles that touch when compressed." },
+                { q: "What is market pull?", opts: ["R&D labs discovering new polymers", "Consumer needs and changing market trends driving new product development", "Factory conveyor belts", "Import tariffs"], ans: 1, exp: "Market pull is driven directly by customer feedback and consumer demand." },
+                { q: "What does a Life Cycle Assessment (LCA) evaluate?", opts: ["Product profit margins", "Environmental impact across all stages from raw material to disposal", "Manufacturing speed", "Packaging graphics"], ans: 1, exp: "LCA measures ecological damage throughout the complete product lifecycle." },
+                { q: "Which scale of production is best suited for 1,000 identical school crest badges?", opts: ["One-off production", "Batch production", "Continuous production", "Bespoke crafting"], ans: 1, exp: "Batch production manufactures a specific batch quantity efficiently." },
+                { q: "What is polymorph?", opts: ["A high-carbon steel", "A smart polymer granule that becomes moldable in 62°C water", "A ceramic tile", "A solar cell film"], ans: 1, exp: "Polymorph softens at 62°C, making it reusable for rapid prototyping." },
+                { q: "What is planned obsolescence?", opts: ["Designing products for easy repair", "Deliberately designing a product to fail or become obsolete after a set time", "Recycling plastic bottles", "Building custom furniture"], ans: 1, exp: "Planned obsolescence encourages consumer repurchasing." },
+                { q: "In an electronic system, what category does a buzzer belong to?", opts: ["Input", "Process", "Output", "Sensor"], ans: 2, exp: "Buzzers convert electrical signals into sound energy (Output)." },
+                { q: "Which CAD feature allows designers to send digital files directly to a CNC router?", opts: ["Hand sketching", "CAM integration", "Paper plotting", "Manual drafting"], ans: 1, exp: "CAD vector files generate G-code to drive CNC CAM machinery directly." },
+                { q: "What does CAM stand for?", opts: ["Computer-Aided Manufacture", "Centralized Assembly Methods", "Controlled Automated Metalwork", "Custom Mechanical Art"], ans: 0, exp: "CAM stands for Computer-Aided Manufacture." },
+                { q: "What is crowd funding?", opts: ["Bank loans", "Raising product capital from large online backer communities", "Government grants", "Company equity sales"], ans: 1, exp: "Crowd funding gathers small financial investments online." },
+                { q: "What is the formula for Mechanical Advantage (MA)?", opts: ["MA = Effort ÷ Load", "MA = Load ÷ Effort", "MA = Distance × Force", "MA = Mass × Velocity"], ans: 1, exp: "Mechanical Advantage is calculated as Load divided by Effort." },
+                { q: "What is standardisation?", opts: ["Making custom parts", "Using uniform component dimensions across the industry (e.g., M6 bolts)", "Banning plastic packaging", "Hand-carving wood"], ans: 1, exp: "Standardised parts ensure international interchangeability." },
+                { q: "Which renewable energy source uses steam from underground hot rocks?", opts: ["Biomass", "Geothermal power", "Hydroelectric dam", "Tidal barrage"], ans: 1, exp: "Geothermal harnesses natural heat beneath the earth's crust." },
+                { q: "What is a main limitation of solar PV energy generation?", opts: ["High carbon emissions during operation", "Weather dependent output with zero generation at night", "Nuclear radiation risk", "Pollutes rivers"], ans: 1, exp: "Solar PV output relies on sunlight availability." },
+                { q: "What does 'Refuse' mean in the 6 Rs?", opts: ["Refusing to work", "Declining unnecessary single-use items or wasteful packaging", "Throwing items in general waste", "Fixing broken tools"], ans: 1, exp: "Refusing avoids waste generation by rejecting unneeded items." },
+                { q: "Which battery technology is standard in electric vehicles and smartphones?", opts: ["Lead-acid", "Lithium-ion", "Zinc-carbon", "Nickel-cadmium"], ans: 1, exp: "Lithium-ion batteries deliver high energy density and rechargeable cycles." },
+                { q: "What is automation in modern manufacturing?", opts: ["Hiring more factory workers", "Replacing manual human tasks with automated robot systems", "Shutting down assembly lines", "Crafting by hand"], ans: 1, exp: "Automation increases output speed and precision while reducing labor costs." },
+                { q: "What is a primary advantage of 3D printing (Additive Layer Manufacturing)?", opts: ["Generates heavy material waste", "Creates complex geometries without specialized tooling or molds", "Slower than molding for mass volume", "Requires steel dies"], ans: 1, exp: "3D printing builds parts layer by layer straight from CAD files." }
+              ]
+            }
+          ]
+        },
+        mat: {
+          title: "Section 3.2: Specialist Material Categories",
+          color: "#eab308",
+          units: [
+            {
+              id: "dt_materials",
+              code: "DT2",
+              name: "Unit 2: Papers, Boards, Timbers, Metals & Polymers",
+              notes: [
+                {
+                  t: "Papers and Boards (AQA 3.2.1)",
+                  content: "Classified by weight (GSM) and thickness (microns):",
+                  bullets: [
+                    "Paper: Under 200 GSM. Includes Layout paper (tracing), Cartridge paper (drawing), and Grid paper.",
+                    "Board: Over 200 GSM. Corrugated board (fluted core for protection), Bleached card (high-end packaging), Duplex board (food packaging)."
+                  ]
+                },
+                {
+                  t: "Timbers, Metals & Polymers (AQA 3.2.1)",
+                  content: "Core material groups and their working properties:",
+                  bullets: [
+                    "Natural Timbers: Softwoods (evergreen coniferous like Pine; fast-growing) vs Hardwoods (deciduous like Oak; dense and durable). Manufactured boards (MDF, Plywood) are uniform and stable.",
+                    "Metals & Alloys: Ferrous (contains iron, rusts, magnetic like Mild Steel), Non-Ferrous (no iron, no rust like Aluminium, Copper), Alloys (mixtures like Brass, Stainless Steel).",
+                    "Polymers: Thermoforming (can be remelted repeatedly like Acrylic, ABS) vs Thermosetting (cross-linked chains; burn when heated like Epoxy resin, Urea formaldehyde)."
+                  ]
+                },
+                {
+                  t: "Material Properties & Mechanical Devices",
+                  content: "Mechanical and physical properties evaluated in AQA exams:",
+                  bullets: [
+                    "Properties: Tensile strength (resists pulling), Compressive strength (resists pushing), Hardness (resists scratching), Toughness (resists impact), Malleability (hammered into shape), Ductility (drawn into wire).",
+                    "Levers: Class 1 (Fulcrum middle), Class 2 (Load middle), Class 3 (Effort middle)."
+                  ]
+                }
+              ],
+              cards: [
+                { q: "What is a Ferrous metal?", a: "A metal containing iron, magnetic, and prone to rusting (e.g., mild steel, cast iron)." },
+                { q: "What is a Non-Ferrous metal?", a: "A metal containing no iron, non-magnetic, and resistant to rust (e.g., aluminium, copper)." },
+                { q: "What is an Alloy?", a: "A mixture of two or more metals (or metal with carbon) to improve properties (e.g., brass, stainless steel)." },
+                { q: "What is a Thermoforming polymer?", a: "A polymer that softens when heated and can be reshaped multiple times (e.g., Acrylic, ABS, PET)." },
+                { q: "What is a Thermosetting polymer?", a: "A polymer with cross-linked chains that sets permanently when heated and cannot be remelted (e.g., Epoxy resin)." },
+                { q: "What is Hardwood?", a: "Timber from slow-growing broad-leaved deciduous trees (e.g., Oak, Beech, Balsa)." },
+                { q: "What is Softwood?", a: "Timber from fast-growing coniferous evergreen trees with needles and cones (e.g., Pine, Spruce)." },
+                { q: "What is MDF?", a: "Medium Density Fibreboard: manufactured board made of fine wood fibers compressed with resin binder." },
+                { q: "What is Plywood?", a: "Manufactured board made of wood veneers glued with alternating 90° grain directions." },
+                { q: "What is GSM?", a: "Grams per Square Metre: standard measurement for paper weight." },
+                { q: "At what weight does paper legally classify as Board?", a: "200 GSM and above." },
+                { q: "What is Rotary motion?", a: "Continuous movement in a circle (e.g., motor shaft, bicycle wheel)." },
+                { q: "What is Reciprocating motion?", a: "Back-and-forth movement in a straight line (e.g., sewing machine needle)." },
+                { q: "What is Oscillating motion?", a: "Swinging back and forth in an arc around a fixed pivot (e.g., pendulum)." },
+                { q: "What is Linear motion?", a: "Movement in one direction along a straight path (e.g., train along straight tracks)." },
+                { q: "In a Class 1 lever, what is in the middle?", a: "The Fulcrum (pivot)." },
+                { q: "In a Class 2 lever, what is in the middle?", a: "The Load (e.g., wheelbarrow)." },
+                { q: "In a Class 3 lever, what is in the middle?", a: "The Effort (e.g., tweezers, fishing rod)." },
+                { q: "What is tensile strength?", a: "The ability of a material to withstand pulling or stretching forces without snapping." },
+                { q: "What is compressive strength?", a: "The ability of a material to withstand pushing or squeezing forces without crushing." },
+                { q: "What is malleability?", a: "The ability of a material to be hammered or rolled into shape without cracking." },
+                { q: "What is ductility?", a: "The ability of a material to be drawn out into a long thin wire without breaking." },
+                { q: "What is Carbon Fibre Reinforced Polymer (CFRP)?", a: "A composite material combining high-tensile carbon fibers embedded in an epoxy resin matrix." },
+                { q: "What is Glass Reinforced Plastic (GRP)?", a: "A composite material of glass fiber mats set in polyester resin (used for boat hulls)." },
+                { q: "What is Corrugated board?", a: "A packaging board featuring a fluted paper layer sandwiched between two flat linerboards." }
+              ],
+              quiz: [
+                { q: "Which metal group contains iron and is magnetic?", opts: ["Non-Ferrous", "Ferrous", "Alloy", "Composite"], ans: 1, exp: "Ferrous metals contain iron, making them magnetic and susceptible to rust." },
+                { q: "What property defines a thermoforming polymer?", opts: ["Burns when heated", "Can be softened and reshaped multiple times by heating", "Cannot be recycled", "Extremely brittle always"], ans: 1, exp: "Thermoforming polymers melt when heated, allowing re-molding." },
+                { q: "Which tree classification yields softwood timber?", opts: ["Oak", "Beech", "Scots Pine", "Mahogany"], ans: 2, exp: "Scots Pine is a coniferous softwood tree." },
+                { q: "How is paper weight measured standardizedly?", opts: ["Millimetres", "Grams per Square Metre (GSM)", "Microns", "Newtons"], ans: 1, exp: "Paper density is measured in Grams per Square Metre (GSM)." },
+                { q: "In a Class 2 lever, which component is positioned in the middle?", opts: ["Fulcrum", "Load", "Effort", "Pivot"], ans: 1, exp: "Class 2 levers place the Load between the Effort and Fulcrum." },
+                { q: "What type of motion is executed by a clock pendulum?", opts: ["Linear", "Rotary", "Reciprocating", "Oscillating"], ans: 3, exp: "Oscillating motion swings back and forth along an arc." },
+                { q: "Which manufactured board uses wood veneers glued at alternating 90° grain angles?", opts: ["MDF", "Plywood", "Chipboard", "Hardboard"], ans: 1, exp: "Plywood's cross-laminated veneers eliminate directional grain weakness." },
+                { q: "What is an alloy made of Copper and Zinc?", opts: ["Bronze", "Steel", "Brass", "Duralumin"], ans: 2, exp: "Brass is a non-ferrous alloy composed of copper and zinc." },
+                { q: "Which polymer is a thermoset widely used for electrical plugs?", opts: ["Acrylic", "Urea Formaldehyde", "HDPE", "PVC"], ans: 1, exp: "Urea Formaldehyde is a thermoset electrical insulator that resists heat." },
+                { q: "What property measures resistance to surface scratching and indentation?", opts: ["Toughness", "Hardness", "Ductility", "Elasticity"], ans: 1, exp: "Hardness evaluates surface wear and scratch resistance." },
+                { q: "Which motion travels in one straight direction continuously?", opts: ["Linear", "Rotary", "Reciprocating", "Oscillating"], ans: 0, exp: "Linear motion moves in one direction along a line." },
+                { q: "What is a major working property of Aluminium?", opts: ["Heavy and dense", "Lightweight, corrosion resistant, and good conductor", "Rusts quickly", "Low ductility"], ans: 1, exp: "Aluminium is lightweight and forms a protective oxide layer." },
+                { q: "What category does Carbon Fibre Reinforced Polymer belong to?", opts: ["Smart material", "Composite material", "Ferrous metal", "Hardwood"], ans: 1, exp: "CFRP is a composite material combining carbon fibers and resin." },
+                { q: "What motion does a sewing machine needle perform?", opts: ["Rotary", "Oscillating", "Reciprocating", "Linear"], ans: 2, exp: "Reciprocating motion moves linearly back and forth." },
+                { q: "Which paper product features a fluted inner core?", opts: ["Bleached card", "Corrugated board", "Layout paper", "Duplex board"], ans: 1, exp: "Corrugated board uses a fluted paper core for structural impact resistance." },
+                { q: "What is toughness in material testing?", opts: ["Resistance to scratching", "Ability to absorb sudden impacts without fracturing", "Ability to stretch into wire", "Heat resistance"], ans: 1, exp: "Toughness measures energy absorption under sudden impact forces." },
+                { q: "What makes Balsa wood unique?", opts: ["Extremely dense", "Botanically a hardwood, but exceptionally soft and lightweight", "Waterproof", "Black color"], ans: 1, exp: "Balsa is a fast-growing broad-leaf hardwood with very low density." },
+                { q: "Which component sits in the middle of a Class 3 lever?", opts: ["Load", "Fulcrum", "Effort", "Pivot"], ans: 2, exp: "Class 3 levers (tweezers) place Effort in the middle." },
+                { q: "What is malleability?", opts: ["Snapping easily", "Ability to be hammered into shape without cracking", "Heat conduction", "Floating on water"], ans: 1, exp: "Malleable materials deform plastically under compressive force." },
+                { q: "Why does unsealed MDF swell in outdoor damp environments?", opts: ["It melts", "It absorbs water, breaking down the resin binder", "It catches fire", "It shrinks"], ans: 1, exp: "MDF wood fibers absorb moisture readily if unsealed." },
+                { q: "Which polymer is clear and acts as an alternative to glass?", opts: ["Polystyrene", "Polypropylene", "Acrylic (PMMA)", "Epoxy Resin"], ans: 2, exp: "Acrylic is a clear, rigid thermoforming polymer." },
+                { q: "What gear setup reduces output speed while increasing torque?", opts: ["Large driver turning small driven gear", "Small driver turning larger driven gear", "Equal sized gears", "Belt pulley"], ans: 1, exp: "A smaller gear driving a larger gear decreases speed and multiplies torque." },
+                { q: "What mechanical force stretches a structural beam?", opts: ["Tension", "Compression", "Torsion", "Shear"], ans: 0, exp: "Tension is a pulling force acting along an axis." },
+                { q: "What makes Corrugated Board ideal for shipping boxes?", opts: ["Heavy weight", "High strength-to-weight ratio and shock cushioning", "Waterproof naturally", "Transparent"], ans: 1, exp: "Fluted channels absorb impacts while keeping weight low." },
+                { q: "What is an advantage of Stainless Steel?", opts: ["Rusts fast", "Resists corrosion due to added Chromium", "Soft and weak", "Low melting point"], ans: 1, exp: "Chromium added to steel creates a corrosion-resistant alloy." }
+              ]
+            }
+          ]
+        },
+        des: {
+          title: "Section 3.3: Designing & Making Principles",
+          color: "#06b6d4",
+          units: [
+            {
+              id: "dt_design",
+              code: "DT3",
+              name: "Unit 3: Design Process, Tolerances & Manufacturing",
+              notes: [
+                {
+                  t: "Design Process & Specification (AQA 3.3.1 - 3.3.4)",
+                  content: "User-centered design techniques required by AQA:",
+                  bullets: [
+                    "Design Brief & Specification: Using ACCESS FM (Aesthetics, Cost, Customer, Environment, Size, Safety, Function, Material) to set testable criteria.",
+                    "Ergonomics & Anthropometrics: Body measurement data. Designing between the 5th and 95th percentiles accommodates 90% of the target population."
+                  ]
+                },
+                {
+                  t: "Commercial Manufacturing Processes (AQA 3.3.5 - 3.3.7)",
+                  content: "Techniques used to form and shape materials commercially:",
+                  bullets: [
+                    "Wastage: Cutting away material (milling, turning on a lathe, laser cutting, routing).",
+                    "Addition: Adding/layering material (3D printing, soldering, welding, brazing).",
+                    "Deforming: Reshaping without loss of material (vacuum forming, injection moulding, blow moulding, press forming)."
+                  ]
+                },
+                {
+                  t: "Quality Control, Assurance & Tolerances (AQA 3.3.8 - 3.3.9)",
+                  content: "Maintaining exact industrial standards:",
+                  bullets: [
+                    "QC vs QA: Quality Control inspects components (e.g. Go/No-Go gauges). Quality Assurance manages systems across the factory to prevent errors.",
+                    "Tolerances: Acceptable dimensional variance (e.g., 50mm ± 0.5mm permits 49.5mm to 50.5mm)."
+                  ]
+                }
+              ],
+              cards: [
+                { q: "What does ACCESS FM stand for in D&T?", a: "Aesthetics, Cost, Customer, Environment, Size, Safety, Function, Material." },
+                { q: "What is Anthropometrics?", a: "The study and collection of human body measurement data." },
+                { q: "What is Ergonomics?", a: "Designing products to fit human body dimensions and usage comfortably and safely." },
+                { q: "Which percentile range is standard for mass market product design?", a: "The 5th to 95th percentile (accommodates 90% of users)." },
+                { q: "What is a 5th percentile dimension?", a: "A measurement where only 5% of the population is smaller (used for minimum reach limits)." },
+                { q: "What is a 95th percentile dimension?", a: "A measurement where 95% of the population is smaller (used for maximum height/clearance limits)." },
+                { q: "What is Quality Control (QC)?", a: "Inspecting and testing components during and after production to check tolerance compliance." },
+                { q: "What is Quality Assurance (QA)?", a: "Systematic factory procedures implemented to prevent errors throughout the manufacturing process." },
+                { q: "What is a Tolerance in manufacturing?", a: "The total allowable variation in a physical dimension (e.g., ±0.2mm)." },
+                { q: "What is a Go/No-Go Gauge?", a: "A quick QC tool used to inspect if a part dimension falls within tolerance limits." },
+                { q: "What is Vacuum Forming?", a: "Heating a plastic sheet and using vacuum suction to pull it tight over a mold former." },
+                { q: "What is Injection Moulding?", a: "Injecting molten polymer under high pressure into a steel mold cavity (e.g., Lego bricks)." },
+                { q: "What is Blow Moulding?", a: "Inflating a hot plastic tube (parison) inside a hollow mold cavity using air (e.g., plastic bottles)." },
+                { q: "What is a Wastage process?", a: "Removing material to shape a component (e.g., sawing, turning, laser cutting)." },
+                { q: "What is an Addition process?", a: "Building up a component by joining or depositing material (e.g., 3D printing, welding)." },
+                { q: "What is a Deforming process?", a: "Changing material shape without cutting or adding material (e.g., press forming, bending)." },
+                { q: "What is Turning on a lathe?", a: "Spinning a workpiece rapidly against a fixed cutting tool to produce cylindrical forms." },
+                { q: "What is Milling?", a: "Removing material using a rotating cutter while the workpiece moves on a table." },
+                { q: "What is Soldering?", a: "Joining metals using a low-melting-point filler alloy and soldering iron." },
+                { q: "What is Welding?", a: "Fusing parent metals together by melting their joint edges with extreme heat." },
+                { q: "What is a Prototype?", a: "A full-scale physical model built to evaluate design functionality and aesthetics." },
+                { q: "What is a Knock-Down (KD) fitting?", a: "Standardized hardware fasteners allowing flat-pack furniture assembly with simple hand tools." },
+                { q: "What is Surface Finishing?", a: "Applying protective or decorative coatings (paint, varnish, anodising) to finished parts." },
+                { q: "What is a Jig?", a: "A manufacturing tool that holds the workpiece and guides the cutting tool accurately." },
+                { q: "What is a Fixture?", a: "A heavy-duty manufacturing tool that holds a workpiece in a fixed position on a machine." }
+              ],
+              quiz: [
+                { q: "What does ACCESS FM stand for?", opts: ["Anthropometrics, Cost, Customer...", "Aesthetics, Cost, Customer, Environment, Size, Safety, Function, Material", "Assembly, Craft...", "Automation..."], ans: 1, exp: "ACCESS FM is the standard design specification mnemonic." },
+                { q: "Which percentile range is targeted when designing mass consumer products?", opts: ["0th to 100th", "5th to 95th", "50th only", "25th to 75th"], ans: 1, exp: "Designing between 5th and 95th percentiles covers 90% of the population." },
+                { q: "If a shaft is specified as 50mm ± 0.2mm, what is the minimum allowed diameter?", opts: ["50.2mm", "49.8mm", "50.0mm", "49.0mm"], ans: 1, exp: "50mm minus 0.2mm equals 49.8mm minimum." },
+                { q: "Which process inflates a hot plastic parison tube inside a mold to make bottles?", opts: ["Vacuum forming", "Blow moulding", "Injection moulding", "Extrusion"], ans: 1, exp: "Blow moulding uses compressed air to inflate hollow plastic containers." },
+                { q: "What is Quality Assurance (QA)?", opts: ["Binning broken parts", "Factory-wide management systems preventing defects during production", "Paying bonus wages", "Drawing logos"], ans: 1, exp: "QA sets up defect prevention procedures across the entire production chain." },
+                { q: "Which of the following is a wastage process?", opts: ["Laser cutting sheet acrylic", "3D printing a bracket", "Soldering wires", "Vacuum forming"], ans: 0, exp: "Laser cutting cuts away and wastes material from sheet stock." },
+                { q: "What tool holds a workpiece and actively guides a drill bit?", opts: ["Fixture", "Jig", "Mould", "Micrometer"], ans: 1, exp: "A jig holds the work and guides the cutting tool." },
+                { q: "What process injects molten polymer under pressure into steel molds for Lego bricks?", opts: ["Injection moulding", "Blow moulding", "Compression moulding", "Rotational moulding"], ans: 0, exp: "Injection moulding produces precise solid plastic parts at high volume." },
+                { q: "What is the study of human body measurements?", opts: ["Ergonomics", "Anthropometrics", "Economics", "Anatomy"], ans: 1, exp: "Anthropometrics gathers data on physical human dimensions." },
+                { q: "Why are Knock-Down (KD) fittings used in flat-pack furniture?", opts: ["To make furniture permanent", "To enable self-assembly using simple hand tools", "To add weight", "To glue wood"], ans: 1, exp: "KD fittings allow flat-pack shipping and simple home assembly." },
+                { q: "What machine turns a workpiece against a cutter to create cylindrical parts?", opts: ["Milling machine", "Lathe", "Band saw", "3D printer"], ans: 1, exp: "Lathes rotate workpieces against stationary cutters." },
+                { q: "What is a 5th percentile reach dimension used for?", opts: ["Doorway height", "Ensuring short-armed users can reach control buttons", "Max load capacity", "Large shoe sizes"], ans: 1, exp: "Designing for 5th percentile reach ensures those with shortest arms can reach controls." },
+                { q: "Which process uses heat and vacuum suction to pull plastic sheets over a former?", opts: ["Vacuum forming", "Casting", "Injection moulding", "Forging"], ans: 0, exp: "Vacuum forming uses atmospheric pressure to pull heated plastic over molds." },
+                { q: "What inspection tool checks if a pin is within upper and lower tolerance limits quickly?", opts: ["Go/No-Go Gauge", "Ruler", "Thermometer", "Spirit level"], ans: 0, exp: "Go/No-Go gauges check tolerances instantly without reading scales." },
+                { q: "What is an addition manufacturing process?", opts: ["Sawing wood", "Milling steel", "3D Printing (FDM)", "Turning on a lathe"], ans: 2, exp: "3D printing deposits material layer by layer." },
+                { q: "What timber treatment protects outdoor wood from fungal decay?", opts: ["Anodising", "Tanning", "Pressure treating / Tanalising", "Dip coating"], ans: 2, exp: "Pressure treating forces chemical preservatives deep into timber." },
+                { q: "What is Ergonomics concerned with?", opts: ["Calculating cost", "Designing products to fit human use comfortably and safely", "Color schemes", "Shipping logistics"], ans: 1, exp: "Ergonomics applies anthropometrics to improve human-product interaction." },
+                { q: "Which metal joining method melts the base metals together with extreme heat?", opts: ["Brazing", "Soldering", "Welding", "Pop riveting"], ans: 2, exp: "Welding melts parent metal edges together to form strong structural bonds." },
+                { q: "What is the main purpose of building a prototype?", opts: ["To sell in retail stores", "To test and evaluate physical design performance before mass production", "To store waste", "To pack boxes"], ans: 1, exp: "Prototypes identify design flaws prior to expensive factory tooling." },
+                { q: "What coating thickens the natural protective oxide layer on Aluminium?", opts: ["Galvanising", "Anodising", "Dip coating", "Varnishing"], ans: 1, exp: "Anodising electrochemically thickens aluminium oxide for protection." },
+                { q: "Which ACCESS FM criteria evaluates environmental impact?", opts: ["Aesthetics", "Environment", "Safety", "Function"], ans: 1, exp: "Environment assesses sustainability, carbon footprint, and recyclability." },
+                { q: "What is a fixture in manufacturing?", opts: ["A tool guiding a drill", "A heavy device holding a workpiece rigidly in position on a machine", "A light bulb", "A hand saw"], ans: 1, exp: "Fixtures clamp workpieces securely in fixed positions." },
+                { q: "Which process dips pre-heated metal parts into polymer powder to form a plastic coat?", opts: ["Anodising", "Fluidized bed dip coating", "Electroplating", "Polishing"], ans: 1, exp: "Dip coating fuses plastic powder onto hot metal surfaces." },
+                { q: "What is a design specification?", opts: ["Initial rough sketch", "A list of measurable target criteria a design must fulfill", "Material invoice", "User manual"], ans: 1, exp: "Specifications detail measurable targets for successful design execution." },
+                { q: "Why is 95th percentile height used for door frame clearances?", opts: ["To save material", "To ensure 95% of tall people walk through without hitting their heads", "To make doors small", "Because doors are round"], ans: 1, exp: "Clearances designed for 95th percentile tall height prevent head injuries." }
+              ]
+            }
+          ]
+        }
+      };
+
+      window.toggleTheme = function () {
+        isDark = !isDark;
+        if (isDark) {
+          document.documentElement.removeAttribute('data-theme');
+          document.getElementById('theme-btn').innerText = 'Dark Mode';
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+          document.getElementById('theme-btn').innerText = 'Light Mode';
+        }
+      };
+
+      window.switchSubject = function (subjKey) {
+        currentSubj = subjKey;
+        currentUnit = 'all';
+        flashIdx = 0;
+        quizIdx = 0;
+        quizSelected = null;
+        quizScore = 0;
+        flipped = false;
+
+        document.querySelectorAll('.subj-btn').forEach(function (btn) {
+          btn.classList.toggle('active', btn.getAttribute('data-subj') === subjKey);
+        });
+
+        document.documentElement.style.setProperty('--accent', SPEC_DATA[subjKey].color);
+        updateUnitDropdown();
+        render();
+      };
+
+      window.switchUnit = function (unitVal) {
+        currentUnit = unitVal;
+        flashIdx = 0;
+        quizIdx = 0;
+        quizSelected = null;
+        quizScore = 0;
+        flipped = false;
+        render();
+      };
+
+      window.switchTab = function (tabKey) {
+        currentTab = tabKey;
+        flipped = false;
+        document.querySelectorAll('nav button').forEach(function (btn) {
+          btn.setAttribute('aria-selected', btn.id === 'tab-' + tabKey);
+        });
+        render();
+      };
+
+      function updateUnitDropdown() {
+        var select = document.getElementById('unit-select');
+        var html = '<option value="all">All Units (' + currentSubj.toUpperCase() + ')</option>';
+        if (SPEC_DATA[currentSubj] && SPEC_DATA[currentSubj].units) {
+          SPEC_DATA[currentSubj].units.forEach(function (u) {
+            html += '<option value="' + u.id + '">' + u.name + '</option>';
+          });
+        }
+        select.innerHTML = html;
+        select.value = currentUnit;
+      }
+
+      function getFilteredUnits() {
+        if (!SPEC_DATA[currentSubj]) return [];
+        var units = SPEC_DATA[currentSubj].units;
+        if (currentUnit === 'all') return units;
+        return units.filter(function (u) { return u.id === currentUnit; });
+      }
+
+      function getFilteredCards() {
+        var list = [];
+        getFilteredUnits().forEach(function (u) {
+          if (u.cards) {
+            u.cards.forEach(function (c) {
+              list.push({ unitName: u.name, q: c.q, a: c.a });
+            });
+          }
+        });
+        return list;
+      }
+
+      function getFilteredQuiz() {
+        var list = [];
+        getFilteredUnits().forEach(function (u) {
+          if (u.quiz) {
+            u.quiz.forEach(function (q) {
+              list.push({ unitName: u.name, q: q.q, opts: q.opts, ans: q.ans, exp: q.exp });
+            });
+          }
+        });
+        return list;
+      }
+
+      function renderNotes() {
+        var units = getFilteredUnits();
+        var html = '<div class="notes-container">';
+        units.forEach(function (u) {
+          html += '<div class="unit-panel">';
+          html += '<div class="unit-title"><span>' + u.name + '</span><span class="unit-spec-tag">AQA GCSE D&T (8552)</span></div>';
+          if (u.notes) {
+            u.notes.forEach(function (n) {
+              html += '<div class="note-block">';
+              html += '<h4>' + n.t + '</h4>';
+              if (n.content) html += '<p>' + n.content + '</p>';
+              if (n.bullets && n.bullets.length) {
+                html += '<ul>';
+                n.bullets.forEach(function (b) {
+                  html += '<li>' + b + '</li>';
+                });
+                html += '</ul>';
+              }
+              html += '</div>';
+            });
+          }
+          html += '</div>';
+        });
+        html += '</div>';
+        return html;
+      }
+
+      function renderStudy() {
+        var cards = getFilteredCards();
+        if (cards.length === 0) return '<div class="unit-panel">No flashcards available for this filter.</div>';
+
+        var c = cards[flashIdx % cards.length];
+        var html = '<div class="card-container">';
+        html += '<div class="card" onclick="flipCard()">';
+        html += '<div class="card-head"><span>' + c.unitName + '</span><span>Card ' + (flashIdx + 1) + ' of ' + cards.length + '</span></div>';
+        html += '<div class="card-body">';
+        html += '<div class="card-q">' + c.q + '</div>';
+        if (flipped) {
+          html += '<div class="card-a">' + c.a + '</div>';
+        }
+        html += '</div>';
+        html += '<div class="card-hint">' + (flipped ? '✓ Tap card to flip back' : '💡 Tap card to reveal answer') + '</div>';
+        html += '</div>';
+        html += '</div>';
+
+        html += '<div class="actions">';
+        html += '<button class="btn miss" onclick="nextCard(event, false)">❌ Need Practice</button>';
+        html += '<button class="btn hit" onclick="nextCard(event, true)">✅ Got It!</button>';
+        html += '</div>';
+        return html;
+      }
+
+      window.flipCard = function () {
+        flipped = !flipped;
+        render();
+      };
+
+      window.nextCard = function (e, hit) {
+        if (e) e.stopPropagation();
+        flipped = false;
+        flashIdx++;
+        render();
+      };
+
+      function renderQuiz() {
+        var quizList = getFilteredQuiz();
+        if (quizList.length === 0) return '<div class="unit-panel">No quiz questions available for this unit filter.</div>';
+
+        if (quizIdx >= quizList.length) {
+          var html = '<div class="quiz-container"><div class="score-summary">';
+          html += '<h2>Quiz Completed!</h2>';
+          html += '<div class="score-circle">' + quizScore + ' / ' + quizList.length + '</div>';
+          html += '<p>Great job revising AQA GCSE Design & Technology!</p>';
+          html += '<button class="btn primary" onclick="resetQuiz()">Restart Quiz</button>';
+          html += '</div></div>';
+          return html;
+        }
+
+        var q = quizList[quizIdx];
+        var html = '<div class="quiz-container">';
+        html += '<div class="quiz-header"><span>' + q.unitName + '</span><span>Question ' + (quizIdx + 1) + ' of ' + quizList.length + '</span></div>';
+        html += '<div class="quiz-q">' + q.q + '</div>';
+        html += '<div class="opts">';
+        q.opts.forEach(function (opt, idx) {
+          var cls = 'opt';
+          if (quizSelected !== null) {
+            if (idx === q.ans) cls += ' right';
+            else if (idx === quizSelected) cls += ' wrong';
+          }
+          html += '<button class="' + cls + '" ' + (quizSelected !== null ? 'disabled' : '') + ' onclick="selectQuizOpt(' + idx + ')">';
+          html += '<span class="opt-idx">' + String.fromCharCode(65 + idx) + '</span>';
+          html += '<span>' + opt + '</span>';
+          html += '</button>';
+        });
+        html += '</div>';
+
+        if (quizSelected !== null) {
+          html += '<div class="explanation"><b>Explanation:</b> ' + q.exp + '</div>';
+          html += '<button class="btn primary" style="margin-top:10px;" onclick="nextQuizQ()">Next Question →</button>';
+        }
+        html += '</div>';
+        return html;
+      }
+
+      window.selectQuizOpt = function (idx) {
+        quizSelected = idx;
+        if (idx === getFilteredQuiz()[quizIdx].ans) quizScore++;
+        render();
+      };
+
+      window.nextQuizQ = function () {
+        quizIdx++;
+        quizSelected = null;
+        render();
+      };
+
+      window.resetQuiz = function () {
+        quizIdx = 0;
+        quizSelected = null;
+        quizScore = 0;
+        render();
+      };
+
+      function render() {
+        var main = document.getElementById('view');
+        if (!main) return;
+        if (currentTab === 'notes') main.innerHTML = renderNotes();
+        else if (currentTab === 'study') main.innerHTML = renderStudy();
+        else if (currentTab === 'quiz') main.innerHTML = renderQuiz();
+      }
+
+      updateUnitDropdown();
+      render();
+    })();
+  </script>
+</body>
+</html>
