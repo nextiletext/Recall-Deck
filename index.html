@@ -6,17 +6,18 @@
   <title>Recall Deck</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
   <style>
     :root {
       --bg: #0d1318;
       --surface: #141c24;
       --surface-card: #19232c;
+      --surface-hover: #212e3a;
       --ink: #e8edf0;
       --muted: #8a9ba8;
       --line: #24323e;
-      --accent: #00c896;
-      --accent-ink: #0d1318;
+      --accent: #a855f7;
+      --accent-ink: #ffffff;
       --display: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
       --body: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif;
       --mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
@@ -25,42 +26,151 @@
       --bg: #eceff1;
       --surface: #fbfcfc;
       --surface-card: #ffffff;
+      --surface-hover: #e2e8f0;
       --ink: #15212b;
       --muted: #5b6874;
       --line: #d0d7dc;
-      --accent: #a8480c;
+      --accent: #9333ea;
       --accent-ink: #ffffff;
     }
-    * { box-sizing: border-box; }
-    body {
-      background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.5;
-      padding: 40px 16px; display: flex; align-items: center; justify-content: center; min-height: 100vh;
-    }
-    .wrap { max-width: 500px; width: 100%; display: flex; flex-direction: column; gap: 24px; }
-    
-    .top-box {
-      background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 32px;
-      display: flex; flex-direction: column; gap: 24px; text-align: center;
-    }
-    .header-row { display: flex; justify-content: space-between; align-items: center; }
-    .brand h1 { font-family: var(--display); font-weight: 700; font-size: 2rem; letter-spacing: -0.02em; margin: 0; text-align: left; }
-    .brand .sub { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.05em; color: var(--muted); text-transform: uppercase; margin-top: 4px; display: block; text-align: left; }
-    
-    .mode-btn {
-      font-family: var(--body); font-size: 0.8rem; padding: 6px 12px; border-radius: 20px;
-      border: 1px solid var(--line); background: var(--bg); color: var(--muted); cursor: pointer; height: fit-content;
-    }
-    .mode-btn:hover { border-color: var(--accent); color: var(--ink); }
 
-    .link-buttons { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
-    .portal-btn {
-      display: flex; align-items: center; justify-content: space-between;
-      background: var(--surface-card); border: 1px solid var(--line); border-radius: 12px;
-      padding: 16px 20px; color: var(--ink); text-decoration: none; font-weight: 600;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 15px;
+      line-height: 1.5;
+      padding: 24px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .wrap {
+      max-width: 480px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .top-box {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand h1 {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 1.75rem;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin: 0;
+    }
+
+    .brand .sub {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-top: 4px;
+      display: block;
+    }
+
+    .mode-btn {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: var(--surface-card);
+      color: var(--ink);
+      cursor: pointer;
+      white-space: nowrap;
       transition: all 0.2s ease;
     }
-    .portal-btn:hover { border-color: var(--accent); background: var(--surface); transform: translateY(-2px); }
-    .portal-btn span { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); font-weight: 400; }
+    .mode-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Compact 2-column Central Grid */
+    .link-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .portal-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: var(--surface-card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px 10px;
+      color: var(--ink);
+      text-decoration: none;
+      transition: all 0.2s ease;
+      min-height: 84px;
+    }
+
+    .portal-card:hover {
+      border-color: var(--accent);
+      background: var(--surface-hover);
+      transform: translateY(-2px);
+    }
+
+    .portal-card .subj-title {
+      font-weight: 700;
+      font-size: 0.9rem;
+      line-height: 1.25;
+      color: var(--ink);
+    }
+
+    .portal-card .board-tag {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    /* Optional full-width span for longer titles like T-Level */
+    .portal-card.full-width {
+      grid-column: span 2;
+    }
+
+    @media (max-width: 360px) {
+      .link-grid {
+        grid-template-columns: 1fr;
+      }
+      .portal-card.full-width {
+        grid-column: span 1;
+      }
+    }
   </style>
 </head>
 <body>
@@ -74,33 +184,50 @@
         <button class="mode-btn" onclick="toggleTheme()" id="themeBtn">Light Mode</button>
       </div>
 
-      <div class="link-buttons">
-        <!-- Replace these # symbols with your actual links or filenames -->
-        <a href="compsci.html" class="portal-btn">
-          Computer Science <span>OCR J277 &rarr;</span>
+      <div class="link-grid">
+        <a href="compsci.html" class="portal-card">
+          <span class="subj-title">Computer Science</span>
+          <span class="board-tag">OCR J277</span>
         </a>
-        <a href="geography.html" class="portal-btn">
-          Geography <span>AQA &rarr;</span>
+
+        <a href="geography.html" class="portal-card">
+          <span class="subj-title">Geography</span>
+          <span class="board-tag">AQA</span>
         </a>
-        <a href="dt.html" class="portal-btn">
-          Technology <span>AQA &rarr;</span>
-        <a href="science.html" class="portal-btn">
-          Science <span>OCR B 21st Century &rarr;</span>
+
+        <a href="dt.html" class="portal-card">
+          <span class="subj-title">Design & Tech</span>
+          <span class="board-tag">AQA</span>
         </a>
-        <a href="re.html" class="portal-btn">
-          Religious Education <span>wjec Eduqas &rarr;</span>
+
+        <a href="science.html" class="portal-card">
+          <span class="subj-title">Science</span>
+          <span class="board-tag">OCR B 21st Cent</span>
         </a>
-        <a href="maths.html" class="portal-btn">
-          Mathematics <span>Edexcel &rarr;</span>
+
+        <a href="re.html" class="portal-card">
+          <span class="subj-title">Religious Ed</span>
+          <span class="board-tag">WJEC Eduqas</span>
         </a>
-        <a href="psychology.html" class="portal-btn">
-          Psychology <span>Edexcel &rarr;</span>
+
+        <a href="maths.html" class="portal-card">
+          <span class="subj-title">Mathematics</span>
+          <span class="board-tag">Edexcel</span>
         </a>
-        <a href="https://nextiletext.github.io/Recall-Deck-SE/" class="portal-btn">
-          Software Development(T level) <span>T level &rarr;</span>
+
+        <a href="psychology.html" class="portal-card">
+          <span class="subj-title">Psychology</span>
+          <span class="board-tag">Edexcel</span>
         </a>
-        <a href="it.html" class="portal-btn">
-          Information Technology <span>OCR &rarr;</span>
+
+        <a href="it.html" class="portal-card">
+          <span class="subj-title">Information Tech</span>
+          <span class="board-tag">OCR</span>
+        </a>
+
+        <a href="https://nextiletext.github.io/Recall-Deck-SE/" class="portal-card full-width">
+          <span class="subj-title">Software Development</span>
+          <span class="board-tag">T Level</span>
         </a>
       </div>
     </div>
