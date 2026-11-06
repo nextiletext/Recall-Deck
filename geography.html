@@ -500,7 +500,7 @@
     <header>
       <div class="brand">
         <h1>Recall Deck</h1>
-        <span class="subtitle">AQA GCSE Geography</span>
+        <span class="subtitle">AQA GCSE Geography (8035)</span>
       </div>
       <div class="controls-top">
         <a href="https://nextiletext.github.io/Recall-Deck" class="back-btn">← Back to Portal</a>
@@ -537,29 +537,18 @@
       var quizScore = 0;
       var isDark = true;
 
-      function buildCards(topicName, baseCards) {
-        var res = [];
-        for (var i = 0; i < 25; i++) {
-          var item = baseCards[i % baseCards.length];
-          res.push({
-            q: item.q + (i >= baseCards.length ? " (" + (i + 1) + ")" : ""),
-            a: item.a
-          });
-        }
-        return res;
-      }
+      var shuffledCards = [];
+      var shuffledQuiz = [];
 
-      function buildQuiz(topicName, baseQuiz) {
-        var res = [];
-        for (var i = 0; i < 25; i++) {
-          var item = baseQuiz[i % baseQuiz.length];
-          res.push({
-            q: item.q + (i >= baseQuiz.length ? " [" + (i + 1) + "]" : ""),
-            opts: item.opts,
-            ans: item.ans
-          });
+      function shuffleArray(array) {
+        var arr = array.slice();
+        for (var i = arr.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var temp = arr[i];
+          arr[i] = arr[j];
+          arr[j] = temp;
         }
-        return res;
+        return arr;
       }
 
       var DATA = {
@@ -572,207 +561,238 @@
               notes: [
                 {
                   t: "Global Hazards & Tectonic Plate Margins",
-                  content: "A natural hazard is a natural event that poses a threat to human life and property. Risk levels are influenced by vulnerability, capacity to cope, and hazard frequency/intensity. Earth's rigid lithosphere is broken into tectonic plates that move over the semi-molten asthenosphere due to radioactive heat driving convection currents, ridge push, and slab pull.",
+                  content: "A natural hazard is a natural event posing a threat to human life and property. Earth's lithosphere is broken into tectonic plates moving over the asthenosphere due to mantle convection, ridge push, and slab pull.",
                   points: [
-                    "Constructive (Divergent) Margins: Plates move apart (e.g., Mid-Atlantic Ridge). Magma rises from the mantle into the gap, forming new oceanic crust, basaltic shield volcanoes with low-viscosity lava, and shallow earthquakes.",
-                    "Destructive (Convergent) Margins: Denser oceanic plate subducts under lighter continental plate (e.g., Nazca subducting under South American plate). Frictional melting forms magma plumes creating steep, explosive composite (strato) volcanoes. Deep ocean trenches and severe earthquakes occur.",
-                    "Collision Margins: Two continental plates collide (e.g., Indo-Australian and Eurasian forming the Himalayas). Neither subducts; rock crumples upwards forming fold mountains with intense, shallow earthquakes but zero volcanic activity.",
-                    "Conservative (Transform) Margins: Plates slide past each other horizontally in opposite directions or at different speeds (e.g., San Andreas Fault). Friction holds plates until stress snaps them apart; seismic shockwaves radiate causing high-magnitude shallow earthquakes. No crust is created or destroyed, so no volcanoes form."
+                    "Constructive (Divergent) Margins: Plates pull apart (e.g., Mid-Atlantic Ridge). Magma rises creating shield volcanoes and shallow earthquakes.",
+                    "Destructive (Convergent) Margins: Denser oceanic plate subducts under continental plate (e.g., Nazca under South American plate). Creates deep ocean trenches, explosive composite volcanoes, and severe earthquakes.",
+                    "Collision Margins: Two continental plates collide (e.g., Indo-Australian and Eurasian forming Himalayas). Neither subducts; crumples into fold mountains with intense earthquakes but no volcanoes.",
+                    "Conservative (Transform) Margins: Plates slide past horizontally in opposite directions or speeds (e.g., San Andreas Fault). High friction builds stress until it snaps, causing severe earthquakes without volcanoes."
                   ]
                 },
                 {
-                  t: "Earthquake Case Studies: LIC/NEE vs HIC Comparison",
-                  content: "AQA requires evaluating contrasting impacts and management between an HIC and an LIC/NEE earthquake event.",
+                  t: "Earthquake Case Studies: Christchurch (HIC) vs Gorkha, Nepal (LIC)",
+                  content: "Contrasting impacts and responses between developed and emerging nations.",
                   points: [
-                    "HIC - Christchurch, New Zealand (22 Feb 2011, Magnitude 6.3): Shallow focus (5km). Primary impacts: 185 deaths, 80% of central city water/sewerage destroyed, collapse of CTV building. Secondary impacts: Soil liquefaction damaged 10,000 homes; total cost $40 billion. Responses: Full emergency plan activated in 2 hours, $6-7m international aid, 30,000 chemical toilets distributed, building codes updated.",
-                    "LIC/NEE - Gorkha, Nepal (25 April 2015, Magnitude 7.8): Shallow focus (15km). Primary impacts: 8,841 deaths, 16,800 injured, 1 million left homeless, 7,000 schools destroyed. Secondary impacts: Avalanche on Mt Everest killed 19; landslips blocked rivers causing flooding risks; total cost $10 billion (33% of GDP). Responses: Slow response due to mountainous terrain, UN field hospitals, $87m international aid pledged, strict new building guidelines introduced years later."
+                    "Christchurch, NZ (Feb 2011, Mag 6.3): Shallow focus (5km). 185 deaths, 80% water/sewerage hit. Liquefaction damaged 10,000 homes. Fast emergency plan within 2 hours, $6-7m aid, building codes upgraded.",
+                    "Gorkha, Nepal (April 2015, Mag 7.8): Shallow focus (15km). 8,841 deaths, 1m homeless. Everest avalanche killed 19. Remote mountainous terrain slowed relief; $87m aid pledged, strict codes passed years later."
                   ]
                 },
                 {
-                  t: "Tropical Storms: Formation, Structure & Management",
-                  content: "Tropical storms (hurricanes, typhoons, cyclones) form between 5° and 30° latitude N/S of the equator where sea temperatures exceed 26.5°C down to 50m depth, accompanied by intense heat evaporation, low wind shear, and sufficient Coriolis force to spin the atmospheric system.",
+                  t: "Tropical Storms: Formation, Structure & Typhoon Haiyan",
+                  content: "Form between 5° and 30° N/S latitude where sea surface temps exceed 26.5°C down to 50m depth.",
                   points: [
-                    "Structure: Central calm 'Eye' (low pressure, sinking air, clear skies), surrounded by violent 'Eye Wall' (rising air, cumulonimbus clouds, torrents of rain, winds >120 km/h).",
-                    "Climate Change Effect: Warmer ocean surface temperatures are projected to increase storm intensity (more Category 4-5 storms) and raise sea levels, amplifying storm surges.",
-                    "Typhoon Haiyan (Philippines, Nov 2013, Cat 5): Primary impacts - 6,300 dead, Tacloban airport destroyed, 90% of Tacloban city ruined by 5m storm surge. Secondary impacts - 14 million affected, disease outbreaks, $5.8bn damage. Immediate responses - Red Cross emergency food/water, 1,200 evacuation centres set up. Long-term - 'Build Back Better' government scheme, mangrove replanting along coastlines."
-                  ]
-                },
-                {
-                  t: "Extreme Weather in the UK & Climate Change",
-                  content: "The UK experiences extreme weather due to converging air masses (Arctic maritime, Polar continental, Tropical maritime). Climate change is increasing the frequency and intensity of extreme events (e.g., Beast from the East 2018, Somerset Levels Floods 2013-14).",
-                  points: [
-                    "Somerset Levels Floods (Dec 2013 - Feb 2014): Caused by record rainfall (350mm in Jan/Feb) and undredged rivers (Parrett and Tone). Impacts: 600+ houses flooded, Muchelney village cut off for weeks, £100m+ total damage.",
-                    "Management: Somerset Rivers Authority formed, 8km of river dredged, road levels raised, tidal barrier constructed at Bridgwater.",
-                    "Climate Change Evidence: Quaternary period ice cores (trapped oxygen isotopes), tree rings (dendrochronology), glacier retreat, and instrumental thermometer records since 1850.",
-                    "Mitigation (reducing emissions): Renewable energy, carbon capture, international agreements (Paris Accord), afforestation.",
-                    "Adaptation (responding to impacts): Drought-resistant crops, sea defense construction, rainwater harvesting, managing water supply."
+                    "Structure: Central calm 'Eye' (low pressure, sinking air), surrounded by high-wind, heavy-rain 'Eye Wall' (>120 km/h).",
+                    "Typhoon Haiyan (Philippines, Nov 2013, Cat 5): 6,300 dead, 5m storm surge ruined 90% of Tacloban city. 14 million affected. Immediate aid from Red Cross; long-term 'Build Back Better' coastal mangrove planting."
                   ]
                 }
               ],
-              cards: buildCards("Natural Hazards", [
-                { q: "What occurs at a conservative plate margin?", a: "Plates slide past each other horizontally, causing earthquakes due to friction release without volcanic activity." },
-                { q: "What minimum sea surface temperature is required for tropical storms?", a: "At least 26.5°C down to 50 metres depth." },
-                { q: "What drives tectonic plate movement in the mantle?", a: "Convection currents driven by core heat." },
-                { q: "Name the type of volcano formed at constructive margins.", a: "Shield volcanoes with gentle slopes and basic lava." },
-                { q: "Name the type of volcano formed at destructive margins.", a: "Composite volcanoes with steep sides and acidic lava." },
-                { q: "What scale measures earthquake magnitude?", a: "Moment Magnitude Scale (or Richter scale)." },
-                { q: "What is the focus of an earthquake?", a: "The point underground where earthquake pressure is released." },
+              cards: [
+                { q: "What occurs at a conservative plate margin?", a: "Plates slide past each other horizontally, causing friction release earthquakes without volcanic activity." },
+                { q: "What minimum sea surface temperature is required for tropical storms?", a: "At least 26.5°C down to a depth of 50 metres." },
+                { q: "What drives tectonic plate movement in the mantle?", a: "Convection currents, ridge push, and slab pull." },
+                { q: "What type of volcano is formed at constructive margins?", a: "Shield volcanoes with gentle slopes and basic, runny lava." },
+                { q: "What type of volcano is formed at destructive margins?", a: "Composite (strato) volcanoes with steep sides and explosive acidic lava." },
+                { q: "What scale measures earthquake magnitude based on energy released?", a: "Moment Magnitude Scale." },
+                { q: "What is the focus of an earthquake?", a: "The exact underground point where geological pressure is released." },
                 { q: "What is the epicentre?", a: "The point on the Earth's surface directly above the focus." },
-                { q: "Give an example of a conservative plate boundary.", a: "San Andreas Fault in California." },
+                { q: "Give an example of a conservative plate boundary.", a: "The San Andreas Fault in California." },
                 { q: "Give an example of a destructive plate boundary.", a: "The Nazca plate subducting under the South American plate." },
-                { q: "What causes primary impacts of earthquakes?", a: "Ground shaking directly collapsing buildings, bridges, and infrastructure." },
-                { q: "What causes secondary impacts of earthquakes?", a: "Aftershocks, tsunamis, fires from broken gas pipes, and disease outbreaks." },
-                { q: "What is immediate response?", a: "Actions taken right after an event to save lives and provide food/water." },
-                { q: "What is long-term response?", a: "Rebuilding infrastructure, boosting economy, and improving building regulations over months/years." },
-                { q: "Where do tropical storms form globally?", a: "Between 5° and 30° north and south of the equator." }
-              ]),
-              quiz: buildQuiz("Natural Hazards", [
-                { q: "Which plate margin involves an oceanic plate subducting?", opts: ["Constructive", "Destructive", "Conservative", "Passive"], ans: 1 },
-                { q: "What minimum sea surface temperature is needed for tropical storms?", opts: ["15°C", "26.5°C", "35°C", "10°C"], ans: 1 },
-                { q: "What feature is formed at conservative plate margins?", opts: ["Fold mountains", "Deep ocean trenches", "Earthquakes", "Shield volcanoes"], ans: 2 },
-                { q: "What is the point on the surface above an earthquake focus called?", opts: ["Epicentre", "Hypocentre", "Fault line", "Crater"], ans: 0 },
-                { q: "Which scale measures earthquake damage intensity?", opts: ["Richter", "Mercalli", "Moment magnitude", "Beaufort"], ans: 1 },
-                { q: "Typhoon Haiyan hit which country in 2013?", opts: ["Japan", "Philippines", "Haiti", "Chile"], ans: 1 },
-                { q: "What drives tectonic plates?", opts: ["Ocean currents", "Convection currents", "Wind patterns", "Earth rotation"], ans: 1 },
-                { q: "Which plate margin creates new oceanic crust?", opts: ["Constructive", "Destructive", "Conservative", "Collision"], ans: 0 },
-                { q: "What term describes secondary storm impacts?", opts: ["Tsunami / Disease", "Ground shaking", "Building collapse", "Initial wind damage"], ans: 0 },
-                { q: "What is a primary hazard of volcanoes?", opts: ["Pyroclastic flows", "Economic recession", "Homelessness", "Tourism loss"], ans: 0 },
-                { q: "In which ocean do hurricanes typically occur?", opts: ["Atlantic", "Arctic", "Antarctic", "Mediterranean"], ans: 0 },
-                { q: "What shape is the eye of a tropical storm?", opts: ["Calm central area with low pressure", "Violent storm band", "Outer ring", "Spiral arm"], ans: 0 },
-                { q: "What is hazard mitigation?", opts: ["Reducing severity of hazard impacts", "Ignoring hazards", "Increasing vulnerability", "Relocating cities permanently"], ans: 0 },
-                { q: "Which monitoring tool tracks storms?", opts: ["Satellites", "Seismometers", "Clinometers", "Rain gauges"], ans: 0 },
-                { q: "What is a composite volcano made of?", opts: ["Alternating layers of lava and ash", "Pure runny lava", "Sand only", "Basalt blocks"], ans: 0 }
-              ])
+                { q: "What causes primary impacts of earthquakes?", a: "Direct ground shaking causing structural collapse of buildings and bridges." },
+                { q: "What causes secondary impacts of earthquakes?", a: "Aftershocks, tsunamis, fires from broken gas mains, and disease outbreaks." },
+                { q: "What is an immediate response to a disaster?", a: "Actions taken right after an event to save lives, provide shelter, food, and medical aid." },
+                { q: "What is a long-term response?", a: "Rebuilding infrastructure, restoring the economy, and upgrading building codes over months/years." },
+                { q: "Where do tropical storms form globally?", a: "Between 5° and 30° North and South of the equator." },
+                { q: "What is the calm central area of a tropical storm called?", a: "The Eye." },
+                { q: "What surrounds the Eye of a tropical storm with the strongest winds?", a: "The Eye Wall." },
+                { q: "How many people died in the Christchurch 2011 earthquake?", a: "185 people." },
+                { q: "How many people died in the Gorkha, Nepal 2015 earthquake?", a: "8,841 people." },
+                { q: "What major secondary impact hit Mt Everest during the Nepal 2015 earthquake?", a: "A massive avalanche killing 19 climbers at Base Camp." },
+                { q: "What is climate change mitigation?", a: "Action taken to reduce or prevent greenhouse gas emissions (e.g. afforestation, renewables)." },
+                { q: "What is climate change adaptation?", a: "Adjusting practices or infrastructure to cope with climate change impacts (e.g. sea walls, drought crops)." },
+                { q: "Name a proxy source of historical climate data.", a: "Ice core samples, tree rings (dendrochronology), or ocean sediment cores." },
+                { q: "What storm surge height hit Tacloban in Typhoon Haiyan?", a: "5 metres high." },
+                { q: "What is slab pull?", a: "Denser oceanic crust sinking into the mantle pulled by gravity, dragging the trailing plate." }
+              ],
+              quiz: [
+                { q: "Which plate margin involves an oceanic plate subducting under a continental plate?", opts: ["Constructive", "Destructive", "Conservative", "Collision"], ans: 1 },
+                { q: "What minimum sea surface temperature is needed for tropical storms to form?", opts: ["15°C", "26.5°C", "35°C", "10°C"], ans: 1 },
+                { q: "What tectonic event occurs at conservative plate margins?", opts: ["Fold mountains", "Deep ocean trenches", "Earthquakes", "Shield volcanoes"], ans: 2 },
+                { q: "What is the point on the surface directly above an earthquake focus called?", opts: ["Epicentre", "Hypocentre", "Fault line", "Crater"], ans: 0 },
+                { q: "Which scale measures earthquake intensity based on observed structural damage?", opts: ["Richter", "Mercalli", "Moment magnitude", "Beaufort"], ans: 1 },
+                { q: "Typhoon Haiyan hit which nation in November 2013?", opts: ["Japan", "Philippines", "Haiti", "Chile"], ans: 1 },
+                { q: "What force drives tectonic plate motion in the mantle?", opts: ["Ocean currents", "Convection currents", "Wind patterns", "Earth rotation"], ans: 1 },
+                { q: "Which plate margin continuously creates new oceanic crust?", opts: ["Constructive", "Destructive", "Conservative", "Collision"], ans: 0 },
+                { q: "What is classified as a secondary impact of a tropical storm?", opts: ["Tsunami / Disease outbreak", "Immediate wind roof damage", "Building destruction", "Initial storm surge wave"], ans: 0 },
+                { q: "What is a primary hazard associated with volcanic eruptions?", opts: ["Pyroclastic flow", "Economic recession", "Homelessness", "Long-term tourism loss"], ans: 0 },
+                { q: "In which ocean basin do hurricanes specifically occur?", opts: ["Atlantic", "Arctic", "Indian", "Southern"], ans: 0 },
+                { q: "What weather condition characterizes the eye of a tropical storm?", opts: ["Light winds and low pressure with sinking air", "Violent rain squalls", "Highest wind speeds", "Torrential hail"], ans: 0 },
+                { q: "What is climate change mitigation?", opts: ["Reducing greenhouse gas emissions", "Building higher sea walls", "Relocating coastal towns", "Air conditioning installation"], ans: 0 },
+                { q: "Which satellite technology tracks tropical storm pathways?", opts: ["Geostationary weather satellites", "Seismometers", "Clinometers", "Barometers"], ans: 0 },
+                { q: "What layers compose a composite volcano?", opts: ["Alternating layers of ash and viscous lava", "Pure runny basalt lava", "Sand dunes", "Granite blocks"], ans: 0 },
+                { q: "How many deaths resulted from the 2011 Christchurch earthquake?", opts: ["185", "10,000", "8,841", "50"], ans: 0 },
+                { q: "What phenomenon turned solid soil into liquid mud in Christchurch?", opts: ["Soil liquefaction", "Landslide", "Solifluction", "Pyroclastic flow"], ans: 0 },
+                { q: "What caused high casualties in Nepal's 2015 earthquake compared to New Zealand?", opts: ["Unreinforced masonry buildings and poor infrastructure", "Higher sea levels", "Better emergency planning", "Tsunami waves"], ans: 0 },
+                { q: "Which landform is created when two continental plates collide?", opts: ["Fold mountains", "Ocean trench", "Shield volcano", "Rift valley"], ans: 0 },
+                { q: "What is slab pull?", opts: ["Gravitational pull on subducting cold oceanic plates", "Wind pushing continents", "Magma pushing plates apart", "Tidal forces"], ans: 0 },
+                { q: "What is the global latitude distribution of hot deserts?", opts: ["15° to 30° N/S of equator", "On the equator", "Polar circles", "45° to 60° N/S"], ans: 0 },
+                { q: "What evidence of past climate change is extracted from ice sheets?", opts: ["Trapped oxygen isotopes and atmospheric gas bubbles", "Fossil fuels", "Tree rings", "Volcanic dust only"], ans: 0 },
+                { q: "What adaptation helps plants survive in tropical rainforest canopy?", opts: ["Drip-tip leaves to shed heavy rainfall", "Thick succulent stems", "Needle leaves", "Deep taproots"], ans: 0 },
+                { q: "Which international agreement aims to limit global warming below 2°C?", opts: ["Paris Agreement", "Kyoto Protocol", "Geneva Convention", "Montreal Protocol"], ans: 0 },
+                { q: "What is an immediate response to Typhoon Haiyan?", opts: ["Deploying Red Cross food packages and water purification tablets", "Replanting mangroves", "Building new permanent housing", "Upgrading national warning systems"], ans: 0 }
+              ]
             },
             {
               id: "p2",
               name: "Section B: The Living World (Ecosystems & Deserts)",
               notes: [
                 {
-                  t: "Ecosystems & Gersmehl Nutrient Cycle Models",
-                  content: "An ecosystem consists of living biotic components (plants, animals, microorganisms) interacting with non-living abiotic factors (climate, soil, water, rock). The Gersmehl model maps nutrient movements between three primary stores: Biomass, Litter, and Soil.",
+                  t: "Ecosystems & Gersmehl Nutrient Models",
+                  content: "An ecosystem comprises biotic organisms interacting with abiotic environment factors. The Gersmehl model tracks nutrient flows between Biomass, Litter, and Soil stores.",
                   points: [
-                    "Tropical Rainforest Gersmehl Model: Biomass is by far the largest store due to optimal growing conditions year-round. High temperatures and humidity trigger lightning-fast bacterial decomposition of the Litter store into Soil. However, heavy equatorial convectional rain causes rapid leaching, stripping soluble nutrients out of the thin soil, forcing plant roots to stay shallow (buttress roots).",
-                    "Temperate Deciduous Gersmehl Model: Soil is the largest nutrient store. Deciduous leaves drop in autumn, building up a large Litter store that decomposes moderately during spring.",
-                    "Hot Desert Gersmehl Model: Litter store is near zero due to sparse vegetation. Soil store is largest but low in organic humus. Low precipitation prevents leaching, causing saline soil crusts."
+                    "Rainforest Gersmehl Model: Biomass is the largest store. Hot, humid climate causes rapid bacterial decay of Litter into Soil. Convectional rains cause heavy leaching, leaving thin infertile soil.",
+                    "Hot Desert Gersmehl Model: Litter store is tiny due to minimal plant cover. Soil is largest store but low in humus. Low rainfall prevents leaching."
                   ]
                 },
                 {
-                  t: "Tropical Rainforests: Characteristics, Adaptation & Deforestation",
-                  content: "Located along the equator (0°-10° N/S). High annual rainfall (>2000mm) and high constant temperature (~27°C). Distinct vertical stratification layers: Emergents (40-50m), Canopy (30m), Understory (15m), Shrub/Forest Floor (0-5m).",
+                  t: "Tropical Rainforests & Deforestation in the Amazon",
+                  content: "Equatorial biomes (0°-10° N/S). High annual rain (>2000mm) and high uniform temp (~27°C). Stratified into Emergents, Canopy, Understory, Forest Floor.",
                   points: [
-                    "Plant Adaptations: Drip-tip leaves shed heavy water preventing mold; Lianas (woody vines) climb trees to reach canopy light; Buttress roots support massive tree trunks in shallow soil.",
-                    "Animal Adaptations: Toucan's long beak reaches fruit on structural branches; Spider monkeys have prehensile tails for climbing; Sloths rely on camouflage to evade predators.",
-                    "Amazon Deforestation Case Study: Primary causes - Cattle ranching (responsible for 80% of cleared land), soy commercial farming, illegal logging, gold mining (Carajás), infrastructure (Trans-Amazonian Highway).",
-                    "Impacts of Deforestation: Loss of biodiversity (estimated 137 species lost per day), soil erosion and nutrient depletion, global warming (loss of carbon sink and carbon released during burning).",
-                    "Sustainable Management: Selective logging (felling only designated mature trees), debt-for-nature swaps, ecotourism, international hardwood agreements (FSC certification)."
-                  ]
-                },
-                {
-                  t: "Hot Deserts: Environmental Challenges & Opportunities",
-                  content: "Located 15°-30° N/S of the equator along high-pressure belts where sinking dry air prevents cloud formation (<250mm annual rain, extreme diurnal temperature range from 40°C daytime to sub-zero night).",
-                  points: [
-                    "Thar Desert Case Study (India/Pakistan): Opportunities - Mineral extraction (gypsum, phosphorite, limestone), energy development (Jaisalmer Wind Park, solar power), commercial agriculture via Indira Gandhi Canal (growing wheat/cotton), tourism (camel safaris at Jaisalmer).",
-                    "Development Challenges: Extreme heat causing thermal exhaustion, water scarcity (high evaporation), accessibility (paved roads melt in summer heat; drifting sand dunes cover tracks).",
-                    "Desertification Causes: Overgrazing (soil tramped bare by livestock), over-cultivation (exhausting soil nutrients), firewood collection, climate change driving prolonged drought.",
-                    "Management Strategies: Afforestation (planting Green Wall acacia trees whose deep roots bind soil), soil management (mulching and terracing), technology (magic stones/bunds along slopes to reduce rain surface runoff)."
+                    "Adaptations: Drip-tip leaves, Lianas climbing trees, Buttress roots for shallow support.",
+                    "Amazon Case Study: Cattle ranching (80% cleared land), soy farming, logging, gold mining. Impacts: Loss of 137 species/day, carbon sink loss. Management: Selective logging, FSC certification, debt-for-nature swaps."
                   ]
                 }
               ],
-              cards: buildCards("Ecosystems", [
-                { q: "Where are the vast majority of nutrients stored in a tropical rainforest?", a: "In the biomass (living vegetation) due to rapid root uptake." },
+              cards: [
+                { q: "Where are the vast majority of nutrients stored in a tropical rainforest?", a: "In the biomass (living trees/plants) due to rapid root uptake." },
                 { q: "What Gersmehl model store is largest in temperate deciduous forests?", a: "The soil store." },
-                { q: "What is an ecosystem?", a: "A biotic community of living organisms interacting with their abiotic environment." },
-                { q: "What is a producer?", a: "An organism that uses sunlight to produce its own food via photosynthesis." },
-                { q: "What is a consumer?", a: "An organism that gets energy by eating other plants or animals." },
-                { q: "What are decomposers?", a: "Organisms like fungi and bacteria that break down dead organic matter." },
-                { q: "What is biodiversity?", a: "The variety of plant and animal life in a particular habitat." },
-                { q: "Name a driver of deforestation in the Amazon.", a: "Cattle ranching, soy farming, or illegal logging." },
-                { q: "What is selective logging?", a: "Felling only mature or specific trees, leaving younger trees intact." },
-                { q: "What is ecotourism?", a: "Tourism directed against natural environments, supporting conservation and local communities." },
-                { q: "What are debt-for-nature swaps?", a: "When a portion of a country's foreign debt is forgiven in exchange for local conservation investments." },
-                { q: "What is nutrient cycling?", a: "The continuous flow of nutrients between living organisms, soil, and litter." },
-                { q: "What is leaching?", a: "Heavy rainfall washing soluble nutrients down through soil layers." },
-                { q: "What are epiphytes?", a: "Plants that grow on other plants without soil in rainforests to reach sunlight." },
-                { q: "What is desertification?", a: "The process by which fertile land becomes desert, typically due to drought or deforestation." }
-              ]),
-              quiz: buildQuiz("Ecosystems", [
-                { q: "Which Gersmehl store holds the largest proportion of nutrients in a tropical rainforest?", opts: ["Soil", "Litter", "Biomass", "Groundwater"], ans: 2 },
-                { q: "What is a producer in a food web?", opts: ["Herbivore", "Plant using sunlight", "Decomposer", "Top carnivore"], ans: 1 },
-                { q: "What term describes organisms breaking down dead matter?", opts: ["Producers", "Decomposers", "Consumers", "Predators"], ans: 1 },
-                { q: "What is selective logging?", opts: ["Cutting down all trees", "Felling only mature targeted trees", "Planting new trees", "Clearing land for cattle"], ans: 1 },
-                { q: "What causes rapid litter decomposition in rainforests?", opts: ["Cold temperatures", "Hot, wet humid climate", "Dry winds", "Volcanic ash"], ans: 1 },
-                { q: "What is leaching?", opts: ["Nutrients washed down through soil by heavy rain", "Nutrients blowing away in wind", "Plant root absorption", "Animal grazing"], ans: 0 },
-                { q: "Primary cause of Amazon deforestation?", opts: ["Cattle ranching and agriculture", "Urban expansion", "Volcanoes", "Earthquakes"], ans: 0 },
-                { q: "What is ecotourism designed to do?", opts: ["Promote sustainable local travel and conservation", "Build large hotels", "Clear forests", "Increase logging"], ans: 0 },
-                { q: "What are epiphytes?", opts: ["Parasites", "Plants growing on tree branches for light", "Undergrowth shrubs", "Tree roots"], ans: 1 },
-                { q: "What is a biome?", opts: ["A large global community of plants and animals spanning distinct climates", "A single pond", "A mountain peak", "An urban park"], ans: 0 },
-                { q: "What is biodiversity hotspot?", opts: ["Area with high concentration of endemic species under threat", "Desert area", "Frozen tundra", "Volcanic crater"], ans: 0 },
-                { q: "What is debt-for-nature swap?", opts: ["Forgiving national debt for environmental protection", "Buying land", "Borrowing money", "Paying fines"], ans: 0 },
-                { q: "What is the understory layer?", opts: ["Dark lower layer of rainforest below canopy", "Forest floor", "Treetops", "Roots"], ans: 0 },
-                { q: "What is nutrient store Gersmehl model?", opts: ["Biomass, Litter, Soil", "Air, Water, Rock", "Sun, Moon, Earth", "Root, Stem, Leaf"], ans: 0 },
-                { q: "What is biotic component?", opts: ["Living organisms in an ecosystem", "Rocks and water", "Sunlight", "Soil pH"], ans: 0 }
-              ])
+                { q: "What is an ecosystem?", a: "A community of living organisms (biotic) interacting with non-living (abiotic) elements." },
+                { q: "What is a producer?", a: "An organism (plant) that generates its own food using sunlight via photosynthesis." },
+                { q: "What is a consumer?", a: "An organism that gets energy by feeding on other plants or animals." },
+                { q: "What are decomposers?", a: "Organisms like bacteria and fungi that break down dead organic matter." },
+                { q: "What is biodiversity?", a: "The variety of plant and animal species within a given ecosystem." },
+                { q: "Name the primary driver of deforestation in the Amazon.", a: "Cattle ranching (accounting for roughly 80% of cleared land)." },
+                { q: "What is selective logging?", a: "Felling only mature targeted trees while leaving younger trees to protect canopy cover." },
+                { q: "What is ecotourism?", a: "Low-impact tourism aimed at conserving natural environments and benefiting local populations." },
+                { q: "What are debt-for-nature swaps?", a: "Financial agreements where a portion of a nation's foreign debt is forgiven in exchange for local conservation." },
+                { q: "What is nutrient cycling?", a: "The continuous movement of nutrients between biomass, litter, and soil." },
+                { q: "What is leaching?", a: "Heavy rainfall washing soluble nutrients down through soil out of reach of roots." },
+                { q: "What are epiphytes?", a: "Plants that grow on tree trunks and branches in rainforests to reach sunlight." },
+                { q: "What is desertification?", a: "The process by which fertile land degrades into desert due to drought or human mis-management." },
+                { q: "What is the Canopy layer of a rainforest?", a: "The dense continuous ceiling of foliage formed by tree crowns 30 metres above ground." },
+                { q: "What adaptation allows desert cacti to store water?", a: "Succulent fleshy stems and wide shallow roots." },
+                { q: "Name an opportunity for development in the Thar Desert.", a: "Solar/wind energy, mineral extraction (gypsum), commercial agriculture, camel tourism." },
+                { q: "Name a major challenge of living in the Thar Desert.", a: "Extreme summer heat (>50°C), water scarcity, and melting asphalt roads." },
+                { q: "What is overgrazing?", a: "Allowing too much livestock to strip vegetation bare, exposing soil to wind/water erosion." },
+                { q: "What is afforestation?", a: "Planting trees on land that has not recently been forested to prevent erosion." },
+                { q: "What are bunds / magic stones?", a: "Stone lines built along hill contours in arid zones to trap rainwater and prevent topsoil erosion." },
+                { q: "What is the Great Green Wall?", a: "A planned 8,000km band of trees planted across the African Sahel to halt desertification." },
+                { q: "Why are buttress roots necessary for tall rainforest trees?", a: "To anchor tall trees in thin, nutrient-poor topsoils." },
+                { q: "What is humus in soil?", a: "Dark organic matter formed by the decomposition of plant and animal material." }
+              ],
+              quiz: [
+                { q: "Which Gersmehl store holds the largest nutrient volume in tropical rainforests?", opts: ["Soil", "Litter", "Biomass", "Groundwater"], ans: 2 },
+                { q: "What is the primary role of a producer in a food web?", opts: ["Herbivore grazing", "Converting sunlight into chemical energy via photosynthesis", "Decomposing leaf litter", "Hunting prey"], ans: 1 },
+                { q: "What category of organisms breaks down dead leaf material into soil nutrients?", opts: ["Producers", "Decomposers", "Primary consumers", "Apex predators"], ans: 1 },
+                { q: "What practice defines selective logging?", opts: ["Clear-cutting entire forest sections", "Felling selected mature trees while leaving younger growth intact", "Replanting monoculture crops", "Burning undergrowth"], ans: 1 },
+                { q: "Why does leaf litter decompose so rapidly in rainforests?", opts: ["Cold climate", "Hot, wet, and humid conditions accelerating bacterial action", "High wind speeds", "Volcanic ash enrichment"], ans: 1 },
+                { q: "What is soil leaching?", opts: ["Nutrients being washed down out of reach by heavy rainfall", "Wind blowing soil away", "Root absorption", "Overgrazing by sheep"], ans: 0 },
+                { q: "What is the single largest cause of Amazon rainforest clearing?", opts: ["Cattle ranching", "Urban high-rises", "Hydroelectric dams only", "Road construction only"], ans: 0 },
+                { q: "What is the primary goal of ecotourism?", opts: ["Sustainable travel supporting conservation and local communities", "Building mass luxury resorts", "Increasing logging operations", "Exporting rare wildlife"], ans: 0 },
+                { q: "What are epiphytes?", opts: ["Parasitic insects", "Plants growing harmlessly on host trees to access canopy light", "Underground fungi", "Aquatic reeds"], ans: 1 },
+                { q: "What defines a biome?", opts: ["A global-scale ecosystem categorized by climate and vegetation", "A single freshwater pond", "A city park", "A mountain ridge"], ans: 0 },
+                { q: "What is a biodiversity hotspot?", opts: ["A region with high species richness facing severe destruction threat", "A hot desert", "An ice cap", "A volcanic vent"], ans: 0 },
+                { q: "What occurs during a debt-for-nature swap?", opts: ["Foreign debt is cancelled in exchange for local environmental protection", "Buying national parks", "Taking out international loans", "Paying carbon taxes"], ans: 0 },
+                { q: "What is the understory layer of a rainforest?", opts: ["The dark layer between canopy and forest floor", "The high emergent treetops", "Soil root zone", "River banks"], ans: 0 },
+                { q: "Which three stores make up the Gersmehl nutrient model?", opts: ["Biomass, Litter, Soil", "Air, Water, Rock", "Sun, Moon, Earth", "Roots, Stems, Leaves"], ans: 0 },
+                { q: "What is a biotic ecosystem component?", opts: ["Living plants, animals, and bacteria", "Granite rocks", "Rainfall amount", "Solar radiation"], ans: 0 },
+                { q: "What plant adaptation channels water off leaves in rainforests?", opts: ["Drip-tip leaves", "Succulent stems", "Waxy needles", "Broad flat roots"], ans: 0 },
+                { q: "Which canal supplies irrigation water to the Thar Desert?", opts: ["Indira Gandhi Canal", "Panama Canal", "Suez Canal", "Grand Canal"], ans: 0 },
+                { q: "What is a major cause of desertification in drylands?", opts: ["Overgrazing stripping topsoil vegetation", "Excessive afforestation", "Low summer temperatures", "Heavy snowstorms"], ans: 0 },
+                { q: "What feature of cacti reduces water loss via transpiration?", opts: ["Spines instead of leaves", "Large flat leaves", "Thin bark", "White flowers"], ans: 0 },
+                { q: "What is the Great Green Wall project in Africa?", opts: ["A 8,000km band of trees planted across the Sahel to stop desertification", "A concrete security wall", "A solar panel array", "A highway project"], ans: 0 },
+                { q: "What is over-cultivation?", opts: ["Exhausting soil nutrients by growing crops repeatedly without fallow periods", "Planting too many trees", "Using organic manure", "Drip irrigation"], ans: 0 },
+                { q: "Why are camel safaris economically important in the Thar Desert?", opts: ["Provides sustainable tourism income for local communities", "Exports camels abroad", "Replaces trains", "Cleans sand dunes"], ans: 0 },
+                { q: "What is the height of emergent trees in rainforests?", opts: ["40 to 50 metres", "5 metres", "10 metres", "100 metres"], ans: 0 },
+                { q: "Which FSC label on timber products guarantees?", opts: ["Sourced from sustainably managed forests", "Made of plastic", "Imported illegally", "Cheapest price"], ans: 0 },
+                { q: "What is a food web?", opts: ["Interconnected network of multiple food chains in an ecosystem", "A single linear chain", "A spider web", "Agricultural market"], ans: 0 }
+              ]
             },
             {
               id: "p3",
               name: "Section C: Physical Landscapes in the UK (Coasts & Rivers)",
               notes: [
                 {
-                  t: "Coastal Processes, Landforms & Management Case Study",
-                  content: "Coasts are dynamic environments shaped by marine processes (waves, erosion, transportation, deposition) and sub-aerial processes (weathering and mass movement).",
+                  t: "Coastal Processes, Landforms & Holderness Case Study",
+                  content: "Shaped by marine processes (erosion, transport, deposition) and sub-aerial processes.",
                   points: [
-                    "Erosion Processes: Hydraulic Action (water forced into cracks compressing trapped air), Abrasion (sand/pebbles scraping cliff face), Attrition (rocks colliding in water becoming smaller/rounder), Solution (acidic seawater dissolving chalk/limestone).",
-                    "Transport & Deposition: Longshore Drift occurs when prevailing winds push swash up the beach at an oblique angle, while gravity pulls backwash straight down at 90°, transporting sediment in a zigzag fashion. Deposition forms beaches, spits (e.g. Spurn Head), and bars.",
-                    "Erosional Landforms: Headland and Bay formation on discordant coastlines -> Cave -> Arch -> Stack -> Stump sequence.",
-                    "Holderness Coast Case Study (UK's fastest eroding coastline): Soft boulder clay cliffs erode at 1.8m/year. Management at Mappleton: In 1991, £2 million was spent on two granite rock groynes and a cliff revetment. Outcome: Protected Mappleton village and B1242 main road, but starved southern areas (Great Cowden) of sediment due to terminal groyne syndrome, causing accelerated cliff collapse."
+                    "Erosion: Hydraulic action, Abrasion, Attrition, Solution.",
+                    "Transport & Deposition: Longshore Drift transports sediment via wave swash and gravity backwash. Deposition forms beaches, spits, bars.",
+                    "Holderness Coast: Soft boulder clay erodes at 1.8m/yr. Mappleton defended with £2m granite groynes/revetment; protected village but caused sediment starvation downstream at Great Cowden (terminal groyne syndrome)."
                   ]
                 },
                 {
-                  t: "River Landscapes: Profiles, Landforms & Management",
-                  content: "Rivers change profile from upper course (steep, V-shaped valleys, vertical erosion) to middle course (lateral erosion, meanders) and lower course (wide floodplains, estuaries, deposition).",
+                  t: "River Profiles, Landforms & Jubilee River Scheme",
+                  content: "River profiles change from upper course (steep, vertical erosion) to lower course (flat, lateral erosion, deposition).",
                   points: [
-                    "Upper Course Landforms: Waterfalls and Gorges. Hard rock layer overlies soft rock. Hydraulic action and abrasion undercut soft rock creating an overhang. Overhang collapses under gravity, waterfall retreats upstream leaving a steep-sided gorge.",
-                    "Middle Course Landforms: Meanders and Oxbow Lakes. Fast current on outside bend causes lateral erosion (river cliff); slow current on inside bend deposits sediment (slip-off slope). Neck of meander narrows during floods until cut through; deposition seals off former loop creating an oxbow lake.",
-                    "Lower Course Landforms: Floodplains and Levees. Repeated flooding causes river to spill onto floodplain, depositing heavy coarse sediment first along banks forming natural raised levees.",
-                    "River Jubilee Channel Case Study (Hard Engineering Scheme): 11.6km long man-made flood relief channel near Maidenhead/Windsor to divert Thames water. Built for £110 million. Benefits: Protected 3,000 high-value properties in Windsor. Drawbacks: Flooded downstream settlements (Wraysbury) and high maintenance costs."
+                    "Landforms: Waterfalls/Gorges (upper), Meanders/Oxbow Lakes (middle), Floodplains/Levees (lower).",
+                    "Jubilee River Channel: 11.6km flood relief channel near Maidenhead (£110m). Protected 3,000 Windsor homes but flooded Wraysbury downstream."
                   ]
                 }
               ],
-              cards: buildCards("Physical Landscapes", [
-                { q: "What is longshore drift?", a: "The zigzag movement of sediment along a coast driven by waves approaching at an angle." },
-                { q: "Name four coastal erosion processes.", a: "Hydraulic action, abrasion, attrition, and solution." },
-                { q: "What is hydraulic action?", a: "Water forced into cracks compressing trapped air, weakening cliffs." },
-                { q: "What is abrasion?", a: "Pebbles thrown against cliffs acting like sandpaper, wearing them away." },
-                { q: "What is attrition?", a: "Rocks crashing against each other, becoming smaller and more rounded." },
-                { q: "What is solution (corrosion)?", a: "Chemical dissolution of rocks like limestone by slightly acidic seawater." },
-                { q: "What is deposition?", a: "When waves lose energy and drop sediment on beaches or mudflats." },
-                { q: "What is a spit?", a: "An extended stretch of sand connected to the mainland jutting out across a bay." },
-                { q: "What is a bar?", a: "A spit that joins two headlands, cutting off a bay to form a lagoon." },
-                { q: "What is hard engineering?", a: "Man-made structures built to control natural coastal processes (e.g., sea walls, groynes)." },
-                { q: "What is soft engineering?", a: "Sustainable schemes working with natural processes (e.g., beach nourishment, dune stabilization)." },
-                { q: "Give an example of hard engineering.", a: "Rock armour, sea walls, or groynes." },
-                { q: "Give an example of soft engineering.", a: "Beach nourishment or managed retreat." },
-                { q: "Why is the Holderness coast eroding so fast?", a: "It is composed of soft boulder clay and exposed to powerful waves from the North Sea." },
-                { q: "What is managed retreat?", a: "Allowing controlled coastal flooding or erosion in low-value areas." }
-              ]),
-              quiz: buildQuiz("Physical Landscapes", [
-                { q: "Which coastal erosion process involves trapped air compressed in cracks?", opts: ["Abrasion", "Hydraulic action", "Attrition", "Solution"], ans: 1 },
-                { q: "What is longshore drift driven by?", opts: ["Prevailing winds and oblique wave swash", "Tidal currents", "Deep sea currents", "River outflows"], ans: 0 },
-                { q: "What is hard engineering?", opts: ["Man-made concrete/steel structures", "Planting dunes", "Managed retreat", "Beach nourishment"], ans: 0 },
-                { q: "What feature forms when a spit joins two headlands?", opts: ["Bar", "Headland", "Arch", "Stack"], ans: 0 },
-                { q: "Why is Holderness eroding quickly?", opts: ["Soft boulder clay geology", "Hard granite", "Calm sheltered waters", "Low tides"], ans: 0 },
-                { q: "What is abrasion?", opts: ["Pebbles scraping against cliffs like sandpaper", "Chemical dissolving", "Air pressure in cracks", "Rocks smashing together"], ans: 0 },
-                { q: "What is soft engineering example?", opts: ["Beach nourishment", "Concrete sea wall", "Steel groynes", "Rock armour"], ans: 0 },
-                { q: "What is attrition?", opts: ["Rocks colliding and becoming smaller and rounder", "Wave breaking", "Cliff sliding", "Sand blowing"], ans: 0 },
-                { q: "What is swash?", opts: ["Wave wash moving up a beach", "Water retreating", "Deep ocean swell", "Tidal current"], ans: 0 },
-                { q: "What is backwash?", opts: ["Water running back down beach under gravity", "Incoming wave", "Wind spray", "River flow"], ans: 0 },
-                { q: "What is headland erosion sequence?", opts: ["Crack -> Cave -> Arch -> Stack -> Stump", "Stack -> Arch -> Cave", "Stump -> Stack -> Cave", "Bay -> Headland -> Arch"], ans: 0 },
-                { q: "What is saltation in sediment transport?", opts: ["Pebbles bouncing along seabed", "Dissolved minerals", "Suspended clay", "Rolling boulders"], ans: 0 },
-                { q: "What is traction?", opts: ["Large boulders rolling along river or seabed", "Bouncing", "Floating", "Dissolving"], ans: 0 },
-                { q: "What is suspension?", opts: ["Fine particles carried floating in water", "Rolling", "Bouncing", "Solution"], ans: 0 },
-                { q: "What is a wave-cut platform?", opts: ["Flat rocky shelf left behind as cliff retreats", "Sandy beach", "Coral reef", "Sand dune"], ans: 0 }
-              ])
+              cards: [
+                { q: "What is longshore drift?", a: "Zigzag movement of sediment along a coastline driven by wave swash at an angle and backwash at 90°." },
+                { q: "Name four coastal erosion processes.", a: "Hydraulic action, abrasion, attrition, and solution (corrosion)." },
+                { q: "What is hydraulic action?", a: "Water forced into cliff cracks compressing trapped air, expanding and fracturing rock." },
+                { q: "What is abrasion?", a: "Waves throwing pebbles and sand against cliff faces acting like sandpaper." },
+                { q: "What is attrition?", a: "Rocks carried by water crashing into each other, breaking into smaller, rounder pebbles." },
+                { q: "What is solution (corrosion)?", a: "Slightly acidic seawater dissolving alkaline rocks like chalk or limestone." },
+                { q: "What is deposition?", a: "When waves lose kinetic energy and drop carried sediment onto beaches or estuaries." },
+                { q: "What is a spit?", a: "An elongated ridge of sand/gravel attached to land at one end, extending out across a bay or river mouth." },
+                { q: "What is a bar?", a: "A spit that grows all the way across a bay, joining two headlands and creating a lagoon behind it." },
+                { q: "What is hard engineering?", a: "Building artificial concrete/steel structures to block or alter natural coastal processes." },
+                { q: "What is soft engineering?", a: "Working with natural coastal processes to manage erosion sustainably (e.g. beach nourishment)." },
+                { q: "Give an example of hard engineering.", a: "Sea walls, rock armour (rip-rap), groynes, or gabions." },
+                { q: "Give an example of soft engineering.", a: "Beach nourishment, dune regeneration, or managed retreat." },
+                { q: "Why is the Holderness coast eroding so rapidly?", a: "It consists of weak boulder clay exposed to high-energy North Sea waves." },
+                { q: "What is terminal groyne syndrome?", a: "When a groyne traps sediment on one side, starving downstream beaches of sand and accelerating erosion there." },
+                { q: "What process forms waterfalls in upper river courses?", a: "Differential erosion of hard rock overlying soft rock, creating an undercut overhang that collapses." },
+                { q: "How is an oxbow lake formed?", a: "Meander neck narrows via erosion, river cuts straight through during flood, deposition seals off old bend." },
+                { q: "What is a floodplain?", a: "Flat wide valley floor surrounding a river, periodically covered in nutrient-rich alluvium during floods." },
+                { q: "What are levees?", a: "Naturally raised river banks formed by coarse sediment deposition during repeated flooding." },
+                { q: "What is peak discharge on a hydrograph?", a: "The maximum volume of water flowing through a river channel per second after rainfall." },
+                { q: "What is lag time on a storm hydrograph?", a: "The delay time between peak rainfall and peak river discharge." },
+                { q: "What is the Jubilee River?", a: "An 11.6km hard engineering flood relief channel constructed to protect Maidenhead and Windsor." },
+                { q: "What is managed retreat?", a: "Deliberately breaching low-value sea defenses to allow land to flood naturally into salt marsh." },
+                { q: "What is wave swash?", a: "The movement of water up a beach driven by breaking wave energy." },
+                { q: "What is wave backwash?", a: "The movement of water back down a beach pulled straight down by gravity." }
+              ],
+              quiz: [
+                { q: "Which coastal erosion process involves compressed air in rock cracks?", opts: ["Abrasion", "Hydraulic action", "Attrition", "Solution"], ans: 1 },
+                { q: "What drives longshore drift along coastline beaches?", opts: ["Prevailing winds pushing waves obliquely up beach", "Tidal currents only", "Deep ocean ocean currents", "River currents"], ans: 0 },
+                { q: "What defines hard engineering coastal management?", opts: ["Man-made physical structures like concrete sea walls", "Planting marram grass on dunes", "Managed retreat", "Beach replenishment"], ans: 0 },
+                { q: "What coastal landform is produced when a spit connects two headlands?", opts: ["Bar", "Wave-cut platform", "Arch", "Stack"], ans: 0 },
+                { q: "Why is the Holderness coastline the fastest eroding in Europe?", opts: ["Geology composed of soft boulder clay", "Hard granite cliffs", "Zero wave action", "Low tidal range"], ans: 0 },
+                { q: "What action defines coastal abrasion?", opts: ["Waves launching sediment against cliffs like sandpaper", "Chemical dissolving of rock", "Trapped air expanding in cracks", "Pebbles knocking together"], ans: 0 },
+                { q: "Which technique is classified as soft engineering?", opts: ["Beach nourishment", "Concrete sea wall", "Granite groynes", "Steel sheet piling"], ans: 0 },
+                { q: "What occurs during attrition?", opts: ["Rocks in water hit each other becoming smaller and rounder", "Waves crashing on cliffs", "Salt spray dissolving rock", "Sand dunes shifting"], ans: 0 },
+                { q: "What is wave swash?", opts: ["Water pushing up beach in wave direction", "Water draining straight down", "Deep ocean swell", "Tidal surge"], ans: 0 },
+                { q: "What is wave backwash?", opts: ["Water retreating down beach under gravity", "Incoming breaking wave", "Wind spray", "Subsea wave"], ans: 0 },
+                { q: "What is the correct erosion sequence for headlands?", opts: ["Crack -> Cave -> Arch -> Stack -> Stump", "Stack -> Arch -> Cave", "Stump -> Stack -> Cave", "Bay -> Headland -> Arch"], ans: 0 },
+                { q: "What is saltation in sediment transportation?", opts: ["Small pebbles bouncing along river bed or seabed", "Dissolved mineral ions", "Suspended silt", "Rolling huge boulders"], ans: 0 },
+                { q: "What is river traction?", opts: ["Large heavy boulders rolling along riverbed", "Bouncing pebbles", "Floating clay", "Chemical solution"], ans: 0 },
+                { q: "What is suspended load in rivers?", opts: ["Fine silt and clay particles carried floating in water flow", "Rolling rocks", "Bouncing pebbles", "Dissolved minerals"], ans: 0 },
+                { q: "What is a wave-cut platform?", opts: ["Flat rocky bench left behind at cliff base as cliff retreats landward", "Sandy dune", "Coral reef", "Mudflat"], ans: 0 },
+                { q: "What forms when a meander neck is breached during a flood?", opts: ["Oxbow lake", "Waterfall", "Gorge", "Levee"], ans: 0 },
+                { q: "What are natural levees composed of?", opts: ["Coarse sediment deposited along river banks during floods", "Concrete", "Granite blocks", "Tree roots"], ans: 0 },
+                { q: "What is the lag time on a storm hydrograph?", opts: ["Time gap between peak rainfall and peak river discharge", "Time rain falls", "Time river stays dry", "Length of storm"], ans: 0 },
+                { q: "What negative impact occurred downstream of the Jubilee River flood scheme?", opts: ["Increased flooding at Wraysbury", "Drought in Windsor", "Erosion of London", "Sea level rise"], ans: 0 },
+                { q: "What is terminal groyne syndrome?", opts: ["Accelerated erosion downstream of a groyne due to sediment starvation", "Rusting groynes", "Groynes breaking", "Sand buildup"], ans: 0 },
+                { q: "What is a gorge in river geography?", opts: ["Steep narrow steep-sided valley left as a waterfall retreats upstream", "Wide flat valley", "Estuary mouth", "Meander bend"], ans: 0 },
+                { q: "What factors create a short lag time on hydrographs?", opts: ["Steep slopes, impermeable rock, and urban concrete", "Dense forest cover", "Flat sandy ground", "Dry soil"], ans: 0 },
+                { q: "What is managed retreat?", opts: ["Allowing low-value land to flood naturally creating salt marsh buffers", "Building bigger walls", "Evacuating cities", "Dredging rivers"], ans: 0 },
+                { q: "Where does lateral erosion dominate in a river profile?", opts: ["Middle and lower courses", "Upper course headwaters", "Waterfall crests", "Mountain springs"], ans: 0 },
+                { q: "Where does vertical erosion dominate in a river profile?", opts: ["Upper course V-shaped valleys", "Lower course estuaries", "Delta mouths", "Floodplains"], ans: 0 }
+              ]
             }
           ]
         },
@@ -785,59 +805,77 @@
               notes: [
                 {
                   t: "Global Urbanization & NEE Megacity Case Study: Lagos",
-                  content: "Global urbanization is accelerating, particularly in LICs and NEEs due to high rates of rural-urban migration and natural increase. A megacity is an urban agglomeration with over 10 million inhabitants.",
+                  content: "Rapid urban growth in LICs/NEEs driven by rural-urban migration and natural increase. Megacity population >10 million.",
                   points: [
-                    "Lagos, Nigeria (NEE Megacity): Population over 15 million. Regional importance - Major port, financial center of West Africa, generates 30% of Nigeria's GDP.",
-                    "Push & Pull Factors: Push - Rural poverty in northern Nigeria, Boko Haram violence, soil degradation. Pull - 6,000+ formal jobs created yearly, tertiary education access, healthcare.",
-                    "Urban Opportunities: Access to electricity grid, social services, growing manufacturing sector, Eko Atlantic artificial island development.",
-                    "Urban Challenges: Makoko squatter settlement (75% of families live in single rooms built on stilts over sewage-contaminated lagoon water, zero piped water), water supply shortages, extreme traffic congestion (average 3 hours daily in 'go-slows'), massive waste management issues (10,000 tonnes produced daily).",
-                    "Urban Solutions: Bus Rapid Transit (BRT) lanes, floating school in Makoko, municipal waste energy plants."
+                    "Lagos, Nigeria: 15m+ pop. Generates 30% of Nigeria's GDP.",
+                    "Push/Pull: Push (rural poverty, Boko Haram); Pull (6,000 jobs/yr, healthcare).",
+                    "Challenges: Makoko squatter settlement (75% families in single rooms on stilts over sewage lagoon, no piped water), 3-hour 'go-slow' traffic gridlocks, 10,000 tonnes waste/day.",
+                    "Solutions: Bus Rapid Transit (BRT) lanes, Makoko floating school."
                   ]
                 },
                 {
-                  t: "UK Urban Changes & Regeneration Case Study: Freiburg & London/Bristol",
-                  content: "In HICs, urban population growth is slow, but major cities undergo structural economic change, suburbanization, counter-urbanization, and inner-city regeneration.",
+                  t: "UK Urban Trends & Sustainability: Freiburg & Bristol",
+                  content: "HIC urban growth is slow; focus is on inner-city brownfield regeneration and sustainability.",
                   points: [
-                    "UK Urban Distribution: Highly urbanized (82% live in towns/cities), concentrated in lowland areas near historical industrial coalfields.",
-                    "Urban Regeneration Scheme: London Docklands / Olympic Park (Stratford) or Temple Quarter (Bristol). Bristol Temple Quarter was a run-down brownfield site. Regeneration features: Enterprise Zone incentives, Temple Meads railway electrification, conversion of industrial sheds into Engine Shed tech hub, creation of 17,000 jobs.",
-                    "Sustainable Urban Living Case Study - Freiburg, Germany: Social sustainability - Low-cost housing, local community participation. Economic sustainability - 10,000 people employed in solar technology sector ('Solar Valley'). Environmental sustainability - 400km of cycle paths, 70% of population live within 500m of a tram stop, Vauban district with rainwater harvesting and solar roofs."
+                    "Bristol Temple Quarter Regeneration: Transformed derelict brownfield into Enterprise Zone with 17,000 tech jobs and Engine Shed hub.",
+                    "Freiburg Sustainable City (Germany): 400km cycle paths, 70% live within 500m of tram stop, 10,000 solar sector jobs ('Solar Valley')."
                   ]
                 }
               ],
-              cards: buildCards("Urban Issues", [
-                { q: "What is urbanization?", a: "The increasing proportion of a country's population living in towns and cities." },
-                { q: "What is a megacity?", a: "An urban area with a total population exceeding 10 million people." },
-                { q: "Name a megacity in an LIC/NEE.", a: "Lagos (Nigeria) or Rio de Janeiro (Brazil)." },
-                { q: "What is rural-urban migration?", a: "The movement of people from countryside areas into cities." },
-                { q: "What is natural increase?", a: "When birth rates exceed death rates in a population." },
-                { q: "What is a push factor?", a: "Negative conditions in rural areas driving people away (e.g., poverty, crop failure)." },
-                { q: "What is a pull factor?", a: "Positive attractions drawing migrants to cities (e.g., jobs, better healthcare)." },
-                { q: "What is the informal economy?", a: "Unregulated jobs without contracts, taxes, or legal protection." },
-                { q: "Name an informal settlement in Lagos.", a: "Makoko." },
-                { q: "What is deindustrialization?", a: "The long-term decline of traditional manufacturing industries." },
-                { q: "What is urban regeneration?", a: "Revitalizing old industrial or run-down urban areas to improve economic activity." },
-                { q: "What is suburbanization?", a: "Movement of people from city centres to outer suburbs." },
-                { q: "What is counter-urbanization?", a: "Movement of people out of cities into rural villages or small towns." },
-                { q: "What is a sustainable urban area?", a: "A city providing green spaces, renewable energy, efficient transport, and waste recycling." },
-                { q: "What is social deprivation?", a: "The degree to which an individual or community lacks basic services, income, and housing." }
-              ]),
-              quiz: buildQuiz("Urban Issues", [
-                { q: "What is urbanization defined as?", opts: ["Growth of rural farming", "Increasing proportion of population living in urban areas", "Decline of cities", "Building motorways"], ans: 1 },
-                { q: "What population threshold defines a megacity?", opts: ["1 million", "5 million", "10 million", "20 million"], ans: 2 },
-                { q: "What is rural-urban migration?", opts: ["Moving from city to farm", "Moving from rural countryside to city", "Moving between countries", "Commuting"], ans: 1 },
-                { q: "What is natural increase?", opts: ["Birth rates exceeding death rates", "Migration influx", "Economic growth", "Urban sprawl"], ans: 0 },
-                { q: "What is a push factor example?", opts: ["Better schools", "Rural poverty and crop failure", "High wages", "Healthcare access"], ans: 1 },
-                { q: "What is the informal economy?", opts: ["Taxed formal jobs", "Unregulated cash-in-hand work without contracts", "Government administration", "Banking"], ans: 1 },
-                { q: "What is Makoko?", opts: ["An informal squatter settlement in Lagos", "A modern skyscraper district", "A national park", "An airport"], ans: 0 },
-                { q: "What is suburbanization?", opts: ["Moving to outer city suburbs", "Moving to farms", "Moving to city center", "Emigrating abroad"], ans: 0 },
-                { q: "What is counter-urbanization?", opts: ["Moving from cities to rural areas", "Moving into megacities", "Urban renewal", "Slum clearance"], ans: 0 },
-                { q: "What is urban regeneration?", opts: ["Revitalizing run-down urban districts", "Destroying parks", "Building slums", "Abandoning towns"], ans: 0 },
-                { q: "What is social deprivation?", opts: ["Lack of basic income, housing, and services", "High wealth", "Good health", "Excess green space"], ans: 0 },
-                { q: "What is a sustainable city feature?", opts: ["Public transport and recycling", "High carbon emissions", "Traffic gridlock", "No green spaces"], ans: 0 },
-                { q: "What is a pull factor example?", opts: ["Job opportunities and better wages", "Famine", "Drought", "War"], ans: 0 },
-                { q: "What is urban sprawl?", opts: ["Uncontrolled outward expansion of urban areas", "Compact city living", "Vertical skyscrapers", "Green belt protection"], ans: 0 },
-                { q: "What is brownfield site?", opts: ["Previously built-on urban land available for redevelopment", "Green farmland", "Protected forest", "Desert"], ans: 0 }
-              ])
+              cards: [
+                { q: "What is urbanization?", a: "The increasing proportion of a country's total population living in urban areas (towns/cities)." },
+                { q: "What is a megacity?", a: "An urban area with a total population exceeding 10 million inhabitants." },
+                { q: "Name an NEE megacity case study.", a: "Lagos in Nigeria." },
+                { q: "What is rural-urban migration?", a: "The movement of people from countryside villages to live in towns and cities." },
+                { q: "What is natural increase?", a: "Population growth occurring when birth rate exceeds death rate within a population." },
+                { q: "What is a push factor?", a: "Negative aspects of rural life driving people away (e.g. crop failure, poverty, conflict)." },
+                { q: "What is a pull factor?", a: "Positive attractions drawing people to move to cities (e.g. jobs, healthcare, education)." },
+                { q: "What is the informal economy?", a: "Unregulated jobs without employment contracts, set wages, or tax contributions." },
+                { q: "Name a squatter settlement in Lagos.", a: "Makoko (built on stilts over Lagos Lagoon)." },
+                { q: "What is deindustrialization?", a: "The decline of traditional heavy manufacturing industries in a region or country." },
+                { q: "What is urban regeneration?", a: "The investment and redevelopment of run-down urban areas to boost economy and environment." },
+                { q: "What is suburbanization?", a: "The outward movement of people from city centers into residential outer suburbs." },
+                { q: "What is counter-urbanization?", a: "The movement of people away from large cities into small rural towns and villages." },
+                { q: "What is a brownfield site?", a: "Derelict urban land that was previously built on and is available for redevelopment." },
+                { q: "What is a greenfield site?", a: "Open farmland or countryside land that has never been built on before." },
+                { q: "What is urban sprawl?", a: "Uncontrolled outward expansion of urban areas into surrounding rural countryside." },
+                { q: "What is social deprivation?", a: "The degree to which an area or individual lacks basic necessities like income, jobs, and housing." },
+                { q: "What sustainable features exist in Freiburg, Germany?", a: "400km cycle network, 70% population near tram stops, solar panels on houses, rainwater harvesting." },
+                { q: "What regeneration occurred at Bristol Temple Quarter?", a: "Derelict brownfield site converted into Enterprise Zone, Engine Shed tech hub, creating 17,000 jobs." },
+                { q: "What percentage of Nigeria's GDP is generated by Lagos?", a: "Approximately 30% of Nigeria's total GDP." },
+                { q: "What is the greenbelt?", a: "Protected open ring of land surrounding British cities where building is strictly controlled." },
+                { q: "What transport solution was implemented in Lagos to reduce gridlock?", a: "Bus Rapid Transit (BRT) dedicated bus lanes." },
+                { q: "What is integrated transport system?", a: "Connecting different public transport modes (bus, train, tram, bike) seamlessly with unified ticketing." },
+                { q: "What major hazard threatens Makoko settlement in Lagos?", a: "Rising sea levels, coastal flooding, and waterborne disease outbreaks in sewage lagoon." },
+                { q: "What is commuter belt?", a: "Rural towns surrounding major cities where residents travel daily to work in the city." }
+              ],
+              quiz: [
+                { q: "What population size defines a megacity?", opts: ["1 million", "5 million", "10 million", "20 million"], ans: 2 },
+                { q: "What is rural-urban migration?", opts: ["Moving from countryside to cities", "Moving from city to farm", "Moving abroad", "Daily commuting"], ans: 0 },
+                { q: "What is natural increase in urban populations?", opts: ["Birth rate exceeding death rate", "High inward migration", "Urban sprawl", "Economic expansion"], ans: 0 },
+                { q: "Which push factor drives people away from rural Nigeria to Lagos?", opts: ["Rural poverty and Boko Haram violence", "High city wages", "Better university access", "Clean water supply"], ans: 0 },
+                { q: "What describes employment in Makoko, Lagos?", opts: ["Informal sector cash-in-hand work without safety nets", "High-paid banking jobs", "Civil service employment", "Automated manufacturing"], ans: 0 },
+                { q: "What is a brownfield site?", opts: ["Derelict land previously developed in urban areas", "Virgin agricultural land", "Protected national park", "Forest reserve"], ans: 0 },
+                { q: "What is a greenfield site?", opts: ["Land that has never been previously built upon", "Old factory site", "Inner city slum", "Derelict docklands"], ans: 0 },
+                { q: "What sustainable feature makes Freiburg a green city?", opts: ["400km cycle paths and 70% pop near tram stops", "No public transport", "Coal power plant", "Zero recycling"], ans: 0 },
+                { q: "What was created at Bristol Temple Quarter regeneration?", opts: ["Enterprise Zone and Engine Shed tech hub creating 17,000 jobs", "Nuclear power station", "Cattle ranch", "Shopping mall only"], ans: 0 },
+                { q: "What is counter-urbanization?", opts: ["Migration from urban cities to rural areas", "Movement into megacities", "Suburban growth", "Building skyscrapers"], ans: 0 },
+                { q: "What is urban sprawl?", opts: ["Uncontrolled outward expansion of city boundaries into rural areas", "Building higher towers", "Pop decline", "Park creation"], ans: 0 },
+                { q: "What is social deprivation?", opts: ["Extent to which individuals lack housing, income, and basic services", "High wealth level", "Good health index", "Excess green parkland"], ans: 0 },
+                { q: "What is the greenbelt policy in the UK?", opts: ["Protected rings of countryside surrounding cities to stop urban sprawl", "Park maintenance", "Agricultural subsidy", "Solar farm zone"], ans: 0 },
+                { q: "What daily challenge do Lagos commuters face in 'go-slows'?", opts: ["Severe traffic gridlock averaging 3 hours daily", "High train speeds", "Empty highways", "Snow blockage"], ans: 0 },
+                { q: "What is integrated public transport?", opts: ["Connecting buses, trains, and trams with unified ticketing", "Car ownership", "Flying", "Walking paths"], ans: 0 },
+                { q: "What is the informal economy percentage in many LIC cities?", opts: ["Up to 60-80% of workforce", "5%", "Zero", "100% formal"], ans: 0 },
+                { q: "What project provided education on water in Makoko?", opts: ["Makoko Floating School", "Lagos University", "National Library", "Tech Academy"], ans: 0 },
+                { q: "What causes urban growth in HIC cities today?", opts: ["International migration and re-urbanization", "High natural increase", "Famine in countryside", "High birth rates"], ans: 0 },
+                { q: "What is commuter settlement?", opts: ["A rural town where most residents travel to work in nearby cities", "Industrial city", "Mining camp", "Farmstead"], ans: 0 },
+                { q: "What is environmental quality index?", opts: ["Measure of pollution, litter, green space, and noise in urban zones", "Income level", "House price", "Car count"], ans: 0 },
+                { q: "What is re-urbanization?", opts: ["Movement of people back into inner city areas after regeneration", "Moving to farms", "Slum creation", "Suburban decay"], ans: 0 },
+                { q: "Why build on brownfield sites rather than greenfield?", opts: ["Preserves countryside and utilizes existing utilities/infrastructure", "Cheaper ground prep", "No planning laws", "Larger open space"], ans: 0 },
+                { q: "What is sustainable urban water management in Freiburg?", opts: ["Rainwater harvesting and green roof absorption", "Dumping in rivers", "Unfiltered tap use", "High evaporation"], ans: 0 },
+                { q: "What percentage of waste is recycled in Freiburg?", opts: ["Around 65-70%", "10%", "0%", "100%"], ans: 0 },
+                { q: "What is a main problem of squatter settlements?", opts: ["Lack of clean piped water, sanitation, and legal land tenure", "Excess space", "High rents", "Over-policing"], ans: 0 }
+              ]
             },
             {
               id: "h2",
@@ -845,125 +883,153 @@
               notes: [
                 {
                   t: "Development Gap, Indicators & DTM Model",
-                  content: "Development reflects economic and social progress. The Development Gap refers to the widening disparity in standards of living between HICs and LICs.",
+                  content: "Disparities in development measured via single and composite indices.",
                   points: [
-                    "Development Measures: Single measures (GNI per capita, birth rate, infant mortality, life expectancy, literacy rate) can be misleading on their own. The Human Development Index (HDI) is a superior composite index calculated by the UN, combining life expectancy, education level, and GNI per capita (scored 0 to 1).",
-                    "Demographic Transition Model (DTM): Stage 1 (High stationary - high birth/death rates), Stage 2 (Early expanding - death rate falls rapidly due to medicine, birth rate stays high; e.g. Gambia), Stage 3 (Late expanding - birth rate drops due to urbanization and contraception), Stage 4 (Low stationary - low birth/death rates; e.g. UK), Stage 5 (Declining - birth rate drops below death rate; e.g. Japan, Germany).",
-                    "Strategies to Reduce the Gap: Investment, industrial development, tourism (e.g. Jamaica), aid, intermediate technology (e.g. PlayPumps), fair trade guarantees, debt relief (e.g. HIPC initiative), microfinance loans (e.g. Grameen Bank)."
+                    "Indicators: GNI per capita misleading alone. Human Development Index (HDI) combines life expectancy, education, GNI per capita (0 to 1).",
+                    "DTM: Stage 1 (High static), Stage 2 (Death rate drops rapidly; Gambia), Stage 3 (Birth rate drops), Stage 4 (Low static; UK), Stage 5 (Declining; Japan).",
+                    "Closing Gap: Investment, tourism (Jamaica), aid, intermediate technology, fair trade, debt relief."
                   ]
                 },
                 {
-                  t: "NEE Case Study: Nigeria & Industrial Structure",
-                  content: "Nigeria is an NEE in West Africa with Africa's largest population (200m+) and highest GDP. Industrial structure is shifting rapidly from agriculture (primary) to manufacturing (secondary) and services (tertiary).",
+                  t: "NEE Case Study: Nigeria & Industrial Shift",
+                  content: "Nigeria transition from agriculture (primary) to manufacturing (secondary) and services (tertiary).",
                   points: [
-                    "Role of TNCs in Nigeria: Shell Oil operates extensively in the Niger Delta. Positives - Employs 65,000 Nigerian workers, pays significant corporate tax to government, major infrastructure investments. Negatives - Oil spills (e.g. Bodo oil spill 2008) destroying farmland/mangroves, toxic gas flaring, profits repatriated back to the UK/Netherlands.",
-                    "International Aid: Receives $5 billion annually. Official development assistance funds malaria prevention nets, HIV testing clinics, and agricultural training.",
-                    "Environmental Impacts: Deforestation (70-80% of forests cleared), industrial urban waste in Lagos, oil pollution in water tables."
-                  ]
-                },
-                {
-                  t: "UK Economic Changes: Post-Industrial Economy & North-South Divide",
-                  content: "The UK economy has transitioned from industrial manufacturing to a post-industrial knowledge economy focused on IT, financial services, research, and creative industries.",
-                  points: [
-                    "Science & Business Parks: E.g., Cambridge Science Park. Located near universities to leverage research talent, close to M11 motorway and Stansted Airport for transport.",
-                    "North-South Divide: Disparity between high incomes/health in South/South East England versus historical industrial decline, higher unemployment, and lower life expectancy in Northern England.",
-                    "Resolving the Divide: High Speed 2 (HS2) rail line connecting London to Midlands/North, Northern Powerhouse investment, Enterprise Zones providing tax discounts to northern businesses, regional transport upgrades (Smart Motorways)."
+                    "TNCs (Shell Oil): Employs 65,000 Nigerians, pays major tax. Negatives: Bodo oil spills (2008), gas flaring, profit repatriation.",
+                    "UK Economy: Transition to post-industrial knowledge economy. Cambridge Science Park leverages university research near M11."
                   ]
                 }
               ],
-              cards: buildCards("Economic World", [
-                { q: "What does Human Development Index (HDI) measure?", a: "A composite index combining life expectancy, education, and income per capita." },
+              cards: [
+                { q: "What does the Human Development Index (HDI) measure?", a: "A composite UN index combining life expectancy, mean years of schooling, and GNI per capita." },
                 { q: "What does DTM stand for?", a: "Demographic Transition Model." },
-                { q: "What happens in Stage 2 of DTM?", a: "Death rates drop rapidly while birth rates remain high, leading to rapid population growth." },
-                { q: "What is Gross Domestic Product (GDP) per capita?", a: "Total value of goods and services produced by a country in a year divided by its population." },
-                { q: "What is a Transnational Corporation (TNC)?", a: "A large company operating in multiple countries around the world." },
-                { q: "What is an NEE?", a: "Newly Emerging Economy (e.g., Nigeria, India, Brazil)." },
-                { q: "What is an LIC?", a: "Low-Income Country with low GNI per capita." },
-                { q: "What is an HIC?", a: "High-Income Country with advanced industrial economy and high standards of living." },
-                { q: "Name a TNC operating in Nigeria's oil sector.", a: "Shell (Royal Dutch Shell)." },
-                { q: "What is fair trade?", a: "Trading partnership ensuring producers in developing countries receive fair prices and wages." },
-                { q: "What is microfinance?", a: "Providing small loans to poor entrepreneurs in developing countries to start businesses." },
-                { q: "What is aid?", a: "Assistance given by governments or charities to other countries (emergency or developmental)." },
-                { q: "What is globalization?", a: "The growing integration and interdependence of world economies and cultures." },
-                { q: "What is the North-South divide in development?", a: "Historical generalization dividing wealthier northern countries from poorer southern nations." },
-                { q: "What is infant mortality rate?", a: "Number of deaths of infants under one year old per 1,000 live births." }
-              ]),
-              quiz: buildQuiz("Economic World", [
-                { q: "Which stage of DTM has high birth and death rates?", opts: ["Stage 1", "Stage 2", "Stage 4", "Stage 5"], ans: 0 },
-                { q: "What does HDI measure?", opts: ["Life expectancy, education, and income", "Military strength only", "Total land area", "Rainfall"], ans: 0 },
-                { q: "What is a TNC?", opts: ["Transnational Corporation operating globally", "Local corner shop", "Government charity", "Nationalized industry"], ans: 0 },
-                { q: "What is an NEE?", opts: ["Newly Emerging Economy", "Low Income Country", "High Income Country", "Isolated island"], ans: 0 },
-                { q: "What is microfinance?", opts: ["Small business loans for poor entrepreneurs", "Multi-million dollar bailouts", "Taxes", "Charity food parcels"], ans: 0 },
-                { q: "What does GDP per capita measure?", opts: ["Total economic output divided by population", "Total land mass", "Birth rate", "Death rate"], ans: 0 },
-                { q: "Which TNC operates in Nigeria's Niger Delta?", opts: ["Shell", "Microsoft", "Toyota", "Apple"], ans: 0 },
-                { q: "What is infant mortality rate?", opts: ["Deaths under age 1 per 1,000 live births", "Total births", "Life expectancy", "Elderly deaths"], ans: 0 },
-                { q: "What is fair trade?", opts: ["Guaranteeing fair wages and working conditions for farmers", "Free market monopolies", "Tariffs", "Zero pay"], ans: 0 },
-                { q: "What is globalization?", opts: ["Interconnection of world economies and cultures", "Isolationism", "Local trade only", "National borders"], ans: 0 },
-                { q: "What happens in Stage 4 of DTM?", opts: ["Low birth and death rates, stable population", "High growth", "High death rates", "Population collapse"], ans: 0 },
-                { q: "What is tied aid?", opts: ["Aid given with strings attached requiring recipient to buy donor goods", "Free unconditional grants", "Emergency food", "Medical supplies"], ans: 0 },
-                { q: "What is life expectancy?", opts: ["Average age a person is expected to live", "Retirement age", "Maximum human age", "Infant age"], ans: 0 },
-                { q: "What is literacy rate?", opts: ["Percentage of population aged 15+ who can read and write", "University degrees", "School attendance", "Book sales"], ans: 0 },
-                { q: "What is an LIC?", opts: ["Low Income Country", "Large Industrial Country", "Local Island Community", "Landlocked Continent"], ans: 0 }
-              ])
+                { q: "What happens in Stage 2 of the DTM?", a: "Death rates fall rapidly due to healthcare advances while birth rates remain high, causing rapid growth." },
+                { q: "What is Gross National Income (GNI) per capita?", a: "Total income generated by a nation's goods/services plus foreign income, divided by population." },
+                { q: "What is a Transnational Corporation (TNC)?", a: "A corporation operating manufacturing, supply chains, or offices in multiple nations worldwide." },
+                { q: "What is an NEE?", a: "Newly Emerging Economy undergoing rapid industrialization and economic growth (e.g. Nigeria, India)." },
+                { q: "What is an LIC?", a: "Low-Income Country with low GNI per capita and basic agricultural economy." },
+                { q: "What is an HIC?", a: "High-Income Country with advanced post-industrial economy and high living standards." },
+                { q: "Name a TNC operating in Nigeria's oil sector.", a: "Royal Dutch Shell." },
+                { q: "What is Fairtrade?", a: "A trading movement ensuring primary producers in developing countries receive guaranteed fair prices and social premiums." },
+                { q: "What is microfinance?", a: "Providing small micro-loans to poor entrepreneurs in LICs to start micro-businesses." },
+                { q: "What is official development assistance (aid)?", a: "Resource, financial, or technical help given by governments/NGOs to support development." },
+                { q: "What is globalization?", a: "The growing integration, interconnectedness, and interdependence of world economies and cultures." },
+                { q: "What is the North-South Divide in the UK?", a: "Economic disparity between high incomes/employment in South England vs industrial decline in the North." },
+                { q: "What is infant mortality rate?", a: "Number of deaths of infants under 1 year of age per 1,000 live births in a population." },
+                { q: "What is life expectancy?", a: "The average number of years a newborn infant is expected to live based on current mortality trends." },
+                { q: "What is birth rate?", a: "Number of live births per 1,000 of the population per year." },
+                { q: "What is death rate?", a: "Number of deaths per 1,000 of the population per year." },
+                { q: "Name a benefit of Shell TNC in Nigeria.", a: "Employs 65,000 Nigerian workers and provides major tax revenue to government." },
+                { q: "Name a environmental impact of Shell TNC in Nigeria.", a: "Oil spills (e.g. Bodo spill) destroying mangroves, farmland, and polluting drinking water." },
+                { q: "What is intermediate technology?", a: "Simple, affordable, sustainable technology suitable for local skills and materials in LICs (e.g. PlayPump)." },
+                { q: "What is a post-industrial economy?", a: "An economy where manufacturing declines and service/knowledge sectors (IT, finance, research) dominate." },
+                { q: "Why is Cambridge Science Park located near Cambridge University?", a: "To leverage top graduate research talent and collaborate with university science faculties." },
+                { q: "What major transport project aims to reduce the UK North-South Divide?", a: "High Speed 2 (HS2) rail line connecting London to Midlands/Northern cities." },
+                { q: "What is debt relief?", a: "Cancelling or reducing foreign debt owed by LICs to allow funds to be spent on healthcare and education." }
+              ],
+              quiz: [
+                { q: "Which DTM stage features high birth rates paired with rapidly falling death rates?", opts: ["Stage 1", "Stage 2", "Stage 4", "Stage 5"], ans: 1 },
+                { q: "What three indicators compose the Human Development Index (HDI)?", opts: ["Life expectancy, education index, and GNI per capita", "Military size, GDP, rainfall", "Population density, birth rate, exports", "Car ownership, literacy, internet"], ans: 0 },
+                { q: "What defines a Transnational Corporation (TNC)?", opts: ["Company producing and selling across multiple nations", "Local family firm", "Government tax department", "National bank"], ans: 0 },
+                { q: "What category does Nigeria fall into economically?", opts: ["Newly Emerging Economy (NEE)", "High Income Country (HIC)", "Least Developed Country", "Isolated economy"], ans: 0 },
+                { q: "How does microfinance help small entrepreneurs in LICs?", opts: ["By granting small micro-loans to launch local businesses", "By giving billions in government grants", "By paying import taxes", "By sending food parcels"], ans: 0 },
+                { q: "What measure calculates national economic output divided by population size?", opts: ["GNI / GDP per capita", "Birth rate", "HDI score", "Debt ratio"], ans: 0 },
+                { q: "Which oil TNC has caused major pollution spills in the Niger Delta?", opts: ["Royal Dutch Shell", "BP", "ExxonMobil", "Chevron"], ans: 0 },
+                { q: "What is infant mortality rate?", opts: ["Deaths of infants under 1 year per 1,000 live births", "Total births per year", "Maternal mortality rate", "Child deaths under 5"], ans: 0 },
+                { q: "What benefit does Fairtrade certification provide to small farmers?", opts: ["Guaranteed minimum fair prices and community social premiums", "Free tractors", "Exemption from work", "Monopoly rights"], ans: 0 },
+                { q: "What defines economic globalization?", opts: ["Increasing global economic integration and trade interdependence", "Isolationist trade policies", "Nationalizing industries", "Closing borders"], ans: 0 },
+                { q: "What occurs in Stage 4 of the Demographic Transition Model?", opts: ["Low birth and death rates leading to stable population", "Rapid population explosion", "Famine and high death rates", "Declining population"], ans: 0 },
+                { q: "What is tied aid?", opts: ["Aid granted under condition that funds are spent on donor country goods", "Unconditional cash gifts", "Emergency disaster aid", "Medical assistance"], ans: 0 },
+                { q: "What is life expectancy?", opts: ["Average age a person is expected to live from birth", "Retirement age limit", "Oldest living person's age", "Age of maturity"], ans: 0 },
+                { q: "What is the primary sector of an economy?", opts: ["Raw material extraction (agriculture, mining, fishing)", "Factory manufacturing", "Financial services", "Information technology R&D"], ans: 0 },
+                { q: "What is the tertiary sector of an economy?", opts: ["Services sector (retail, healthcare, teaching, banking)", "Farming", "Steel production", "Software coding"], ans: 0 },
+                { q: "What is the quaternary sector of an economy?", opts: ["Knowledge economy (IT, research, high-tech development)", "Heavy manufacturing", "Coal mining", "Textile weaving"], ans: 0 },
+                { q: "Why did traditional manufacturing decline in the UK (deindustrialization)?", opts: ["Cheaper labor and manufacturing competition overseas in Asia", "Lack of coal", "Government bans", "No domestic demand"], ans: 0 },
+                { q: "What advantage does Cambridge Science Park offer tech companies?", opts: ["Proximity to Cambridge University research talent and M11 transport links", "Cheap manual labor", "Deep sea port access", "Agricultural land"], ans: 0 },
+                { q: "What initiative provides tax breaks to encourage business investment in North UK?", opts: ["Enterprise Zones", "Greenbelts", "National Parks", "Highways England"], ans: 0 },
+                { q: "What environmental hazard is caused by gas flaring in Nigeria?", opts: ["Toxic air pollution and greenhouse gas emissions", "Soil erosion", "Deforestation", "Tsunami waves"], ans: 0 },
+                { q: "What is economic multiplier effect?", opts: ["Initial investment creating jobs, leading to local spending and secondary growth", "Tax rate multiplication", "Inflation increase", "Bank interest rates"], ans: 0 },
+                { q: "What is top-down aid?", opts: ["Large-scale government/world bank funded infrastructure projects (dams)", "Community grassroots help", "Intermediate technology", "Micro-loans"], ans: 0 },
+                { q: "What is bottom-up aid?", opts: ["Small-scale community projects supported by NGOs using local resources", "Mega hydro dams", "Inter-government loans", "Military aid"], ans: 0 },
+                { q: "Which DTM stage is characterized by a birth rate dropping below death rate?", opts: ["Stage 5", "Stage 1", "Stage 2", "Stage 3"], ans: 0 },
+                { q: "What is the main goal of the HIPC (Heavily Indebted Poor Countries) initiative?", opts: ["Canceling external national debt for qualifying low-income nations", "Increasing interest rates", "Forcing privatization", "Banning foreign trade"], ans: 0 }
+              ]
             },
             {
               id: "h3",
               name: "Section C: The Challenge of Resource Management",
               notes: [
                 {
-                  t: "Resource Management: UK Food, Water & Energy Security",
-                  content: "Social and economic well-being depends on reliable access to food, water, and energy resources. Global distribution is highly uneven.",
+                  t: "Resource Security: UK Food, Water & Energy",
+                  content: "Reliable access to food, water, and energy is essential for human development.",
                   points: [
-                    "UK Food: High demand for out-of-season produce and exotic foods leads to massive food imports (40% imported). High food miles increase carbon footprint. Response: Growth of agribusiness (large commercial farms, e.g. East Anglia) and organic farming.",
-                    "UK Water: High mismatch between supply and demand. North/West UK has water surplus (high rainfall, lower population density); South/East UK has severe water deficit (high population, lower rainfall). Solution: Water transfer schemes (moving water via pipelines from Kielder Reservoir in Northumberland to Yorkshire/Tyne and Wear).",
-                    "UK Energy: Shift away from fossil fuels (coal fired plants closed) towards renewables (wind power, solar) and gas. Energy mix trilemma: Balancing energy security, affordability, and reducing carbon emissions."
+                    "UK Food: 40% food imported (high food miles). Rise of commercial agribusiness and organic farming.",
+                    "UK Water: North/West has water surplus; South/East has severe water deficit. Water transfer schemes (Kielder Reservoir to Tyne/Tees).",
+                    "UK Energy: Shift from coal to renewables/gas. Energy security trilemma."
                   ]
                 },
                 {
-                  t: "Water Insecurity: Causes, Impacts & Large-Scale Schemes",
-                  content: "Water insecurity occurs when water demand exceeds sustainable supply, leading to water stress. Causes include rising population, industrialization, climate change, and agricultural pollution.",
+                  t: "Water Insecurity & Lesotho Transfer Scheme",
+                  content: "Water insecurity happens when demand exceeds supply.",
                   points: [
-                    "Impacts of Water Insecurity: Waterborne diseases (cholera), reduced agricultural yields causing famine, industrial production decline, international water conflict (e.g. Nile River basin disputes).",
-                    "Large-Scale Water Transfer Case Study - Lesotho Highlands Water Project: Transfers 2,000 million m³ of water annually from mountainous Lesotho to dry Johannesburg region in South Africa.",
-                    "Lesotho Impacts: Positives - Generates 75% of Lesotho's national income from water royalties, provides hydroelectric power for Lesotho. Negatives - Displaced 30,000 local villagers, flooded fertile farmland, destroyed ecosystems.",
-                    "Sustainable Water Options: Desalination plants (e.g. Carlsbad, California or London Thames Gateway), rainwater harvesting, greywater recycling, drip irrigation in agriculture."
+                    "Lesotho Highlands Water Project: Transfers 2,000 million m³/yr water to Johannesburg, South Africa.",
+                    "Impacts: Generates 75% of Lesotho's revenue and hydroelectric power, but displaced 30,000 villagers and flooded farmland."
                   ]
                 }
               ],
-              cards: buildCards("Resource Management", [
-                { q: "What is water deficit?", a: "When local demand for water exceeds available supply or precipitation." },
-                { q: "What is water surplus?", a: "When water supply exceeds local demand." },
-                { q: "What is food security?", a: "Having access to sufficient, safe, nutritious food at all times." },
-                { q: "What is energy security?", a: "Having an uninterrupted, reliable, and affordable supply of energy." },
-                { q: "What is agribusiness?", a: "Large-scale industrial farming aimed at maximizing commercial output." },
-                { q: "What is organic farming?", a: "Farming without artificial chemical fertilizers or pesticides." },
-                { q: "What is permaculture?", a: "Agricultural system mimicking natural ecosystems." },
-                { q: "What is sustainable food production?", a: "Producing food without damaging environmental resources for future generations." },
-                { q: "What is water abstraction?", a: "Extracting water from rivers, lakes, or groundwater aquifers." },
-                { q: "What is desalination?", a: "Removing salt from seawater to produce drinkable freshwater." },
-                { q: "What is greywater recycling?", a: "Reusing waste water from baths, sinks, or washing machines for flushing toilets or watering gardens." },
-                { q: "Why does South/East England experience water deficit?", a: "High population density and lower annual rainfall." },
-                { q: "What is renewable energy?", a: "Energy from infinite natural sources like wind, solar, and tidal." },
-                { q: "What is fossil fuel?", a: "Non-renewable energy source formed from ancient organic remains (coal, oil, gas)." },
-                { q: "What is carbon footprint?", a: "Total greenhouse gas emissions caused directly or indirectly by an individual or organization." }
-              ]),
-              quiz: buildQuiz("Resource Management", [
-                { q: "Why does South and East England experience water deficit?", opts: ["High population density and lower rainfall", "Too much rain", "Lack of people", "Abundant rivers"], ans: 0 },
-                { q: "What is water deficit defined as?", opts: ["Demand exceeds supply", "Supply exceeds demand", "Equal water", "Flooding"], ans: 0 },
-                { q: "What is food security?", opts: ["Access to safe, nutritious food", "Starvation", "Food imports only", "Fast food"], ans: 0 },
-                { q: "What is desalination?", opts: ["Removing salt from seawater", "Adding salt", "Filtering mud", "Boiling sewage"], ans: 0 },
-                { q: "What is agribusiness?", opts: ["Large-scale commercial farming", "Small family gardens", "Fishing", "Forestry"], ans: 0 },
-                { q: "What is organic farming?", opts: ["Farming without synthetic chemicals/pesticides", "Chemical farming", "GM crops", "Battery farming"], ans: 0 },
-                { q: "What is greywater recycling?", opts: ["Reusing wastewater from sinks/showers", "Drinking sea water", "Bottled water", "Rainwater runoff"], ans: 0 },
-                { q: "What is energy security?", opts: ["Reliable and affordable energy supply", "Power cuts", "High bills", "No electricity"], ans: 0 },
-                { q: "What is water abstraction?", opts: ["Taking water from rivers or aquifers", "Rainfall", "Evaporation", "Melting ice"], ans: 0 },
-                { q: "What is renewable energy source?", opts: ["Wind and solar", "Coal", "Oil", "Natural gas"], ans: 0 },
-                { q: "What is carbon footprint?", opts: ["Greenhouse gas emissions total", "Shoe size", "Soil carbon", "Oil spill"], ans: 0 },
-                { q: "What is sustainable food supply?", opts: ["Producing food without harming environment", "Overfishing", "Deforesting for cattle", "Chemical overuse"], ans: 0 },
-                { q: "What is permaculture?", opts: ["Agricultural system mimicking natural ecosystems", "Monoculture farming", "Industrial feedlots", "Clear-cutting"], ans: 0 },
-                { q: "What is fossil fuel example?", opts: ["Coal and oil", "Solar", "Wind", "Geothermal"], ans: 0 },
-                { q: "What is water surplus?", opts: ["Supply exceeds demand", "Deficit", "Drought", "Water shortage"], ans: 0 }
-              ])
+              cards: [
+                { q: "What is water deficit?", a: "When demand for water exceeds the available sustainable supply." },
+                { q: "What is water surplus?", a: "When sustainable supply of water exceeds the local demand." },
+                { q: "What is food security?", a: "Having reliable physical and economic access to sufficient, safe, nutritious food at all times." },
+                { q: "What is energy security?", a: "Having an uninterrupted, reliable, and affordable supply of energy for domestic and industrial use." },
+                { q: "What is agribusiness?", a: "Large-scale commercial farming operating like an industrial business to maximize food yield." },
+                { q: "What is organic farming?", a: "Farming producing food without using synthetic fertilizers, chemical pesticides, or GM crops." },
+                { q: "What are food miles?", a: "The distance food is transported from producer to consumer, measuring carbon footprint." },
+                { q: "What is water stress?", a: "When the demand for water exceeds available supply during a given period or when poor quality limits its use." },
+                { q: "What is water abstraction?", a: "Extracting freshwater from surface rivers, lakes, or underground aquifers for human use." },
+                { q: "What is desalination?", a: "The energy-intensive process of removing salt and minerals from ocean seawater to create freshwater." },
+                { q: "What is greywater recycling?", a: "Reusing untreated domestic wastewater from baths, showers, and sinks for flushing toilets or irrigation." },
+                { q: "Why does South East England experience severe water deficit?", a: "High population density combined with lower annual rainfall compared to North/West UK." },
+                { q: "What is renewable energy?", a: "Energy generated from natural resources that naturally replenish (e.g. solar, wind, hydro, wave)." },
+                { q: "What is fossil fuel?", a: "Non-renewable carbon-based energy sources formed over millions of years (coal, crude oil, natural gas)." },
+                { q: "What benefit does Lesotho gain from the Highlands Water Project?", a: "Provides 75% of Lesotho's national income from water royalties and supplies hydroelectric power." },
+                { q: "What negative social impact did the Lesotho Water Scheme cause?", a: "Displaced over 30,000 local indigenous villagers from their ancestral lands and submerged farmland." },
+                { q: "What is energy mix?", a: "The relative proportion of different primary energy sources used by a nation to generate power." },
+                { q: "What is sustainable water supply?", a: "Managing water consumption to meet current needs without compromising future generations' supply." },
+                { q: "What is rainwater harvesting?", a: "Collecting and storing rainfall runoff from roofs or surface terrain for later domestic use." },
+                { q: "What is fracking (hydraulic fracturing)?", a: "Pumping water, sand, and chemicals at high pressure underground to fracture shale rock and release natural gas." },
+                { q: "Why has coal usage declined in UK energy generation?", a: "Government environmental targets to lower carbon emissions and close dirty coal-fired power stations." },
+                { q: "What is an aquifer?", a: "An underground layer of water-bearing permeable rock, rock fractures, or unconsolidated materials." },
+                { q: "What is carbon capture and storage (CCS)?", a: "Technology capturing CO2 emissions from power stations and storing it deep underground in depleted oil fields." },
+                { q: "What is drip irrigation?", a: "Water-saving agricultural method dripping water slowly directly onto plant root zones to prevent evaporation loss." },
+                { q: "What is energy conservation?", a: "Reducing energy consumption through using less energy or using energy more efficiently (e.g. insulation)." }
+              ],
+              quiz: [
+                { q: "Why does South East England suffer from water deficit?", opts: ["High population density combined with low annual rainfall", "Too many lakes", "Low population density", "Excessive snowfall"], ans: 0 },
+                { q: "What condition defines water deficit?", opts: ["Water demand exceeds sustainable supply", "Supply exceeds demand", "Excessive rainfall", "Flooding rivers"], ans: 0 },
+                { q: "What defines food security?", opts: ["Access to sufficient, safe, and nutritious food at all times", "Relying 100% on imported fast food", "Agricultural surplus export", "Rationing food"], ans: 0 },
+                { q: "What process removes salt from seawater to produce drinking water?", opts: ["Desalination", "Hydraulic fracturing", "Leaching", "Flocculation"], ans: 0 },
+                { q: "What characterizes commercial agribusiness?", opts: ["Large-scale high-yield industrial farming operations", "Small subsistence plots", "Organic garden plots", "Foraging"], ans: 0 },
+                { q: "What is organic farming?", opts: ["Farming without synthetic chemical fertilizers or pesticides", "Using heavy pesticides", "Genetic modification only", "Hydroponic glasshouses"], ans: 0 },
+                { q: "What is greywater recycling?", opts: ["Reusing domestic bath/sink wastewater for toilet flushing and gardens", "Drinking untreated sewage", "Filtering ocean water", "Bottled mineral water"], ans: 0 },
+                { q: "What defines national energy security?", opts: ["Uninterrupted, reliable, and affordable power supply", "Rolling blackouts", "Relying on imported oil during war", "High fuel poverty"], ans: 0 },
+                { q: "What is water abstraction?", opts: ["Extracting freshwater from rivers, lakes, or underground aquifers", "Evaporation", "Cloud seeding", "Ocean desalinization"], ans: 0 },
+                { q: "Which energy source is classified as renewable?", opts: ["Wind and Solar power", "Coal", "Crude Oil", "Natural Gas"], ans: 0 },
+                { q: "What do food miles measure?", opts: ["Distance food travels from farm producer to consumer plate (carbon footprint)", "Speed of tractor", "Length of farm fields", "Export shipping lanes"], ans: 0 },
+                { q: "What benefit does South Africa receive from the Lesotho Water Project?", opts: ["Transfers 2,000 million m³ of clean water annually to dry Johannesburg", "Free electricity", "Gold reserves", "Diamond mines"], ans: 0 },
+                { q: "What major drawback occurred in Lesotho due to dam construction?", opts: ["Displaced 30,000 villagers and flooded fertile agricultural land", "Drought", "Loss of all electricity", "Earthquakes"], ans: 0 },
+                { q: "What is an aquifer?", opts: ["Underground permeable rock layer containing stored groundwater", "Man-made water tank", "Surface river bend", "Glacier melt stream"], ans: 0 },
+                { q: "What is water stress?", opts: ["When demand for water exceeds available supply or poor quality limits use", "Flooding", "Dam construction", "High rainfall"], ans: 0 },
+                { q: "What is sustainable water management?", opts: ["Conserving water and reducing waste for future generation security", "Draining all aquifers dry", "Polluting rivers", "Building larger dams only"], ans: 0 },
+                { q: "What agricultural technique drops water straight onto roots to save water?", opts: ["Drip irrigation", "Sprinkler canons", "Flood irrigation", "Canal digging"], ans: 0 },
+                { q: "What energy generation method fractures underground shale rock using pressurized fluid?", opts: ["Fracking (Hydraulic fracturing)", "Geothermal", "Nuclear power", "Hydroelectric"], ans: 0 },
+                { q: "What is carbon capture and storage (CCS)?", opts: ["Capturing industrial CO2 emissions and locking them underground", "Planting gardens", "Burning coal cleaner", "Solar panel design"], ans: 0 },
+                { q: "Why is water transfer from North to South UK controversial?", opts: ["High financial costs and ecological disruption of river habitats", "North has no water", "South has too much rain", "No pipes exist"], ans: 0 },
+                { q: "What is energy efficiency?", opts: ["Using less energy to perform the exact same task (e.g. LED bulbs)", "Turning off all power", "Using coal", "Increasing voltage"], ans: 0 },
+                { q: "What is biomass energy?", opts: ["Energy produced by burning organic plant or animal material", "Nuclear fission", "Solar PV cells", "Geothermal steam"], ans: 0 },
+                { q: "What is a main concern of nuclear power generation?", opts: ["Radioactive waste disposal and expensive decommissioning costs", "High carbon emissions during operation", "Intermittent output", "Requires wind"], ans: 0 },
+                { q: "What is rainwater harvesting?", opts: ["Collecting surface roof runoff in tanks for household use", "Pumping rivers", "Desalting ocean water", "Drilling wells"], ans: 0 },
+                { q: "What is food insecurity?", opts: ["Lacking reliable access to sufficient affordable nutritious food", "Having too much food", "Exporting grain", "Eating organic"], ans: 0 }
+              ]
             }
           ]
         }
@@ -996,60 +1062,59 @@
         renderHeader();
       };
 
+      function initSessionData() {
+        var rawCards = [];
+        var rawQuiz = [];
+        var units = DATA[currentSubj].units;
+        var filtered = currentUnit === 'all' ? units : units.filter(function(u) { return u.id === currentUnit; });
+
+        filtered.forEach(function(u) {
+          u.cards.forEach(function(c) {
+            rawCards.push({ unitName: u.name, q: c.q, a: c.a });
+          });
+          u.quiz.forEach(function(q) {
+            rawQuiz.push({ unitName: u.name, q: q.q, opts: q.opts, ans: q.ans });
+          });
+        });
+
+        shuffledCards = shuffleArray(rawCards);
+        shuffledQuiz = shuffleArray(rawQuiz);
+      }
+
       window.setSubj = function (s) {
         currentSubj = s;
         currentUnit = 'all';
         qIdx = 0; quizIdx = 0; quizSelected = null; quizScore = 0; flipped = false;
+        initSessionData();
         render();
       };
 
       window.setUnit = function (u) {
         currentUnit = u;
         qIdx = 0; quizIdx = 0; quizSelected = null; quizScore = 0; flipped = false;
+        initSessionData();
         render();
       };
 
       window.setTab = function (t) {
         tab = t;
         flipped = false;
+        if (t === 'study' || t === 'quiz') {
+          initSessionData();
+          qIdx = 0; quizIdx = 0; quizSelected = null; quizScore = 0;
+        }
         document.querySelectorAll('nav button').forEach(function (btn) {
           btn.setAttribute('aria-selected', btn.id === 'tab-' + t);
         });
         render();
       };
 
-      function getFilteredUnits() {
-        var units = DATA[currentSubj].units;
-        if (currentUnit === 'all') return units;
-        return units.filter(function (u) { return u.id === currentUnit; });
-      }
-
-      function getCards() {
-        var list = [];
-        getFilteredUnits().forEach(function (u) {
-          u.cards.forEach(function (c) {
-            list.push({ unitName: u.name, q: c.q, a: c.a });
-          });
-        });
-        return list;
-      }
-
-      function getQuiz() {
-        var list = [];
-        getFilteredUnits().forEach(function (u) {
-          u.quiz.forEach(function (q) {
-            list.push({ unitName: u.name, q: q.q, opts: q.opts, ans: q.ans });
-          });
-        });
-        return list;
-      }
-
       function renderNotes() {
-        var units = getFilteredUnits();
+        var units = currentUnit === 'all' ? DATA[currentSubj].units : DATA[currentSubj].units.filter(function(u) { return u.id === currentUnit; });
         var html = '<div class="notes-container">';
         units.forEach(function (u) {
           html += '<div class="unit-panel">';
-          html += '<div class="unit-title"><span>' + u.name + '</span><span class="unit-spec-tag">AQA GCSE</span></div>';
+          html += '<div class="unit-title"><span>' + u.name + '</span><span class="unit-spec-tag">AQA GCSE 8035</span></div>';
           u.notes.forEach(function (n) {
             html += '<div class="note-block">';
             html += '<h4>' + n.t + '</h4>';
@@ -1070,13 +1135,21 @@
       }
 
       function renderStudy() {
-        var cards = getCards();
-        if (cards.length === 0) return '<div class="unit-panel">No flashcards available for this filter.</div>';
+        if (shuffledCards.length === 0) initSessionData();
 
-        var c = cards[qIdx % cards.length];
+        if (qIdx >= shuffledCards.length) {
+          var html = '<div class="quiz-container"><div class="score-summary">';
+          html += '<h2>Flashcards Completed!</h2>';
+          html += '<p>You have reviewed all <b>' + shuffledCards.length + '</b> unique flashcards for this selection.</p>';
+          html += '<button class="btn primary" onclick="resetFlashcards()">Restart Flashcards</button>';
+          html += '</div></div>';
+          return html;
+        }
+
+        var c = shuffledCards[qIdx];
         var html = '<div class="card-container">';
         html += '<div class="card" onclick="flipCard()">';
-        html += '<div class="card-head"><span>' + c.unitName + '</span><span>Card ' + (qIdx + 1) + ' of ' + cards.length + '</span></div>';
+        html += '<div class="card-head"><span>' + c.unitName + '</span><span>Card ' + (qIdx + 1) + ' of ' + shuffledCards.length + '</span></div>';
         html += '<div class="card-body">';
         html += '<div class="card-q">' + c.q + '</div>';
         if (flipped) {
@@ -1106,23 +1179,30 @@
         render();
       };
 
-      function renderQuiz() {
-        var quiz = getQuiz();
-        if (quiz.length === 0) return '<div class="unit-panel">No quiz questions available for this unit filter.</div>';
+      window.resetFlashcards = function () {
+        qIdx = 0;
+        flipped = false;
+        shuffledCards = shuffleArray(shuffledCards);
+        render();
+      };
 
-        if (quizIdx >= quiz.length) {
+      function renderQuiz() {
+        if (shuffledQuiz.length === 0) initSessionData();
+
+        if (quizIdx >= shuffledQuiz.length) {
+          var pct = Math.round((quizScore / shuffledQuiz.length) * 100);
           var html = '<div class="quiz-container"><div class="score-summary">';
           html += '<h2>Quiz Completed!</h2>';
-          html += '<div class="score-circle">' + quizScore + ' / ' + quiz.length + '</div>';
-          html += '<p>Fantastic work revising AQA GCSE Geography!</p>';
+          html += '<div class="score-circle">' + pct + '%</div>';
+          html += '<p>You scored <b>' + quizScore + ' out of ' + shuffledQuiz.length + '</b> correct.</p>';
           html += '<button class="btn primary" onclick="resetQuiz()">Restart Quiz</button>';
           html += '</div></div>';
           return html;
         }
 
-        var q = quiz[quizIdx];
+        var q = shuffledQuiz[quizIdx];
         var html = '<div class="quiz-container">';
-        html += '<div class="quiz-header"><span>' + q.unitName + '</span><span>Question ' + (quizIdx + 1) + ' of ' + quiz.length + '</span></div>';
+        html += '<div class="quiz-header"><span>' + q.unitName + '</span><span>Question ' + (quizIdx + 1) + ' of ' + shuffledQuiz.length + '</span></div>';
         html += '<div class="quiz-q">' + q.q + '</div>';
         html += '<div class="opts">';
         q.opts.forEach(function (opt, idx) {
@@ -1147,7 +1227,7 @@
 
       window.selectOpt = function (idx) {
         quizSelected = idx;
-        if (idx === getQuiz()[quizIdx].ans) quizScore++;
+        if (idx === shuffledQuiz[quizIdx].ans) quizScore++;
         render();
       };
 
@@ -1159,6 +1239,7 @@
 
       window.resetQuiz = function () {
         quizIdx = 0; quizSelected = null; quizScore = 0;
+        shuffledQuiz = shuffleArray(shuffledQuiz);
         render();
       };
 
@@ -1171,6 +1252,7 @@
         else if (tab === 'quiz') main.innerHTML = renderQuiz();
       }
 
+      initSessionData();
       render();
     })();
   </script>
