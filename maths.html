@@ -504,7 +504,9 @@
       </div>
       <div class="controls-top">
         <a href="https://nextiletext.github.io/Recall-Deck" class="back-btn">← Back to Portal</a>
-        <div class="subject-picker" id="subjects"></div>
+        <div class="subject-picker" id="subject-picker">
+          <button class="subj-btn active" onclick="setSubj('tier1')">Edexcel GCSE Maths</button>
+        </div>
         <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">Dark Mode</button>
       </div>
     </header>
@@ -1003,32 +1005,15 @@
         }
       };
 
-      function renderHeader() {
-        var subHtml = '';
-        var keys = ['tier1'];
-        var labels = { tier1: 'Edexcel GCSE Maths' };
-        keys.forEach(function (k) {
-          subHtml += '<button class="subj-btn ' + (currentSubj === k ? 'active' : '') + '" onclick="setSubj(\'' + k + '\')">' + labels[k] + '</button>';
-        });
-        document.getElementById('subjects').innerHTML = subHtml;
-
-        var unitOpts = '<option value="all">All Units (' + DATA[currentSubj].title + ')</option>';
+      function updateUnitDropdown() {
+        var select = document.getElementById('unitSelect');
+        var html = '<option value="all">All Units (' + DATA[currentSubj].title + ')</option>';
         DATA[currentSubj].units.forEach(function (u) {
-          unitOpts += '<option value="' + u.id + '" ' + (currentUnit === u.id ? 'selected' : '') + '>' + u.name + '</option>';
+          html += '<option value="' + u.id + '" ' + (currentUnit === u.id ? 'selected' : '') + '>' + u.name + '</option>';
         });
-        document.getElementById('unitSelect').innerHTML = unitOpts;
-        document.getElementById('themeBtn').textContent = isDark ? 'Dark Mode' : 'Light Mode';
+        select.innerHTML = html;
+        select.value = currentUnit;
       }
-
-      window.toggleTheme = function() {
-        isDark = !isDark;
-        if (!isDark) {
-          document.documentElement.setAttribute('data-theme', 'light');
-        } else {
-          document.documentElement.removeAttribute('data-theme');
-        }
-        renderHeader();
-      };
 
       function initSessionData() {
         var rawCards = [];
@@ -1054,10 +1039,22 @@
         shuffledQuiz = shuffleArray(rawQuiz);
       }
 
+      window.toggleTheme = function() {
+        isDark = !isDark;
+        if (!isDark) {
+          document.documentElement.setAttribute('data-theme', 'light');
+          document.getElementById('themeBtn').textContent = 'Light Mode';
+        } else {
+          document.documentElement.removeAttribute('data-theme');
+          document.getElementById('themeBtn').textContent = 'Dark Mode';
+        }
+      };
+
       window.setSubj = function (s) {
         currentSubj = s;
         currentUnit = 'all';
         qIdx = 0; quizIdx = 0; quizSelected = null; quizScore = 0; flipped = false;
+        updateUnitDropdown();
         initSessionData();
         render();
       };
@@ -1119,7 +1116,7 @@
         if (qIdx >= shuffledCards.length) {
           var html = '<div class="quiz-container"><div class="score-summary">';
           html += '<h2>Flashcards Completed!</h2>';
-          html += '<p>You have reviewed all <b>' + shuffledCards.length + '</b> unique flashcards for this unit selection.</p>';
+          html += '<p>You have reviewed all <b>' + shuffledCards.length + '</b> unique flashcards for this selection.</p>';
           html += '<button class="btn primary" onclick="resetFlashcards()">Restart Flashcards</button>';
           html += '</div></div>';
           return html;
@@ -1225,7 +1222,6 @@
       };
 
       function render() {
-        renderHeader();
         var main = document.getElementById('view');
         if (!main) return;
         if (tab === 'notes') main.innerHTML = renderNotes();
@@ -1233,6 +1229,7 @@
         else if (tab === 'quiz') main.innerHTML = renderQuiz();
       }
 
+      updateUnitDropdown();
       initSessionData();
       render();
     })();
