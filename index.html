@@ -78,10 +78,25 @@
       gap: 12px;
     }
 
+    .brand-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid var(--line);
+      flex-shrink: 0;
+    }
+
     .brand h1 {
       font-family: var(--display);
       font-weight: 800;
-      font-size: 1.75rem;
+      font-size: 1.6rem;
       letter-spacing: -0.02em;
       line-height: 1.1;
       margin: 0;
@@ -89,11 +104,11 @@
 
     .brand .sub {
       font-family: var(--mono);
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       letter-spacing: 0.05em;
       color: var(--muted);
       text-transform: uppercase;
-      margin-top: 4px;
+      margin-top: 3px;
       display: block;
     }
 
@@ -206,9 +221,12 @@
   <div class="wrap">
     <div class="top-box">
       <div class="header-row">
-        <div class="brand">
-          <h1>Recall Deck - RCS</h1>
-          <span class="sub">GCSE Revision Portal</span>
+        <div class="brand-container">
+          <img src="Recall Deck Logo.jfif" alt="Recall Deck Logo" class="brand-logo">
+          <div class="brand">
+            <h1>Recall Deck - RCS</h1>
+            <span class="sub">GCSE Revision Portal</span>
+          </div>
         </div>
         <button class="mode-btn" onclick="toggleTheme()" id="themeBtn">Light Mode</button>
       </div>
@@ -276,7 +294,7 @@
 
   <script>
     var theme = 'dark';
-    var userEmail = 'recalldeck.revise@gmail.com'; // <--- Change to your actual email
+    var userEmail = 'recalldeck.revise@gmail.com';
 
     function toggleTheme() {
       theme = theme === 'dark' ? 'light' : 'dark';
@@ -290,7 +308,6 @@
     }
 
     function handleEmailClick(e) {
-      // Copy email to clipboard as a guaranteed fallback
       if (navigator.clipboard) {
         navigator.clipboard.writeText(userEmail);
       }
