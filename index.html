@@ -136,6 +136,7 @@
       text-decoration: none;
       transition: all 0.2s ease;
       min-height: 84px;
+      cursor: pointer;
     }
 
     .portal-card:hover {
@@ -158,6 +159,7 @@
       margin-top: 6px;
       text-transform: uppercase;
       letter-spacing: 0.03em;
+      transition: color 0.2s ease;
     }
 
     /* Full-width span across all 3 columns */
@@ -258,10 +260,10 @@
           <span class="board-tag">T Level</span>
         </a>
 
-        <!-- CONTACT / FEEDBACK LINK -->
-        <a href="mailto:recalldeck.revise@gmail.com?subject=Recall%20Deck%20Feedback" class="portal-card full-width">
+        <!-- WORKING CONTACT / FEEDBACK LINK -->
+        <a href="mailto:recalldeck.revise@gmail.com?subject=Recall%20Deck%20Feedback" class="portal-card full-width" onclick="handleEmailClick(event)">
           <span class="subj-title">Contact / Feedback</span>
-          <span class="board-tag">Send an Email</span>
+          <span class="board-tag" id="emailTag">recalldeck.revise@gmail.com</span>
         </a>
       </div>
 
@@ -274,6 +276,8 @@
 
   <script>
     var theme = 'dark';
+    var userEmail = 'recalldeck.revise@gmail.com'; // <--- Change to your actual email
+
     function toggleTheme() {
       theme = theme === 'dark' ? 'light' : 'dark';
       if (theme === 'light') {
@@ -283,6 +287,22 @@
         document.documentElement.removeAttribute('data-theme');
         document.getElementById('themeBtn').textContent = 'Light Mode';
       }
+    }
+
+    function handleEmailClick(e) {
+      // Copy email to clipboard as a guaranteed fallback
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(userEmail);
+      }
+      
+      var tag = document.getElementById('emailTag');
+      tag.textContent = "Copied email to clipboard!";
+      tag.style.color = "var(--online)";
+
+      setTimeout(function() {
+        tag.textContent = userEmail;
+        tag.style.color = "var(--muted)";
+      }, 3000);
     }
   </script>
 </body>
