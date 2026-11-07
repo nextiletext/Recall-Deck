@@ -105,6 +105,26 @@
       flex-wrap: wrap;
     }
 
+    .back-btn {
+      font-family: var(--body);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: var(--surface-card);
+      color: var(--ink);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .back-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
     .subject-picker {
       display: flex;
       background: var(--bg);
@@ -495,6 +515,7 @@
         <span class="subtitle">Eduqas GCSE Religious Studies</span>
       </div>
       <div class="controls-top">
+        <a href="https://nextiletext.github.io/Recall-Deck" class="back-btn">← Back to Portal</a>
         <div class="subject-picker" id="subject-picker">
           <button class="subj-btn active" data-subj="chris" onclick="switchSubject('chris')">Christianity</button>
           <button class="subj-btn" data-subj="islam" onclick="switchSubject('islam')">Islam</button>
