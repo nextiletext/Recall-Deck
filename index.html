@@ -18,6 +18,7 @@
       --line: #24323e;
       --accent: #a855f7;
       --accent-ink: #ffffff;
+      --online: #10b981;
       --display: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
       --body: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif;
       --mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
@@ -32,6 +33,7 @@
       --line: #d0d7dc;
       --accent: #9333ea;
       --accent-ink: #ffffff;
+      --online: #059669;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -158,9 +160,34 @@
       letter-spacing: 0.03em;
     }
 
-    /* Optional full-width span for longer titles like T-Level */
+    /* Full-width span for T-Level card */
     .portal-card.full-width {
       grid-column: span 2;
+    }
+
+    /* Status Banner at bottom */
+    .status-banner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+      margin-top: 4px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--online);
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 8px var(--online);
     }
 
     @media (max-width: 360px) {
@@ -229,6 +256,11 @@
           <span class="subj-title">Software Development</span>
           <span class="board-tag">T Level</span>
         </a>
+      </div>
+
+      <div class="status-banner">
+        <span class="status-dot"></span>
+        <span>We are back online</span>
       </div>
     </div>
   </div>
