@@ -537,12 +537,30 @@
       var quizScore = 0;
       var isDark = true;
 
-      function generate25(pool) {
-        var res = [];
-        for (var i = 0; i < 25; i++) {
-          res.push(pool[i % pool.length]);
+      var shuffledCards = [];
+      var shuffledQuiz = [];
+
+      function shuffleArray(array) {
+        var arr = array.slice();
+        for (var i = arr.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var temp = arr[i];
+          arr[i] = arr[j];
+          arr[j] = temp;
         }
-        return res;
+        return arr;
+      }
+
+      function shuffleQuizQuestion(q) {
+        var correctText = q.opts[q.ans];
+        var shuffledOpts = shuffleArray(q.opts);
+        var newAnsIndex = shuffledOpts.indexOf(correctText);
+        return {
+          unitName: q.unitName,
+          q: q.q,
+          opts: shuffledOpts,
+          ans: newAnsIndex
+        };
       }
 
       var DATA = {
@@ -558,7 +576,7 @@
                   content: "Rules of indices govern powers: a^m × a^n = a^(m+n), a^m ÷ a^n = a^(m-n), (a^m)^n = a^(m×n), a^0 = 1, a^(-n) = 1/a^n, a^(1/n) = ⁿ√a.",
                   points: [
                     "Standard Form: Expressed as A × 10^n where 1 ≤ A < 10 and n is an integer.",
-                    "Worked Example (Standard Form): Multiply (3 × 10^4) × (5 × 10^6) = 15 × 10^10 = 1.5 × 10^11.",
+                    "Worked Example (Standard Form): (3 × 10^4) × (5 × 10^6) = 15 × 10^10 = 1.5 × 10^11.",
                     "Worked Example (Negative Indices): 8^(-2/3) = 1 / (8^(2/3)) = 1 / (³√8)² = 1 / (2²) = 1/4."
                   ]
                 },
@@ -567,28 +585,63 @@
                   content: "Surds are irrational roots that cannot be written as exact fractions. Rules: √(ab) = √a × √b, √(a/b) = √a / √b.",
                   points: [
                     "Simplifying Surds: Find the largest square factor. E.g., √72 = √(36 × 2) = 6√2.",
-                    "Rationalising Denominators: Multiply top and bottom by surd. E.g., 6 / √3 = (6√3) / 3 = 2√3."
+                    "Rationalising Denominators: Multiply numerator and denominator by surd. E.g., 6 / √3 = (6√3) / 3 = 2√3."
                   ]
                 }
               ],
-              cards: generate25([
+              cards: [
                 { q: "What is a rational number?", a: "A number that can be expressed as a fraction a/b where a and b are integers." },
-                { q: "What is an irrational number?", a: "A number that cannot be written as a fraction of integers (e.g., π, √2)." },
+                { q: "What is an irrational number?", a: "A number that cannot be written as a fraction of integers (e.g. π, √2)." },
                 { q: "What is a surd?", a: "An unsimplified root of a number that results in an irrational value." },
                 { q: "What is the rule for a^0?", a: "Any non-zero number raised to the power of 0 equals 1." },
                 { q: "What does a^(-n) mean?", a: "1 / (a^n) — the reciprocal of a^n." },
                 { q: "What does a^(1/n) mean?", a: "The nth root of a (ⁿ√a)." },
                 { q: "Standard form format constraint for A × 10^n?", a: "1 ≤ A < 10, and n must be an integer." },
-                { q: "What is a prime number?", a: "A integer greater than 1 with exactly two factors: 1 and itself." },
+                { q: "What is a prime number?", a: "An integer greater than 1 with exactly two factors: 1 and itself." },
                 { q: "What is HCF?", a: "Highest Common Factor — the largest factor shared by two or more numbers." },
-                { q: "What is LCM?", a: "Lowest Common Multiple — the smallest multiple shared by two or more numbers." }
-              ]),
-              quiz: generate25([
+                { q: "What is LCM?", a: "Lowest Common Multiple — the smallest multiple shared by two or more numbers." },
+                { q: "What is the value of 27^(2/3)?", a: "(³√27)² = 3² = 9." },
+                { q: "Simplify √50 in exact surd form.", a: "√(25 × 2) = 5√2." },
+                { q: "Rationalise 10 / √5.", a: "(10√5) / 5 = 2√5." },
+                { q: "What is a truncating error bound?", a: "Cutting off digits without rounding; bound is from value to value + 1 in last kept digit." },
+                { q: "What is error interval for x rounded to 1 d.p. as 4.3?", a: "4.25 ≤ x < 4.35." },
+                { q: "What is a reciprocal?", a: "The value obtained by dividing 1 by the number (1/x)." },
+                { q: "What is prime factor decomposition?", a: "Expressing a number as the product of its prime factors (e.g., 12 = 2² × 3)." },
+                { q: "Simplify (2 × 10^3) × (4 × 10^5) in standard form.", a: "8 × 10^8." },
+                { q: "Simplify (6 × 10^7) ÷ (3 × 10^2) in standard form.", a: "2 × 10^5." },
+                { q: "What is 4^(-1)?", a: "1/4 or 0.25." },
+                { q: "Simplify √12 + √27.", a: "2√3 + 3√3 = 5√3." },
+                { q: "What is upper bound of 15 rounded to nearest integer?", a: "15.5." },
+                { q: "What is lower bound of 15 rounded to nearest integer?", a: "14.5." },
+                { q: "Convert 0.333... recurring into a fraction.", a: "1/3." },
+                { q: "Convert 0.1666... recurring into a fraction.", a: "1/6." }
+              ],
+              quiz: [
                 { q: "Simplify 8^(-2/3):", opts: ["-4", "1/4", "4", "1/8"], ans: 1 },
                 { q: "Express 0.00045 in standard form:", opts: ["4.5 × 10^(-4)", "45 × 10^(-5)", "4.5 × 10^4", "0.45 × 10^(-3)"], ans: 0 },
                 { q: "Simplify √72 in exact surd form:", opts: ["3√8", "6√2", "2√18", "36√2"], ans: 1 },
                 { q: "Rationalise the denominator of 6 / √3:", opts: ["2√3", "3√6", "6√3", "2"], ans: 0 },
-                { q: "What is the value of 16^(3/4)?", opts: ["6", "8", "12", "64"], ans: 1 }
+                { q: "What is the value of 16^(3/4)?", opts: ["6", "8", "12", "64"], ans: 1 },
+                { q: "Calculate (4 × 10^5) × (3 × 10^4) in standard form:", opts: ["12 × 10^9", "1.2 × 10^10", "1.2 × 10^9", "12 × 10^20"], ans: 1 },
+                { q: "What is the value of 5^0?", opts: ["0", "1", "5", "Undefined"], ans: 1 },
+                { q: "Simplify √50 + √18:", opts: ["√68", "8√2", "15√2", "2√8"], ans: 1 },
+                { q: "Number x is rounded to 1 decimal place as 7.4. What is the error interval?", opts: ["7.35 ≤ x < 7.45", "7.35 < x ≤ 7.45", "7.30 ≤ x < 7.50", "7.39 ≤ x < 7.41"], ans: 0 },
+                { q: "Express 64^(-1/2) as a fraction:", opts: ["-32", "1/8", "-1/8", "8"], ans: 1 },
+                { q: "Find HCF of 24 and 36:", opts: ["6", "12", "72", "3"], ans: 1 },
+                { q: "Find LCM of 12 and 15:", opts: ["3", "30", "60", "180"], ans: 2 },
+                { q: "Express 0.777... as a fraction in simplest form:", opts: ["7/10", "7/9", "77/100", "7/99"], ans: 1 },
+                { q: "Simplify 27^(4/3):", opts: ["81", "36", "9", "243"], ans: 0 },
+                { q: "Rationalise 14 / √7:", opts: ["2√7", "7√2", "14√7", "2"], ans: 0 },
+                { q: "Which of the following is an irrational number?", opts: ["√16", "0.25", "√3", "22/7"], ans: 2 },
+                { q: "Write 0.0000038 in standard form:", opts: ["3.8 × 10^(-6)", "3.8 × 10^(-5)", "38 × 10^(-7)", "0.38 × 10^(-5)"], ans: 0 },
+                { q: "What is reciprocal of 0.2?", opts: ["5", "2", "0.5", "-0.2"], ans: 0 },
+                { q: "A boundary value problem has length L = 8.4cm (1 d.p.). Lower bound is:", opts: ["8.35", "8.3", "8.4", "8.39"], ans: 0 },
+                { q: "Simplify √18 / √2:", opts: ["3", "9", "√9", "√16"], ans: 0 },
+                { q: "Evaluate 9^(-1.5):", opts: ["1/27", "-27", "1/81", "27"], ans: 0 },
+                { q: "Which is prime factor decomposition of 60?", opts: ["2² × 3 × 5", "2 × 30", "4 × 15", "2³ × 5"], ans: 0 },
+                { q: "Calculate (8 × 10^8) ÷ (2 × 10^(-3)) in standard form:", opts: ["4 × 10^11", "4 × 10^5", "4 × 10^(-24)", "16 × 10^11"], ans: 0 },
+                { q: "Express recurring decimal 0.232323... as fraction:", opts: ["23/99", "23/100", "23/90", "2/9"], ans: 0 },
+                { q: "Estimate value of √48 to nearest integer:", opts: ["7", "6", "8", "5"], ans: 0 }
               ])
             },
             {
@@ -597,7 +650,7 @@
               notes: [
                 {
                   t: "Quadratics: Factoring, Completing Square & Formula",
-                  content: "Quadratic equations take the form ax² + bx + c = 0. Solved via factoring, completing the square, or quadratic formula: x = (-b ± √(b² - 4ac)) / (2a).",
+                  content: "Quadratic equations take form ax² + bx + c = 0. Solved via factoring, completing the square, or quadratic formula: x = (-b ± √(b² - 4ac)) / (2a).",
                   points: [
                     "Completing the Square: x² + bx + c = (x + b/2)² - (b/2)² + c.",
                     "Worked Example: Solve x² - 6x + 2 = 0 by completing square: (x - 3)² - 9 + 2 = 0 => (x - 3)² = 7 => x = 3 ± √7."
@@ -605,30 +658,65 @@
                 },
                 {
                   t: "Linear Graphs & Parallel/Perpendicular Lines",
-                  content: "y = mx + c where m is gradient and c is y-intercept. Parallel lines have equal gradients (m1 = m2). Perpendicular lines have gradients m1 × m2 = -1.",
+                  content: "y = mx + c where m is gradient and c is y-intercept. Parallel lines have m1 = m2. Perpendicular lines have m1 × m2 = -1.",
                   points: [
-                    "Worked Example: Line L1 has equation y = 3x + 2. Find perpendicular line passing through (6, 1): Perpendicular gradient = -1/3. Equation: y - 1 = -1/3(x - 6) => y = -1/3x + 3."
+                    "Worked Example: Line L1 has y = 3x + 2. Find perpendicular line passing through (6, 1): Perpendicular gradient = -1/3. Equation: y - 1 = -1/3(x - 6) => y = -1/3x + 3."
                   ]
                 }
               ],
-              cards: generate25([
-                { q: "What is gradient m in y = mx + c?", a: "The rate of change / steepness of the line: Change in y / Change in x." },
+              cards: [
+                { q: "What is gradient m in y = mx + c?", a: "The rate of change / steepness of line: Change in y / Change in x." },
                 { q: "Condition for two lines to be parallel?", a: "They must have identical gradients (m1 = m2)." },
                 { q: "Condition for two lines to be perpendicular?", a: "Their gradients must be negative reciprocals (m1 × m2 = -1)." },
                 { q: "What is an identity ≡?", a: "An equation true for all values of the variable." },
                 { q: "What is the quadratic formula?", a: "x = (-b ± √(b² - 4ac)) / (2a)." },
-                { q: "What is the turning point form of a quadratic?", a: "y = a(x - h)² + k, where (h, k) is the turning point." },
+                { q: "What is turning point form of a quadratic?", a: "y = a(x - h)² + k, where (h, k) is the turning point." },
                 { q: "What does factorising mean?", a: "Writing an algebraic expression as a product of its factors in brackets." },
                 { q: "What is simultaneous equations elimination method?", a: "Scaling and adding/subtracting equations to eliminate one variable." },
                 { q: "What is an inequality?", a: "A mathematical statement comparing expressions using <, >, ≤, or ≥." },
-                { q: "What is an arithmetic sequence nth term?", a: "a + (n - 1)d, where a is first term and d is common difference." }
-              ]),
-              quiz: generate25([
+                { q: "What is an arithmetic sequence nth term?", a: "a + (n - 1)d, where a is first term and d is common difference." },
+                { q: "Difference of two squares identity formula?", a: "a² - b² = (a - b)(a + b)." },
+                { q: "What is quadratic sequence nth term formula format?", a: "an² + bn + c, where 2a is second difference." },
+                { q: "Gradient formula between (x1, y1) and (x2, y2)?", a: "(y2 - y1) / (x2 - x1)." },
+                { q: "What is mid-point formula between two points?", a: "((x1 + x2)/2, (y1 + y2)/2)." },
+                { q: "What is function transformation f(x) + a?", a: "Vertical shift upwards by a units." },
+                { q: "What is function transformation f(x + a)?", a: "Horizontal shift left by a units." },
+                { q: "What is function transformation -f(x)?", a: "Reflection in the x-axis." },
+                { q: "What is function transformation f(-x)?", a: "Reflection in the y-axis." },
+                { q: "What is speed-time graph gradient?", a: "Acceleration." },
+                { q: "What is area under speed-time graph?", a: "Total distance traveled." },
+                { q: "How to find turning point of y = x² - 8x + 10?", a: "Complete square: (x - 4)² - 6 => Turning point is (4, -6)." },
+                { q: "Solve inequality 3x - 5 > 7.", a: "3x > 12 => x > 4." },
+                { q: "What is y-intercept of y = 4x - 9?", a: "(0, -9)." },
+                { q: "Factorise completely 3x² - 12.", a: "3(x² - 4) = 3(x - 2)(x + 2)." },
+                { q: "What is inverse function f^(-1)(x)?", a: "A function that reverses the effect of f(x)." }
+              ],
+              quiz: [
                 { q: "Find the gradient perpendicular to y = 2x + 5:", opts: ["2", "-2", "1/2", "-1/2"], ans: 3 },
                 { q: "Solve x² - 9 = 0:", opts: ["x = 3", "x = 9", "x = ±3", "x = ±9"], ans: 2 },
                 { q: "Turning point of y = (x - 4)² + 7:", opts: ["(-4, 7)", "(4, 7)", "(4, -7)", "(-4, -7)"], ans: 1 },
                 { q: "Nth term of sequence 5, 9, 13, 17...:", opts: ["4n + 1", "5n + 4", "4n + 5", "n + 4"], ans: 0 },
-                { q: "Factorise x² - 5x + 6:", opts: ["(x - 2)(x - 3)", "(x + 2)(x + 3)", "(x - 1)(x - 6)", "(x + 1)(x - 6)"], ans: 0 }
+                { q: "Factorise x² - 5x + 6:", opts: ["(x - 2)(x - 3)", "(x + 2)(x + 3)", "(x - 1)(x - 6)", "(x + 1)(x - 6)"], ans: 0 },
+                { q: "Solve 2x + 3 = 11:", opts: ["x = 4", "x = 7", "x = 3", "x = 5"], ans: 0 },
+                { q: "Gradient between points (2, 5) and (6, 13):", opts: ["2", "4", "1/2", "8"], ans: 0 },
+                { q: "Midpoint of line segment between (1, 4) and (7, 10):", opts: ["(4, 7)", "(3, 3)", "(8, 14)", "(6, 6)"], ans: 0 },
+                { q: "Factorise x² - 16:", opts: ["(x - 4)(x + 4)", "(x - 4)²", "(x - 8)(x + 2)", "(x - 16)(x + 1)"], ans: 0 },
+                { q: "Solve 3x - 4 > 11:", opts: ["x > 5", "x < 5", "x > 2.3", "x > 15"], ans: 0 },
+                { q: "Turning point of y = x² + 6x + 5:", opts: ["(-3, -4)", "(3, -4)", "(-3, 4)", "(3, 32)"], ans: 0 },
+                { q: "What transformation represents y = f(x - 3)?", opts: ["Shift right 3 units", "Shift left 3 units", "Shift up 3 units", "Shift down 3 units"], ans: 0 },
+                { q: "What does gradient of a distance-time graph represent?", opts: ["Speed", "Acceleration", "Distance", "Time"], ans: 0 },
+                { q: "Expand and simplify (2x + 3)(x - 5):", opts: ["2x² - 7x - 15", "2x² + 7x - 15", "2x² - 15", "2x² - 10x - 15"], ans: 0 },
+                { q: "Rearrange y = 3x + 2 to make x the subject:", opts: ["x = (y - 2)/3", "x = 3y - 2", "x = (y + 2)/3", "x = y/3 - 2"], ans: 0 },
+                { q: "Solve simultaneous: x + y = 10 and x - y = 4:", opts: ["x = 7, y = 3", "x = 6, y = 4", "x = 8, y = 2", "x = 5, y = 5"], ans: 0 },
+                { q: "Find nth term of quadratic sequence 3, 6, 11, 18...", opts: ["n² + 2", "n² + 1", "2n² + 1", "n² + 3"], ans: 0 },
+                { q: "What is y-intercept of 2y = 6x - 8?", opts: ["-4", "-8", "3", "-2"], ans: 0 },
+                { q: "If f(x) = 3x² - 5, find f(-2):", opts: ["7", "-17", "17", "1"], ans: 0 },
+                { q: "Which line is parallel to y = -3x + 4?", opts: ["y = -3x - 10", "y = 3x + 4", "y = 1/3x + 4", "y = -1/3x"], ans: 0 },
+                { q: "What is solution set of x² - 4x - 12 ≤ 0?", opts: ["-2 ≤ x ≤ 6", "x ≤ -2 or x ≥ 6", "-6 ≤ x ≤ 2", "x ≥ 6"], ans: 0 },
+                { q: "Simplify (4x^5y^3) ÷ (2x^2y):", opts: ["2x^3y^2", "2x^7y^4", "6x^3y^2", "2x^2y^3"], ans: 0 },
+                { q: "If line L1 has gradient 4, what is gradient of line perpendicular to L1?", opts: ["-1/4", "-4", "1/4", "4"], ans: 0 },
+                { q: "Area under a velocity-time graph represents:", opts: ["Distance travelled", "Speed", "Acceleration", "Average rate of change"], ans: 0 },
+                { q: "Solve 5/x = 2:", opts: ["x = 2.5", "x = 10", "x = 0.4", "x = 3"], ans: 0 }
               ])
             },
             {
@@ -650,24 +738,59 @@
                   ]
                 }
               ],
-              cards: generate25([
+              cards: [
                 { q: "What is direct proportion?", a: "As one variable increases, the other increases at a constant multiplier rate (y = kx)." },
                 { q: "What is inverse proportion?", a: "As one variable increases, the other decreases proportionally (y = k/x)." },
-                { q: "What is a percentage multiplier for 15% increase?", a: "1.15" },
-                { q: "What is a percentage multiplier for 8% decrease?", a: "0.92" },
+                { q: "What is percentage multiplier for 15% increase?", a: "1.15" },
+                { q: "What is percentage multiplier for 8% decrease?", a: "0.92" },
                 { q: "Formula for speed?", a: "Speed = Distance / Time." },
                 { q: "Formula for density?", a: "Density = Mass / Volume." },
                 { q: "Formula for pressure?", a: "Pressure = Force / Area." },
                 { q: "What is unit rate?", a: "A rate simplified to a quantity per single unit (e.g. miles per 1 hour)." },
                 { q: "How to convert m/s to km/h?", a: "Multiply by 3.6 (or ×3600 / 1000)." },
-                { q: "What is compound growth formula?", a: "Total = Principal × (1 + r/100)^n." }
-              ]),
-              quiz: generate25([
+                { q: "What is compound growth formula?", a: "Total = Principal × (1 + r/100)^n." },
+                { q: "How to share £60 in ratio 2:3?", a: "Total parts = 5; 1 part = £12; shares are £24 and £36." },
+                { q: "What is simple interest formula?", a: "Interest = (P × R × T) / 100." },
+                { q: "What multiplier reduces a value by 25%?", a: "0.75" },
+                { q: "Convert 72 km/h to m/s.", a: "72 ÷ 3.6 = 20 m/s." },
+                { q: "If 4 workers take 6 hours, how long do 3 workers take?", a: "Inverse proportion: Total man-hours = 24. 24 / 3 = 8 hours." },
+                { q: "What is percentage change formula?", a: "(Change / Original) × 100." },
+                { q: "What is reverse percentage method?", a: "Original = Final / Multiplier." },
+                { q: "A coat reduced by 20% costs £48. Original price?", a: "48 / 0.80 = £60." },
+                { q: "Unit conversion: How many cm³ in 1 m³?", a: "1,000,000 cm³ (100³)." },
+                { q: "Unit conversion: How many mm² in 1 cm²?", a: "100 mm² (10²)." },
+                { q: "Formula for average speed over multi-stage journey?", a: "Total Distance / Total Time." },
+                { q: "If y ∝ x³ and x doubles, by what factor does y increase?", a: "2³ = 8 times." },
+                { q: "If y ∝ 1/√x and x quadruples, what happens to y?", a: "y is halved (divided by 2)." },
+                { q: "What is gradient of chord on distance-time graph?", a: "Average speed over that time interval." },
+                { q: "What is gradient of tangent on distance-time graph?", a: "Instantaneous speed at that exact moment." }
+              ],
+              quiz: [
                 { q: "£5000 invested at 4% compound interest for 3 years:", opts: ["£5600.00", "£5624.32", "£5608.00", "£5400.00"], ans: 1 },
                 { q: "If y ∝ 1/x and y=6 when x=2, find y when x=4:", opts: ["3", "12", "1.5", "8"], ans: 0 },
                 { q: "Convert 15 m/s to km/h:", opts: ["45 km/h", "54 km/h", "60 km/h", "30 km/h"], ans: 1 },
                 { q: "A map scale is 1:25000. 4cm on map is how many km?", opts: ["1 km", "10 km", "0.1 km", "4 km"], ans: 0 },
-                { q: "Mass = 120g, Volume = 15cm³. Density = ?", opts: ["8 g/cm³", "1800 g/cm³", "0.125 g/cm³", "105 g/cm³"], ans: 0 }
+                { q: "Mass = 120g, Volume = 15cm³. Density = ?", opts: ["8 g/cm³", "1800 g/cm³", "0.125 g/cm³", "105 g/cm³"], ans: 0 },
+                { q: "Share £150 in the ratio 1:2:3. Smallest share is:", opts: ["£25", "£50", "£75", "£30"], ans: 0 },
+                { q: "A car drops in value by 12% per year. Multiplier is:", opts: ["0.88", "1.12", "0.12", "0.92"], ans: 0 },
+                { q: "Item increased by 20% costs £96. Original price =", opts: ["£80", "£76.80", "£82", "£85"], ans: 0 },
+                { q: "If 6 painters take 4 days, how long will 8 painters take?", opts: ["3 days", "5.3 days", "3.5 days", "2 days"], ans: 0 },
+                { q: "Convert 90 km/h to m/s:", opts: ["25 m/s", "32.4 m/s", "20 m/s", "15 m/s"], ans: 0 },
+                { q: "If y ∝ x² and y=18 when x=3, find y when x=5:", opts: ["50", "30", "25", "45"], ans: 0 },
+                { q: "Force = 200 N, Area = 4 m². Pressure =", opts: ["50 N/m²", "800 N/m²", "0.02 N/m²", "196 N/m²"], ans: 0 },
+                { q: "Percentage profit on buying for £40 and selling for £50:", opts: ["25%", "20%", "10%", "30%"], ans: 0 },
+                { q: "How many cm³ are in 2.5 litres?", opts: ["2500 cm³", "250 cm³", "25000 cm³", "25 cm³"], ans: 0 },
+                { q: "Distance 120 miles in 2 hours 30 mins. Average speed =", opts: ["48 mph", "50 mph", "45 mph", "60 mph"], ans: 0 },
+                { q: "Ratio of red to blue is 3:5. What fraction are red?", opts: ["3/8", "3/5", "5/8", "1/3"], ans: 0 },
+                { q: "Simple interest on £800 at 5% for 4 years:", opts: ["£160", "£168", "£960", "£40"], ans: 0 },
+                { q: "If y ∝ 1/x² and y=2 when x=4, find k:", opts: ["32", "8", "0.5", "16"], ans: 0 },
+                { q: "Scale on map is 1:50,000. Real distance of 5km in cm on map is:", opts: ["10 cm", "1 cm", "2.5 cm", "100 cm"], ans: 0 },
+                { q: "Convert 4 m² to cm²:", opts: ["40,000 cm²", "400 cm²", "4,000 cm²", "400,000 cm²"], ans: 0 },
+                { q: "A population grows by 5% each year. In 2 years multiplier is:", opts: ["1.05²", "1.10", "1.05 × 2", "0.95²"], ans: 0 },
+                { q: "Price increases from £80 to £92. Percentage increase =", opts: ["15%", "12%", "13%", "14%"], ans: 0 },
+                { q: "Travel 40 km at 80 km/h, then 60 km at 30 km/h. Total time =", opts: ["2.5 hours", "2 hours", "3 hours", "1.5 hours"], ans: 0 },
+                { q: "If 3 x = 4 y, what is ratio x:y?", opts: ["4:3", "3:4", "12:1", "1:12"], ans: 0 },
+                { q: "Mass of 500 cm³ metal with density 7.8 g/cm³:", opts: ["3900 g", "64.1 g", "390 g", "507.8 g"], ans: 0 }
               ])
             },
             {
@@ -683,10 +806,10 @@
                 },
                 {
                   t: "Circle Theorems",
-                  content: "Core circle rules: 1. Angle at centre is twice angle at circumference. 2. Angle in semicircle is 90°. 3. Angles in same segment are equal. 4. Opposite angles in cyclic quadrilateral sum to 180°. 5. Alternate segment theorem."
+                  content: "Core circle rules: 1. Angle at centre is twice angle at circumference. 2. Angle in semicircle is 90°. 3. Angles in same segment are equal. 4. Opposite angles in cyclic quad sum to 180°. 5. Alternate segment theorem."
                 }
               ],
-              cards: generate25([
+              cards: [
                 { q: "What is Pythagoras' Theorem?", a: "a² + b² = c² in a right-angled triangle where c is the hypotenuse." },
                 { q: "What does SOH stand for?", a: "Sin(θ) = Opposite / Hypotenuse." },
                 { q: "What does CAH stand for?", a: "Cos(θ) = Adjacent / Hypotenuse." },
@@ -696,14 +819,49 @@
                 { q: "Area of non-right-angled triangle?", a: "Area = 1/2 a b sin(C)." },
                 { q: "Circle Theorem: Angle in a semicircle?", a: "Always 90 degrees." },
                 { q: "Circle Theorem: Cyclic quadrilateral opposite angles?", a: "Add up to 180 degrees." },
-                { q: "Circle Theorem: Tangent and radius angle?", a: "Meet at exactly 90 degrees." }
-              ]),
-              quiz: generate25([
-                { q: "In a right triangle, opp=3, adj=4. Hypotenuse = ?", opts: ["5", "6", "7", "25"], ans: 0 },
-                { q: "Exact value of sin(30°)?", opts: ["1/2", "√3/2", "1/√2", "1"], ans: 0 },
-                { q: "Exact value of cos(60°)?", opts: ["1/2", "√3/2", "0", "1"], ans: 0 },
-                { q: "Angle at centre of circle is 70°. Angle at circumference = ?", opts: ["140°", "35°", "70°", "90°"], ans: 1 },
-                { q: "Opposite angle in cyclic quad to 110° is:", opts: ["70°", "110°", "90°", "250°"], ans: 0 }
+                { q: "Circle Theorem: Tangent and radius angle?", a: "Meet at exactly 90 degrees." },
+                { q: "Circle Theorem: Alternate Segment Theorem statement?", a: "Angle between tangent and chord equals angle subtended by chord in alternate segment." },
+                { q: "What is sum of interior angles of n-sided polygon?", a: "(n - 2) × 180°." },
+                { q: "What is sum of exterior angles of any convex polygon?", a: "Always 360°." },
+                { q: "Formula for area of a circle?", a: "π r²." },
+                { q: "Formula for circumference of a circle?", a: "2 π r (or π d)." },
+                { q: "Formula for area of a sector?", a: "(θ / 360) × π r²." },
+                { q: "Formula for arc length of a sector?", a: "(θ / 360) × 2 π r." },
+                { q: "Formula for volume of a sphere?", a: "4/3 π r³." },
+                { q: "Formula for surface area of a sphere?", a: "4 π r²." },
+                { q: "Formula for volume of a cone?", a: "1/3 π r² h." },
+                { q: "If scale factor of length is k, what is area scale factor?", a: "k²." },
+                { q: "If scale factor of length is k, what is volume scale factor?", a: "k³." },
+                { q: "What is column vector for translation 3 units left and 5 units up?", a: "(-3 / 5)." },
+                { q: "What is exact value of tan(45°)?", a: "1." },
+                { q: "What is exact value of sin(90°)?", a: "1." }
+              ],
+              quiz: [
+                { q: "In a right triangle, opp=3, adj=4. Hypotenuse =", opts: ["5", "6", "7", "25"], ans: 0 },
+                { q: "Exact value of sin(30°):", opts: ["1/2", "√3/2", "1/√2", "1"], ans: 0 },
+                { q: "Exact value of cos(60°):", opts: ["1/2", "√3/2", "0", "1"], ans: 0 },
+                { q: "Angle at centre of circle is 70°. Angle at circumference =", opts: ["140°", "35°", "70°", "90°"], ans: 1 },
+                { q: "Opposite angle in cyclic quad to 110° is:", opts: ["70°", "110°", "90°", "250°"], ans: 0 },
+                { q: "Sum of interior angles of a hexagon (6 sides):", opts: ["720°", "540°", "360°", "900°"], ans: 0 },
+                { q: "Each exterior angle of a regular octagon (8 sides):", opts: ["45°", "135°", "60°", "30°"], ans: 0 },
+                { q: "Exact value of tan(60°):", opts: ["√3", "1/√3", "1", "1/2"], ans: 0 },
+                { q: "Area of circle with radius 7cm (take π = 22/7):", opts: ["154 cm²", "44 cm²", "308 cm²", "49 cm²"], ans: 0 },
+                { q: "Arc length of 60° sector in circle of radius 6cm:", opts: ["2π cm", "6π cm", "12π cm", "π cm"], ans: 0 },
+                { q: "Area of triangle with sides 6cm, 8cm and included angle 30°:", opts: ["12 cm²", "24 cm²", "12√3 cm²", "6 cm²"], ans: 0 },
+                { q: "Two similar shapes have length ratio 2:3. Volume ratio =", opts: ["8:27", "4:9", "2:3", "6:9"], ans: 0 },
+                { q: "Vector A = (2, 3), Vector B = (-1, 4). Vector A + 2B =", opts: ["(0, 11)", "(3, 11)", "(0, 7)", "(4, 10)"], ans: 0 },
+                { q: "Bearing of B from A is 070°. Bearing of A from B is:", opts: ["250°", "110°", "290°", "070°"], ans: 0 },
+                { q: "Exact value of cos(90°):", opts: ["0", "1", "1/2", "Undefined"], ans: 0 },
+                { q: "Volume of cylinder with radius 3cm and height 10cm:", opts: ["90π cm³", "30π cm³", "60π cm³", "9π cm³"], ans: 0 },
+                { q: "Surface area of sphere with radius 5cm:", opts: ["100π cm²", "50π cm²", "125π cm²", "20π cm²"], ans: 0 },
+                { q: "In triangle ABC, a=5, b=7, C=60°. c² =", opts: ["39", "74", "39.5", "109"], ans: 0 },
+                { q: "Pythagorean triple missing side: ?, 12, 13", opts: ["5", "7", "9", "10"], ans: 0 },
+                { q: "Perpendicular bisector of a line segment is:", opts: ["Line passing through midpoint at 90°", "Line cutting angle in half", "Parallel line", "Tangent line"], ans: 0 },
+                { q: "Volume of cone with radius 6cm and height 10cm:", opts: ["120π cm³", "360π cm³", "60π cm³", "180π cm³"], ans: 0 },
+                { q: "Scale factor of length is 4. Area scale factor =", opts: ["16", "8", "64", "4"], ans: 0 },
+                { q: "Hypotenuse = 10, Angle = 30°. Opposite side =", opts: ["5", "8.66", "5√3", "10"], ans: 0 },
+                { q: "Circle theorem: Angle between radius and tangent =", opts: ["90°", "180°", "45°", "60°"], ans: 0 },
+                { q: "Enlargement scale factor -2 center origin transforms (3, 4) to:", opts: ["(-6, -8)", "(6, 8)", "(-1.5, -2)", "(-5, -6)"], ans: 0 }
               ])
             },
             {
@@ -719,9 +877,9 @@
                   ]
                 }
               ],
-              cards: generate25([
+              cards: [
                 { q: "What are mutually exclusive events?", a: "Events that cannot happen at the same time (P(A and B) = 0)." },
-                { q: "What are independent events?", a: "Events where the outcome of one does not affect the probability of the other." },
+                { q: "What are independent events?", a: "Events where outcome of one does not affect probability of the other." },
                 { q: "What is conditional probability?", a: "The probability of an event occurring given that another event has already occurred." },
                 { q: "Rule for P(A or B) for mutually exclusive events?", a: "P(A) + P(B)." },
                 { q: "Rule for P(A and B) for independent events?", a: "P(A) × P(B)." },
@@ -729,14 +887,49 @@
                 { q: "What is relative frequency?", a: "Experimental probability = Number of successful trials / Total number of trials." },
                 { q: "What is a Venn diagram in probability?", a: "A diagram showing overlapping set relationships between different events." },
                 { q: "What does P(A') mean?", a: "The probability of event A NOT occurring (1 - P(A))." },
-                { q: "What is sample space?", a: "The set of all possible outcomes of a probability experiment." }
-              ]),
-              quiz: generate25([
+                { q: "What is sample space?", a: "The set of all possible outcomes of a probability experiment." },
+                { q: "Formula for conditional probability P(A|B)?", a: "P(A and B) / P(B)." },
+                { q: "What does intersection A ∩ B mean?", a: "Event A AND event B occurring together." },
+                { q: "What does union A ∪ B mean?", a: "Event A OR event B (or both) occurring." },
+                { q: "If events are independent, what does P(A|B) equal?", a: "P(A)." },
+                { q: "Probability of getting at least one head in 3 coin flips?", a: "1 - P(no heads) = 1 - (1/2)³ = 7/8." },
+                { q: "What is expected frequency formula?", a: "Probability × Total number of trials." },
+                { q: "What is theoretical probability?", a: "Number of favorable outcomes / Total possible equal outcomes." },
+                { q: "If P(A) = 0.3, what is P(A')?", a: "0.7." },
+                { q: "P(A) = 0.6, P(B) = 0.5, P(A ∩ B) = 0.2. What is P(A ∪ B)?", a: "P(A) + P(B) - P(A ∩ B) = 0.6 + 0.5 - 0.2 = 0.9." },
+                { q: "Fair coin flipped 100 times. Expected number of heads?", a: "50." },
+                { q: "Bag has 3 red, 7 blue. Pick 1 marble. P(Red)?", a: "3/10 or 0.3." },
+                { q: "What is a tree diagram branch multiplication rule?", a: "Multiply probabilities along connected branch paths." },
+                { q: "What is tree diagram vertical addition rule?", a: "Add probabilities of separate successful branch paths." },
+                { q: "Rolling two fair 6-sided dice. Total ways to get sum of 7?", a: "6 ways (1+6, 2+5, 3+4, 4+3, 5+2, 6+1)." },
+                { q: "Probability of sum of 7 on two dice?", a: "6/36 = 1/6." }
+              ],
+              quiz: [
                 { q: "If P(Red) = 0.35, find P(Not Red):", opts: ["0.65", "0.35", "0.50", "0.75"], ans: 0 },
                 { q: "Two fair dice rolled. P(getting double 6) =", opts: ["1/6", "1/12", "1/36", "1/18"], ans: 2 },
                 { q: "Bag has 4 red, 6 blue. Pick 2 without replacement. P(2 Red):", opts: ["16/100", "12/90", "12/100", "4/10"], ans: 1 },
                 { q: "Relative frequency of 15 heads in 50 coin flips:", opts: ["0.15", "0.30", "0.50", "0.60"], ans: 1 },
-                { q: "P(A) = 0.4, P(B) = 0.5 (independent). P(A and B) =", opts: ["0.9", "0.2", "0.1", "0.45"], ans: 1 }
+                { q: "P(A) = 0.4, P(B) = 0.5 (independent). P(A and B) =", opts: ["0.9", "0.2", "0.1", "0.45"], ans: 1 },
+                { q: "P(A) = 0.6, P(B) = 0.3 (mutually exclusive). P(A or B) =", opts: ["0.9", "0.18", "0.3", "1.0"], ans: 0 },
+                { q: "Roll a fair 6-sided die 300 times. Expected number of 4s =", opts: ["50", "60", "100", "5"], ans: 0 },
+                { q: "P(A) = 0.7, P(B) = 0.4, P(A ∩ B) = 0.2. Find P(A ∪ B):", opts: ["0.9", "1.1", "0.7", "0.5"], ans: 0 },
+                { q: "Bag has 5 red, 3 green. Pick 2 WITH replacement. P(2 Red):", opts: ["25/64", "20/56", "15/64", "10/64"], ans: 0 },
+                { q: "Flip 3 fair coins. P(getting exactly 2 heads):", opts: ["3/8", "1/4", "1/2", "5/8"], ans: 0 },
+                { q: "If P(Rain) = 0.2, probability it rains on both Sat and Sun (independent):", opts: ["0.04", "0.4", "0.02", "0.16"], ans: 0 },
+                { q: "Venn diagram: n(A) = 12, n(B) = 15, n(A ∩ B) = 5. Total in A ∪ B =", opts: ["22", "27", "32", "17"], ans: 0 },
+                { q: "P(A|B) = 0.6, P(B) = 0.5. Find P(A ∩ B):", opts: ["0.3", "1.1", "0.1", "0.83"], ans: 0 },
+                { q: "Bag has 10 cards numbered 1 to 10. P(picking prime number):", opts: ["4/10", "5/10", "3/10", "6/10"], ans: 0 },
+                { q: "Two events A and B are independent. P(A) = 0.5, P(B) = 0.8. P(A ∩ B) =", opts: ["0.4", "1.3", "0.3", "0.625"], ans: 0 },
+                { q: "P(Fail test) = 0.15. Probability of passing:", opts: ["0.85", "0.15", "0.50", "0.70"], ans: 0 },
+                { q: "Spinner has sections 1 to 5. P(Odd number) =", opts: ["3/5", "2/5", "1/2", "4/5"], ans: 0 },
+                { q: "Pick a card from standard 52-card deck. P(Ace or King) =", opts: ["8/52", "4/52", "2/52", "16/52"], ans: 0 },
+                { q: "P(Both pass driving test) = 0.42. Person 1 P(pass) = 0.7. Person 2 P(pass) =", opts: ["0.6", "0.3", "0.5", "0.49"], ans: 0 },
+                { q: "Roll two 6-sided dice. P(sum equal to 12):", opts: ["1/36", "2/36", "1/12", "1/6"], ans: 0 },
+                { q: "Number of elements in sample space of flipping 4 coins:", opts: ["16", "8", "4", "12"], ans: 0 },
+                { q: "P(A) = 0.3. If experiment repeated 500 times, expected frequency =", opts: ["150", "50", "300", "100"], ans: 0 },
+                { q: "Probability of picking a vowel from word 'MATHEMATICS':", opts: ["4/11", "3/11", "5/11", "2/11"], ans: 0 },
+                { q: "Bag has 2 red, 3 blue, 4 green. Pick 1. P(Not green) =", opts: ["5/9", "4/9", "2/9", "7/9"], ans: 0 },
+                { q: "P(At least 1 tail in 2 coin flips):", opts: ["3/4", "1/4", "1/2", "2/3"], ans: 0 }
               ])
             },
             {
@@ -751,24 +944,59 @@
                   ]
                 }
               ],
-              cards: generate25([
+              cards: [
                 { q: "How to calculate Mean from grouped table?", a: "Sum of (Frequency × Midpoint) divided by Total Frequency (Σfx / Σf)." },
                 { q: "What is Median?", a: "The middle value when data is ordered sequentially." },
                 { q: "What is Mode?", a: "The value that appears most frequently in a dataset." },
-                { q: "What is Range?", a: "Difference between the maximum and minimum values." },
+                { q: "What is Range?", a: "Difference between maximum and minimum values." },
                 { q: "What is Interquartile Range (IQR)?", a: "Upper Quartile (Q3) minus Lower Quartile (Q1)." },
                 { q: "What five values form a Box Plot?", a: "Minimum, Lower Quartile (Q1), Median (Q2), Upper Quartile (Q3), Maximum." },
-                { q: "What is a histogram frequency density formula?", a: "Frequency Density = Frequency / Class Width." },
+                { q: "What is histogram frequency density formula?", a: "Frequency Density = Frequency / Class Width." },
                 { q: "What does a scatter graph show?", a: "Relationship/correlation between two bivariate quantitative variables." },
                 { q: "What is a line of best fit?", a: "A straight line drawn on a scatter graph representing the general trend." },
-                { q: "What is extrapolation?", a: "Estimating values outside the range of collected data (unreliable)." }
-              ]),
-              quiz: generate25([
+                { q: "What is extrapolation?", a: "Estimating values outside the range of collected data (unreliable)." },
+                { q: "What is interpolation?", a: "Estimating values within the range of collected data." },
+                { q: "What is positive correlation?", a: "As one variable increases, the other variable tends to increase." },
+                { q: "What is negative correlation?", a: "As one variable increases, the other variable tends to decrease." },
+                { q: "What is zero correlation?", a: "No observable relationship between the two variables." },
+                { q: "How to find median class in a frequency table?", a: "Find class containing the (n + 1)/2 th position cumulative frequency." },
+                { q: "What is cumulative frequency?", a: "A running total of frequencies up to the upper boundary of each class interval." },
+                { q: "How is a cumulative frequency curve plotted?", a: "Plot cumulative frequency on y-axis against UPPER class boundaries on x-axis." },
+                { q: "What is upper quartile percentile position?", a: "75% of total frequency (3n/4)." },
+                { q: "What is lower quartile percentile position?", a: "25% of total frequency (n/4)." },
+                { q: "In a histogram, what does area of a bar represent?", a: "Frequency (or proportional to frequency)." },
+                { q: "What is primary data?", a: "Data collected directly by the researcher first-hand." },
+                { q: "What is secondary data?", a: "Data collected by someone else previously (e.g. census records)." },
+                { q: "What is stratified sampling?", a: "Sampling method where population is divided into subgroups and sampled proportionally." },
+                { q: "Stratified sample formula for a subgroup?", a: "(Subgroup Size / Total Population Size) × Desired Sample Size." },
+                { q: "What is quantitative data?", a: "Numerical data that can be counted or measured." }
+              ],
+              quiz: [
                 { q: "Find mean of 3, 7, 8, 10, 12:", opts: ["8", "7.5", "8.0", "10"], ans: 0 },
                 { q: "Histogram class width = 5, frequency = 20. Frequency Density =", opts: ["100", "4", "0.25", "25"], ans: 1 },
                 { q: "Q1 = 14, Q3 = 26. IQR =", opts: ["12", "20", "40", "14"], ans: 0 },
                 { q: "Median position formula for n values:", opts: ["(n + 1)/2", "n/2", "n + 1", "(n - 1)/2"], ans: 0 },
-                { q: "Modal class of intervals 0-5 (f=3), 5-10 (f=8), 10-15 (f=4):", opts: ["0-5", "5-10", "10-15", "8"], ans: 1 }
+                { q: "Modal class of intervals 0-5 (f=3), 5-10 (f=8), 10-15 (f=4):", opts: ["0-5", "5-10", "10-15", "8"], ans: 1 },
+                { q: "Calculate median of dataset 4, 1, 9, 7, 3, 8, 5:", opts: ["5", "4", "7", "5.5"], ans: 0 },
+                { q: "Stratified sample: School has 200 Year 10s out of 1000 total. Sample of 50 needs how many Year 10s?", opts: ["10", "20", "15", "25"], ans: 0 },
+                { q: "In a histogram, height of bar represents:", opts: ["Frequency Density", "Frequency", "Class Width", "Cumulative Frequency"], ans: 0 },
+                { q: "Range of 12, 4, 19, 8, 15, 23, 2:", opts: ["21", "23", "19", "25"], ans: 0 },
+                { q: "Upper quartile position for 80 data items:", opts: ["60th item", "20th item", "40th item", "75th item"], ans: 0 },
+                { q: "Scatter graph shows line going downwards left to right. Correlation is:", opts: ["Negative", "Positive", "Zero", "Curved"], ans: 0 },
+                { q: "What point must cumulative frequency graph end at on y-axis?", opts: ["Total Frequency", "100", "Mean", "0"], ans: 0 },
+                { q: "Mode of 3, 5, 5, 6, 8, 8, 8, 9, 10 is:", opts: ["8", "5", "6", "9"], ans: 0 },
+                { q: "Estimate mean from midpoint=15, f=4 and midpoint=25, f=6. Mean =", opts: ["21", "20", "22", "19"], ans: 0 },
+                { q: "Class interval 10 ≤ x < 20. Midpoint =", opts: ["15", "10", "20", "5"], ans: 0 },
+                { q: "What measure of central tendency is best affected by extreme outliers?", opts: ["Mean", "Median", "Mode", "IQR"], ans: 0 },
+                { q: "In box plot, distance between whiskers represents:", opts: ["Range", "IQR", "Median", "Standard deviation"], ans: 0 },
+                { q: "Histogram bar width = 4, frequency density = 3.5. Frequency =", opts: ["14", "0.875", "7", "12"], ans: 0 },
+                { q: "Interpolation on scatter graph means:", opts: ["Estimating within data range", "Estimating outside data range", "Plotting points", "Finding mean"], ans: 0 },
+                { q: "Sampling method where every member has equal chance of selection:", opts: ["Random sampling", "Stratified sampling", "Quota sampling", "Systematic sampling"], ans: 0 },
+                { q: "A dataset has Q1 = 10, Median = 15, Q3 = 22. IQR =", opts: ["12", "7", "5", "15"], ans: 0 },
+                { q: "Number of petrol stations in UK is what type of data?", opts: ["Discrete quantitative", "Continuous quantitative", "Qualitative", "Secondary text"], ans: 0 },
+                { q: "Time taken to run 100m race is what type of data?", opts: ["Continuous quantitative", "Discrete quantitative", "Qualitative", "Categorical"], ans: 0 },
+                { q: "Upper boundary for class interval 20 - 29 (integers):", opts: ["29.5", "29", "30", "28.5"], ans: 0 },
+                { q: "Outlier rule formula using IQR:", opts: ["Above Q3 + 1.5×IQR", "Above Q3 + IQR", "Above Mean + 2×IQR", "Above Median + IQR"], ans: 0 }
               ])
             }
           ]
@@ -802,22 +1030,52 @@
         renderHeader();
       };
 
+      function initSessionData() {
+        var rawCards = [];
+        var rawQuiz = [];
+
+        var units = DATA[currentSubj].units;
+        var filtered = currentUnit === 'all' ? units : units.filter(function(u) { return u.id === currentUnit; });
+
+        filtered.forEach(function(u) {
+          if (u.cards) {
+            u.cards.forEach(function(c) {
+              rawCards.push({ unitName: u.name, q: c.q, a: c.a });
+            });
+          }
+          if (u.quiz) {
+            u.quiz.forEach(function(q) {
+              rawQuiz.push(shuffleQuizQuestion({ unitName: u.name, q: q.q, opts: q.opts, ans: q.ans }));
+            });
+          }
+        });
+
+        shuffledCards = shuffleArray(rawCards);
+        shuffledQuiz = shuffleArray(rawQuiz);
+      }
+
       window.setSubj = function (s) {
         currentSubj = s;
         currentUnit = 'all';
         qIdx = 0; quizIdx = 0; quizSelected = null; quizScore = 0; flipped = false;
+        initSessionData();
         render();
       };
 
       window.setUnit = function (u) {
         currentUnit = u;
         qIdx = 0; quizIdx = 0; quizSelected = null; quizScore = 0; flipped = false;
+        initSessionData();
         render();
       };
 
       window.setTab = function (t) {
         tab = t;
         flipped = false;
+        if (t === 'study' || t === 'quiz') {
+          initSessionData();
+          qIdx = 0; quizIdx = 0; quizSelected = null; quizScore = 0;
+        }
         document.querySelectorAll('nav button').forEach(function (btn) {
           btn.setAttribute('aria-selected', btn.id === 'tab-' + t);
         });
@@ -828,26 +1086,6 @@
         var units = DATA[currentSubj].units;
         if (currentUnit === 'all') return units;
         return units.filter(function (u) { return u.id === currentUnit; });
-      }
-
-      function getCards() {
-        var list = [];
-        getFilteredUnits().forEach(function (u) {
-          u.cards.forEach(function (c) {
-            list.push({ unitName: u.name, q: c.q, a: c.a });
-          });
-        });
-        return list;
-      }
-
-      function getQuiz() {
-        var list = [];
-        getFilteredUnits().forEach(function (u) {
-          u.quiz.forEach(function (q) {
-            list.push({ unitName: u.name, q: q.q, opts: q.opts, ans: q.ans });
-          });
-        });
-        return list;
       }
 
       function renderNotes() {
@@ -876,13 +1114,21 @@
       }
 
       function renderStudy() {
-        var cards = getCards();
-        if (cards.length === 0) return '<div class="unit-panel">No flashcards available for this filter.</div>';
+        if (shuffledCards.length === 0) initSessionData();
 
-        var c = cards[qIdx % cards.length];
+        if (qIdx >= shuffledCards.length) {
+          var html = '<div class="quiz-container"><div class="score-summary">';
+          html += '<h2>Flashcards Completed!</h2>';
+          html += '<p>You have reviewed all <b>' + shuffledCards.length + '</b> unique flashcards for this unit selection.</p>';
+          html += '<button class="btn primary" onclick="resetFlashcards()">Restart Flashcards</button>';
+          html += '</div></div>';
+          return html;
+        }
+
+        var c = shuffledCards[qIdx];
         var html = '<div class="card-container">';
         html += '<div class="card" onclick="flipCard()">';
-        html += '<div class="card-head"><span>' + c.unitName + '</span><span>Card ' + (qIdx + 1) + ' of ' + cards.length + '</span></div>';
+        html += '<div class="card-head"><span>' + c.unitName + '</span><span>Card ' + (qIdx + 1) + ' of ' + shuffledCards.length + '</span></div>';
         html += '<div class="card-body">';
         html += '<div class="card-q">' + c.q + '</div>';
         if (flipped) {
@@ -912,22 +1158,30 @@
         render();
       };
 
+      window.resetFlashcards = function () {
+        qIdx = 0;
+        flipped = false;
+        shuffledCards = shuffleArray(shuffledCards);
+        render();
+      };
+
       function renderQuiz() {
-        var quiz = getQuiz();
-        if (quiz.length === 0) return '<div class="unit-panel">No quiz questions available for this unit filter.</div>';
-        if (quizIdx >= quiz.length) {
+        if (shuffledQuiz.length === 0) initSessionData();
+
+        if (quizIdx >= shuffledQuiz.length) {
+          var pct = Math.round((quizScore / shuffledQuiz.length) * 100);
           var html = '<div class="quiz-container"><div class="score-summary">';
           html += '<h2>Quiz Completed!</h2>';
-          html += '<div class="score-circle">' + quizScore + ' / ' + quiz.length + '</div>';
-          html += '<p>Fantastic work revising Edexcel GCSE Maths!</p>';
+          html += '<div class="score-circle">' + pct + '%</div>';
+          html += '<p>You scored <b>' + quizScore + ' out of ' + shuffledQuiz.length + '</b> correct.</p>';
           html += '<button class="btn primary" onclick="resetQuiz()">Restart Quiz</button>';
           html += '</div></div>';
           return html;
         }
 
-        var q = quiz[quizIdx];
+        var q = shuffledQuiz[quizIdx];
         var html = '<div class="quiz-container">';
-        html += '<div class="quiz-header"><span>' + q.unitName + '</span><span>Question ' + (quizIdx + 1) + ' of ' + quiz.length + '</span></div>';
+        html += '<div class="quiz-header"><span>' + q.unitName + '</span><span>Question ' + (quizIdx + 1) + ' of ' + shuffledQuiz.length + '</span></div>';
         html += '<div class="quiz-q">' + q.q + '</div>';
         html += '<div class="opts">';
         q.opts.forEach(function (opt, idx) {
@@ -952,7 +1206,7 @@
 
       window.selectOpt = function (idx) {
         quizSelected = idx;
-        if (idx === getQuiz()[quizIdx].ans) quizScore++;
+        if (idx === shuffledQuiz[quizIdx].ans) quizScore++;
         render();
       };
 
@@ -963,7 +1217,10 @@
       };
 
       window.resetQuiz = function () {
-        quizIdx = 0; quizSelected = null; quizScore = 0;
+        quizIdx = 0;
+        quizSelected = null;
+        quizScore = 0;
+        initSessionData();
         render();
       };
 
@@ -976,6 +1233,7 @@
         else if (tab === 'quiz') main.innerHTML = renderQuiz();
       }
 
+      initSessionData();
       render();
     })();
   </script>
