@@ -53,7 +53,7 @@
     }
 
     .wrap {
-      max-width: 480px;
+      max-width: 560px;
       width: 100%;
       display: flex;
       flex-direction: column;
@@ -115,10 +115,10 @@
       color: var(--accent);
     }
 
-    /* Compact 2-column Central Grid */
+    /* 3-column Grid for 9 subjects */
     .link-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 10px;
     }
 
@@ -131,7 +131,7 @@
       background: var(--surface-card);
       border: 1px solid var(--line);
       border-radius: 12px;
-      padding: 14px 10px;
+      padding: 12px 8px;
       color: var(--ink);
       text-decoration: none;
       transition: all 0.2s ease;
@@ -146,23 +146,23 @@
 
     .portal-card .subj-title {
       font-weight: 700;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       line-height: 1.25;
       color: var(--ink);
     }
 
     .portal-card .board-tag {
       font-family: var(--mono);
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       color: var(--muted);
       margin-top: 6px;
       text-transform: uppercase;
       letter-spacing: 0.03em;
     }
 
-    /* Full-width span for cards */
+    /* Full-width span across all 3 columns */
     .portal-card.full-width {
-      grid-column: span 2;
+      grid-column: span 3;
     }
 
     /* Status Banner at bottom */
@@ -190,12 +190,12 @@
       box-shadow: 0 0 8px var(--online);
     }
 
-    @media (max-width: 360px) {
+    @media (max-width: 420px) {
       .link-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
       }
       .portal-card.full-width {
-        grid-column: span 1;
+        grid-column: span 2;
       }
     }
   </style>
@@ -212,6 +212,7 @@
       </div>
 
       <div class="link-grid">
+        <!-- 9 SUBJECT CARDS (3x3 GRID) -->
         <a href="compsci.html" class="portal-card">
           <span class="subj-title">Computer Science</span>
           <span class="board-tag">OCR J277</span>
@@ -252,12 +253,12 @@
           <span class="board-tag">OCR</span>
         </a>
 
-        <a href="https://nextiletext.github.io/Recall-Deck-SE/" class="portal-card full-width">
-          <span class="subj-title">Software Development</span>
+        <a href="https://nextiletext.github.io/Recall-Deck-SE/" class="portal-card">
+          <span class="subj-title">Software Dev</span>
           <span class="board-tag">T Level</span>
         </a>
 
-        <!-- EMAIL LINK CARD -->
+        <!-- CONTACT / FEEDBACK LINK -->
         <a href="mailto:recalldeck.revise@gmail.com?subject=Recall%20Deck%20Feedback" class="portal-card full-width">
           <span class="subj-title">Contact / Feedback</span>
           <span class="board-tag">Send an Email</span>
