@@ -1007,6 +1007,7 @@
 
       function updateUnitDropdown() {
         var select = document.getElementById('unitSelect');
+        if (!select) return;
         var html = '<option value="all">All Units (' + DATA[currentSubj].title + ')</option>';
         DATA[currentSubj].units.forEach(function (u) {
           html += '<option value="' + u.id + '" ' + (currentUnit === u.id ? 'selected' : '') + '>' + u.name + '</option>';
@@ -1229,9 +1230,11 @@
         else if (tab === 'quiz') main.innerHTML = renderQuiz();
       }
 
-      updateUnitDropdown();
-      initSessionData();
-      render();
+      document.addEventListener('DOMContentLoaded', function () {
+        updateUnitDropdown();
+        initSessionData();
+        render();
+      });
     })();
   </script>
 </body>
