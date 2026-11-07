@@ -1,0 +1,1072 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Recall Deck - Eduqas GCSE Religious Studies</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --surface: #121820;
+      --surface-card: #18222d;
+      --surface-hover: #1f2c3a;
+      --ink: #f0f4f8;
+      --muted: #8a99a8;
+      --line: #263545;
+      --accent: #00c896;
+      --accent-ink: #0d1318;
+      --good: #10b981;
+      --bad: #ef4444;
+      --display: 'Bricolage Grotesque', system-ui, sans-serif;
+      --body: 'IBM Plex Sans', system-ui, sans-serif;
+      --mono: 'IBM Plex Mono', monospace;
+    }
+
+    [data-theme="light"] {
+      --bg: #eef2f6;
+      --surface: #ffffff;
+      --surface-card: #f8fafc;
+      --surface-hover: #e2e8f0;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --line: #cbd5e1;
+      --accent: #059669;
+      --accent-ink: #ffffff;
+      --good: #059669;
+      --bad: #dc2626;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 15px;
+      line-height: 1.6;
+      padding-block: 20px 48px;
+      padding-left: max(16px, env(safe-area-inset-left, 0px));
+      padding-right: max(16px, env(safe-area-inset-right, 0px));
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      background: var(--surface);
+      padding: 18px 24px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+    }
+
+    h1 {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 1.8rem;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      background: linear-gradient(135deg, var(--ink) 30%, var(--muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .controls-top {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .subject-picker {
+      display: flex;
+      background: var(--bg);
+      padding: 4px;
+      border-radius: 30px;
+      border: 1px solid var(--line);
+      gap: 4px;
+    }
+
+    .subj-btn {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .subj-btn.active { background: var(--accent); color: var(--accent-ink); }
+
+    .theme-toggle {
+      background: var(--surface-card);
+      border: 1px solid var(--line);
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      padding: 8px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 2px solid var(--line);
+      padding-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    nav {
+      display: flex;
+      gap: 6px;
+    }
+
+    nav button {
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: var(--muted);
+      font: 600 0.95rem var(--body);
+      padding: 8px 14px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color 0.2s, border-color 0.2s;
+      border-radius: 6px 6px 0 0;
+    }
+
+    nav button[aria-selected="true"] {
+      color: var(--ink);
+      border-bottom-color: var(--accent);
+      background: var(--surface);
+    }
+
+    .unit-selector {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .unit-selector label {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    select {
+      font: 500 0.85rem var(--mono);
+      color: var(--ink);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 6px 12px;
+      cursor: pointer;
+      outline: none;
+    }
+
+    select:focus { border-color: var(--accent); }
+
+    /* FLASHCARD VIEW */
+    .card-container {
+      perspective: 1000px;
+      min-height: 320px;
+    }
+
+    .card {
+      background: var(--surface-card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 32px 28px;
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 20px;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+      transition: transform 0.15s ease, border-color 0.2s;
+    }
+
+    .card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card-q {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 1.45rem;
+      line-height: 1.35;
+      color: var(--ink);
+    }
+
+    .card-a {
+      border-top: 1px dashed var(--line);
+      padding-top: 16px;
+      font-size: 1.05rem;
+      color: var(--ink);
+      line-height: 1.6;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+
+    .card-hint {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      font: 600 0.95rem var(--body);
+      padding: 14px 20px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+    }
+
+    .btn:hover { background: var(--surface-hover); }
+    .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+    .btn.miss { color: var(--bad); border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.05); }
+    .btn.miss:hover { background: rgba(239,68,68,0.15); }
+    .btn.hit { color: var(--good); border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.05); }
+    .btn.hit:hover { background: rgba(16,185,129,0.15); }
+
+    /* REVISION NOTES VIEW */
+    .notes-container {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .unit-panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .unit-title {
+      font-family: var(--display);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--accent);
+      border-bottom: 2px solid var(--line);
+      padding-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .unit-spec-tag {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .note-block {
+      background: var(--surface-card);
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .note-block h4 {
+      font-family: var(--display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .note-block p {
+      font-size: 0.95rem;
+      color: var(--ink);
+    }
+
+    .note-block ul {
+      padding-left: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .note-block li {
+      font-size: 0.93rem;
+      color: var(--ink);
+    }
+
+    /* QUIZ VIEW */
+    .quiz-container {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 10px;
+    }
+
+    .quiz-q {
+      font-family: var(--display);
+      font-size: 1.35rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .opts {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .opt {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      text-align: left;
+      width: 100%;
+      font: 500 0.95rem var(--body);
+      color: var(--ink);
+      background: var(--surface-card);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .opt:hover:not(:disabled) {
+      border-color: var(--accent);
+      background: var(--surface-hover);
+    }
+
+    .opt.right {
+      border-color: var(--good);
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--good);
+    }
+
+    .opt.wrong {
+      border-color: var(--bad);
+      background: rgba(239, 68, 68, 0.12);
+      color: var(--bad);
+    }
+
+    .opt-idx {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 2px 6px;
+      flex-shrink: 0;
+    }
+
+    .explanation {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+
+    .explanation b { color: var(--accent); }
+
+    .score-summary {
+      text-align: center;
+      padding: 30px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .score-circle {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 3.5rem;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 640px) {
+      header { flex-direction: column; align-items: flex-start; }
+      .nav-bar { flex-direction: column; align-items: stretch; gap: 10px; }
+      .actions { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <h1>Recall Deck</h1>
+        <span class="subtitle">Eduqas GCSE Religious Studies</span>
+      </div>
+      <div class="controls-top">
+        <div class="subject-picker" id="subject-picker">
+          <button class="subj-btn active" data-subj="chris" onclick="switchSubject('chris')">Christianity</button>
+          <button class="subj-btn" data-subj="islam" onclick="switchSubject('islam')">Islam</button>
+          <button class="subj-btn" data-subj="theme" onclick="switchSubject('theme')">Philosophical Themes</button>
+        </div>
+        <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">Dark Mode</button>
+      </div>
+    </header>
+
+    <div class="nav-bar">
+      <nav role="tablist" id="tabs">
+        <button id="tab-notes" aria-selected="true" onclick="switchTab('notes')">Detailed Notes</button>
+        <button id="tab-study" aria-selected="false" onclick="switchTab('study')">Flashcards</button>
+        <button id="tab-quiz" aria-selected="false" onclick="switchTab('quiz')">Practice Quiz</button>
+      </nav>
+
+      <div class="unit-selector">
+        <label for="unit-select">Unit:</label>
+        <select id="unit-select" onchange="switchUnit(this.value)"></select>
+      </div>
+    </div>
+
+    <main id="view"></main>
+  </div>
+
+  <script>
+    (function () {
+      var currentSubj = 'chris';
+      var currentUnit = 'all';
+      var currentTab = 'notes';
+      var flipped = false;
+      var flashIdx = 0;
+      var quizIdx = 0;
+      var quizSelected = null;
+      var quizScore = 0;
+      var isDark = true;
+
+      var sessionCards = [];
+      var sessionQuiz = [];
+
+      function shuffleArray(array) {
+        var arr = array.slice();
+        for (var i = arr.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var temp = arr[i];
+          arr[i] = arr[j];
+          arr[j] = temp;
+        }
+        return arr;
+      }
+
+      function shuffleQuizQuestion(q) {
+        var correctText = q.opts[q.ans];
+        var shuffledOpts = shuffleArray(q.opts);
+        var newAnsIndex = shuffledOpts.indexOf(correctText);
+        return {
+          unitName: q.unitName,
+          q: q.q,
+          opts: shuffledOpts,
+          ans: newAnsIndex,
+          exp: q.exp
+        };
+      }
+
+      var SPEC_DATA = {
+        chris: {
+          title: "Christian Beliefs & Practices",
+          color: "#00c896",
+          units: [
+            {
+              id: "c1",
+              code: "C1",
+              name: "Christianity: Beliefs & Teachings",
+              notes: [
+                {
+                  t: "Nature of God & The Trinity",
+                  content: "Christians believe in one God (monotheism) who exists as three persons: Father, Son, and Holy Spirit.",
+                  bullets: [
+                    "Omnipotence: All-powerful creator of the universe.",
+                    "Omnibenevolence: All-loving, demonstrated through Jesus' sacrifice (John 3:16).",
+                    "Omniscient & Omnipresent: All-knowing and present everywhere.",
+                    "The Trinity: God the Father (Creator), God the Son (Jesus the Redeemer), God the Holy Spirit (Guide and comforter present in the world)."
+                  ]
+                },
+                {
+                  t: "Creation, Afterlife & Salvation",
+                  content: "Key beliefs regarding origin, destiny, and redemption.",
+                  bullets: [
+                    "Creation: Genesis 1 (God created world in 6 days out of nothing - ex nihilo). John 1 states the Word (Jesus) was present at creation.",
+                    "Afterlife: Belief in resurrection of the body or soul, Judgment Day by Jesus, Heaven (eternal paradise with God) and Hell (separation from God).",
+                    "Salvation: Deliverance from sin, achieved through grace (unearned gift from God) or works (following God's laws). Jesus' atonement pays the price for human sin."
+                  ]
+                }
+              ],
+              cards: [
+                { q: "What is monotheism?", a: "Belief in one single God." },
+                { q: "Define God's omnipotence.", a: "God is all-powerful." },
+                { q: "Define God's omnibenevolence.", a: "God is all-loving." },
+                { q: "What are the three persons of the Holy Trinity?", a: "Father, Son, and Holy Spirit." },
+                { q: "What does 'creation ex nihilo' mean?", a: "Creation out of nothing." },
+                { q: "What role did 'The Word' play in creation according to John 1?", a: "Jesus was present with God and involved in creating the universe." },
+                { q: "What is the Incarnation?", a: "God becoming human flesh in the person of Jesus Christ." },
+                { q: "What is atonement in Christianity?", a: "Restoring the broken relationship between God and humanity through Jesus' death." },
+                { q: "What is salvation by grace?", a: "Salvation given freely as an unearned gift from God through faith." },
+                { q: "What is salvation by works?", a: "Earning salvation through obeying God's laws and doing good deeds." },
+                { q: "What is Resurrection?", a: "Rising from the dead, as Jesus did on the third day after crucifixion." },
+                { q: "What is the Christian concept of Heaven?", a: "A state or place of eternal peace and presence with God after death." },
+                { q: "What is the Christian concept of Hell?", a: "Eternal separation from God's presence and love." },
+                { q: "What is the Problem of Evil?", a: "The contradiction between an all-powerful, all-loving God and the existence of evil and suffering." },
+                { q: "What is moral evil?", a: "Suffering caused by free human actions and choices (e.g., murder, theft)." },
+                { q: "What is natural evil?", a: "Suffering caused by natural processes (e.g., earthquakes, tsunamis)." },
+                { q: "What was Jesus' Crucifixion?", a: "Jesus' execution on a wooden cross by the Romans to pay for human sins." },
+                { q: "What is the Ascension?", a: "Jesus rising into Heaven 40 days after his resurrection." },
+                { q: "What is original sin?", a: "The tendency to sin inherited from Adam and Eve's disobedience in Genesis." },
+                { q: "What does Grace mean in Christian theology?", a: "God's unconditional, unearned love and favor towards humanity." },
+                { q: "What is Purgatory in Catholic belief?", a: "A state of cleansing and purification for souls before entering Heaven." },
+                { q: "What is General Revelation?", a: "God revealing himself through nature, conscience, and reason." },
+                { q: "What is Special Revelation?", a: "God revealing himself directly through miracles, visions, or scripture." },
+                { q: "What is the Law in the Old Testament?", a: "The 613 commandments given to Moses, including the Ten Commandments." },
+                { q: "What is the Gospel?", a: "The 'Good News' of Jesus Christ recorded in the New Testament." }
+              ],
+              quiz: [
+                { q: "What term describes the belief in one God?", opts: ["Polytheism", "Monotheism", "Atheism", "Agnosticism"], ans: 1, exp: "Monotheism is the belief in a single God." },
+                { q: "Which person of the Trinity is known as the Redeemer?", opts: ["The Father", "The Son (Jesus)", "The Holy Spirit", "The Creator"], ans: 1, exp: "Jesus the Son redeemed humanity through his sacrifice." },
+                { q: "What does 'ex nihilo' mean in Genesis creation accounts?", opts: ["Out of chaos", "Out of nothing", "Out of water", "Out of light"], ans: 1, exp: "Ex nihilo means creation out of nothing." },
+                { q: "Which term refers to God taking human form in Jesus?", opts: ["Resurrection", "Atonement", "Incarnation", "Transfiguration"], ans: 2, exp: "Incarnation means God becoming flesh." },
+                { q: "What is salvation by grace?", opts: ["Earning entry to heaven by good deeds", "Unearned gift of God's forgiveness through faith", "Paying money to the church", "Following dietary rules"], ans: 1, exp: "Grace is an unearned gift of divine love." },
+                { q: "What type of evil is caused by human choices?", opts: ["Natural evil", "Moral evil", "Cosmic evil", "Physical evil"], ans: 1, exp: "Moral evil results from human free will and actions." },
+                { q: "What event marks Jesus returning to Heaven 40 days post-resurrection?", opts: ["Crucifixion", "Ascension", "Baptism", "Epiphany"], ans: 1, exp: "The Ascension is Jesus returning to Heaven." },
+                { q: "Which Christian denomination believes in Purgatory?", opts: ["Quakers", "Roman Catholics", "Baptists", "Methodists"], ans: 1, exp: "Catholicism teaches Purgatory cleanses souls before Heaven." },
+                { q: "What does Atonement mean?", opts: ["Creating the world", "Restoring the relationship between God and humanity", "Judging non-believers", "Baptizing infants"], ans: 1, exp: "Atonement repairs the breach between God and mankind." },
+                { q: "What Bible verse states 'For God so loved the world that he gave his one and only Son'?", opts: ["Genesis 1:1", "John 3:16", "Exodus 20:3", "Matthew 5:7"], ans: 1, exp: "John 3:16 highlights God's love through Christ." },
+                { q: "What term describes God as all-knowing?", opts: ["Omnipotent", "Omnipresent", "Omniscient", "Omnibenevolent"], ans: 2, exp: "Omniscient means all-knowing." },
+                { q: "Which event represents the ultimate sacrifice for human sin in Christian theology?", opts: ["The Last Supper", "Jesus' Crucifixion", "The Temptation in the Desert", "The Wedding at Cana"], ans: 1, exp: "The Crucifixion paid the debt of sin." },
+                { q: "What is the primary role of the Holy Spirit?", opts: ["Creating physical matter", "Guiding, comforting, and inspiring believers", "Judging souls at death", "Writing scripture"], ans: 1, exp: "The Holy Spirit acts as a guide and helper." },
+                { q: "What is original sin derived from?", opts: ["The Tower of Babel", "Adam and Eve's disobedience in Eden", "The crucifixion", "The golden calf"], ans: 1, exp: "Original sin stems from the Fall of Man in Genesis." },
+                { q: "What type of revelation occurs through observing nature?", opts: ["Special Revelation", "General Revelation", "Direct Revelation", "Scriptural Revelation"], ans: 1, exp: "General revelation is experienced through the natural world." },
+                { q: "What does the word 'Gospel' mean?", opts: ["Holy Law", "Good News", "Divine Truth", "Sacred Story"], ans: 1, exp: "Gospel translates to 'Good News'." },
+                { q: "What is the Inconsistent Triad?", opts: ["Father, Son, and Spirit", "Omnipotence, Omnibenevolence, and the existence of evil", "Faith, Hope, and Charity", "Heaven, Hell, and Purgatory"], ans: 1, exp: "The Inconsistent Triad frames the problem of evil." },
+                { q: "What is the second coming of Jesus known as?", opts: ["Eucharist", "Parousia", "Pentecost", "Annunciation"], ans: 1, exp: "Parousia is Christ's expected return." },
+                { q: "According to Christian belief, who will judge all human souls?", opts: ["Moses", "Jesus Christ", "Saint Peter", "The Angels"], ans: 1, exp: "Jesus acts as the divine judge of humanity." },
+                { q: "What is the Christian belief in the bodily rising of the dead?", opts: ["Reincarnation", "Resurrection", "Transmigration", "Evolution"], ans: 1, exp: "Resurrection is rising bodily or spiritually after death." },
+                { q: "Which term describes God as present everywhere?", opts: ["Omniscient", "Omnipresent", "Omnipotent", "Transcendent"], ans: 1, exp: "Omnipresent means present everywhere." },
+                { q: "What attribute means God is beyond space and time?", opts: ["Immanent", "Transcendent", "Omnibenevolent", "Personal"], ans: 1, exp: "Transcendence means beyond physical existence." },
+                { q: "What attribute means God is actively involved in the world?", opts: ["Transcendent", "Immanent", "Unreachable", "Deistic"], ans: 1, exp: "Immanence means God is active within creation." },
+                { q: "What is the term for God's merciful willingness to forgive sin?", opts: ["Justice", "Grace", "Judgment", "Karma"], ans: 1, exp: "Grace reflects divine mercy and undeserved favor." },
+                { q: "Which Christian creed outlines key doctrines about the Trinity?", opts: ["The Nicene Creed", "The Magna Carta", "The 95 Theses", "The Ten Commandments"], ans: 0, exp: "The Nicene Creed codifies belief in the Trinity." }
+              ]
+            }
+          ]
+        },
+        islam: {
+          title: "Islamic Beliefs & Practices",
+          color: "#10b981",
+          units: [
+            {
+              id: "i1",
+              code: "I1",
+              name: "Islam: Beliefs, Teachings & Practices",
+              notes: [
+                {
+                  t: "Tawhid & Core Beliefs",
+                  content: "Tawhid is the central oneness of Allah. Key articles of faith vary between Sunni and Shi'a Islam.",
+                  bullets: [
+                    "Tawhid: Absolute oneness and uniqueness of Allah. Shirk (associating partners with Allah) is the unforgivable sin.",
+                    "Six Articles of Faith (Sunni): Tawhid, Malaikah (angels), Kutub (books), Rusul (prophets), Akhirah (day of judgment), Al-Qad'r (predestination).",
+                    "Five Roots of Usul ad-Din (Shi'a): Tawhid, Adalat (justice of God), Nabuwwah (prophethood), Imamah (leadership of Imams), Mi'ad (day of resurrection)."
+                  ]
+                },
+                {
+                  t: "Five Pillars of Sunni Islam & Ten Obligatory Acts of Shi'a Islam",
+                  content: "Essential practices defining daily Muslim life.",
+                  bullets: [
+                    "Shahadah: Declaration of faith ('There is no God but Allah, and Muhammad is his messenger').",
+                    "Salah: 5 daily prayers (Sunni) or 3 combined times (Shi'a). Includes Wudu (ritual washing) facing the Ka'aba in Makkah.",
+                    "Zakah: Annual compulsory 2.5% charity tax on surplus wealth given to the poor.",
+                    "Sawm: Fasting during daylight hours during the holy month of Ramadan.",
+                    "Hajj: Pilgrimage to Makkah required once in a lifetime if physically and financially able."
+                  ]
+                }
+              ],
+              cards: [
+                { q: "What is Tawhid?", a: "The absolute oneness and uniqueness of Allah." },
+                { q: "What is Shirk in Islam?", a: "The unforgivable sin of associating partners or equals with Allah." },
+                { q: "What is the Shahadah?", a: "The Muslim declaration of faith." },
+                { q: "What is Salah?", a: "Compulsory prayer performed 5 times daily by Sunni Muslims." },
+                { q: "What is Wudu?", a: "Ritual washing performed before Salah." },
+                { q: "What is Zakah?", a: "Compulsory giving of 2.5% of surplus wealth to charity annually." },
+                { q: "What is Sawm?", a: "Fasting from dawn to sunset during the month of Ramadan." },
+                { q: "What is Hajj?", a: "Annual pilgrimage to Makkah." },
+                { q: "What is Al-Qad'r?", a: "Predestination; the belief that Allah knows and controls everything." },
+                { q: "What is Akhirah?", a: "Belief in life after death and the Day of Judgment." },
+                { q: "Who is Prophet Muhammad?", a: "The final seal of the prophets who received the Holy Qur'an." },
+                { q: "What is the Qur'an?", a: "The infallible, unaltered word of Allah revealed to Muhammad via Angel Jibril." },
+                { q: "What are Malaikah?", a: "Angels created from light who carry out Allah's orders." },
+                { q: "What is Imamah in Shi'a Islam?", a: "Divinely appointed leadership of the 12 Imams starting with Ali." },
+                { q: "What is Adalat?", a: "The divine justice and fairness of Allah." },
+                { q: "What is Greater Jihad?", a: "The personal internal struggle against sin to live a righteous life." },
+                { q: "What is Lesser Jihad?", a: "External physical defense of Islam under strict legitimate conditions." },
+                { q: "What is the Ka'aba?", a: "The cube-shaped holy shrine in Makkah built by Ibrahim and Isma'il." },
+                { q: "What is Khums in Shi'a Islam?", a: "A 20% tax on surplus income paid to religious leaders for charitable distribution." },
+                { q: "What is Eid ul-Fitr?", a: "Festival marking the end of Ramadan fast." },
+                { q: "What is Eid ul-Adha?", a: "Festival of sacrifice commemorating Ibrahim's willingness to sacrifice his son." },
+                { q: "What is Ashura for Shi'a Muslims?", a: "Day of mourning commemorating the martyrdom of Imam Hussain at Karbala." },
+                { q: "What is Jumu'ah?", a: "Friday congregational prayer at the mosque." },
+                { q: "Who is Angel Jibril?", a: "The archangel of revelation who brought the Qur'an to Muhammad." },
+                { q: "Who is Angel Israfil?", a: "The angel who will blow the trumpet to signal the Day of Judgment." }
+              ],
+              quiz: [
+                { q: "What is Tawhid?", opts: ["Belief in angels", "Absolute oneness of Allah", "Pilgrimage to Makkah", "Day of judgment"], ans: 1, exp: "Tawhid is the supreme concept of monotheism in Islam." },
+                { q: "What is the unforgivable sin of associating equals with Allah called?", opts: ["Jihad", "Shirk", "Zakah", "Sadaqah"], ans: 1, exp: "Shirk is attributing partners to Allah." },
+                { q: "How many daily prayers do Sunni Muslims perform?", opts: ["3", "5", "7", "10"], ans: 1, exp: "Sunni Muslims perform 5 daily prayers (Salah)." },
+                { q: "What percentage of surplus wealth is given as Zakah annually?", opts: ["1%", "2.5%", "5%", "10%"], ans: 1, exp: "Zakah is set at 2.5% of excess annual wealth." },
+                { q: "What is Wudu?", opts: ["Fast during Ramadan", "Ritual washing before prayer", "Giving to the poor", "Circling the Ka'aba"], ans: 1, exp: "Wudu cleanses the worshipper physically and spiritually." },
+                { q: "Which Shi'a root refers to the divine justice of Allah?", opts: ["Tawhid", "Adalat", "Nabuwwah", "Mi'ad"], ans: 1, exp: "Adalat represents divine justice." },
+                { q: "What is Greater Jihad?", opts: ["Military battle", "Internal personal struggle against sin", "Writing holy books", "Building mosques"], ans: 1, exp: "Greater Jihad is the internal struggle to obey Allah." },
+                { q: "Which angel brought revelations of the Qur'an to Prophet Muhammad?", opts: ["Mikail", "Jibril", "Israfil", "Azrail"], ans: 1, exp: "Jibril (Gabriel) conveyed Allah's words." },
+                { q: "What festival marks the conclusion of Ramadan?", opts: ["Eid ul-Adha", "Eid ul-Fitr", "Ashura", "Mawlid"], ans: 1, exp: "Eid ul-Fitr breaks the Ramadan fast." },
+                { q: "Which Shi'a practice involves paying a 20% tax on excess income?", opts: ["Zakah", "Khums", "Sadaqah", "Jizya"], ans: 1, exp: "Khums is a 20% tax in Shi'a Islam." },
+                { q: "What is the holiest book in Islam?", opts: ["Torah", "Hadith", "Qur'an", "Psalms"], ans: 2, exp: "The Qur'an is the verbatim word of Allah." },
+                { q: "What is Al-Qad'r?", opts: ["Day of Judgment", "Predestination", "Prophethood", "Angels"], ans: 1, exp: "Al-Qad'r is divine predestination." },
+                { q: "Where do Muslims face when performing Salah?", opts: ["Jerusalem", "Medina", "Makkah (Ka'aba)", "Cairo"], ans: 2, exp: "Muslims face the Ka'aba in Makkah (Qibla)." },
+                { q: "Who rebuilt the Ka'aba alongside his son Isma'il?", opts: ["Musa", "Ibrahim", "Isa", "Adam"], ans: 1, exp: "Ibrahim rebuilt the Ka'aba." },
+                { q: "What is Akhirah?", opts: ["The earthly life", "Life after death", "The night journey", "The hijrah"], ans: 1, exp: "Akhirah is the afterlife." },
+                { q: "Which angel is responsible for blowing the trumpet on Judgment Day?", opts: ["Jibril", "Israfil", "Mikail", "Azrail"], ans: 1, exp: "Israfil blows the trumpet of judgment." },
+                { q: "What is the Friday congregational prayer called?", opts: ["Fajr", "Jumu'ah", "Taraweeh", "Isha"], ans: 1, exp: "Jumu'ah is the Friday community prayer." },
+                { q: "Which pillar involves fasting in Ramadan?", opts: ["Salah", "Zakah", "Sawm", "Hajj"], ans: 2, exp: "Sawm is fasting." },
+                { q: "Who is considered the 'Seal of the Prophets'?", opts: ["Ibrahim", "Musa", "Isa", "Muhammad"], ans: 3, exp: "Muhammad is the final prophet." },
+                { q: "Which holy book was revealed to Prophet Musa (Moses)?", opts: ["Zabur", "Tawrat", "Injeel", "Qur'an"], ans: 1, exp: "Tawrat (Torah) was given to Musa." },
+                { q: "Which holy book was revealed to Prophet Dawud (David)?", opts: ["Zabur (Psalms)", "Tawrat", "Injeel", "Sahifah"], ans: 0, exp: "Zabur was given to Dawud." },
+                { q: "What is the Shi'a commemoration of Imam Hussain's martyrdom?", opts: ["Eid ul-Fitr", "Ashura", "Laylat al-Qadr", "Hajj"], ans: 1, exp: "Ashura remembers Hussain's martyrdom." },
+                { q: "What state of purity must pilgrims enter before Hajj?", opts: ["Wudu", "Ihram", "Halal", "Tawaf"], ans: 1, exp: "Ihram involves spiritual purity and white garments." },
+                { q: "What act involves circling the Ka'aba seven times?", opts: ["Sa'y", "Tawaf", "Wuquf", "Rami"], ans: 1, exp: "Tawaf is circumambulating the Ka'aba." },
+                { q: "What is Sadaqah?", opts: ["Compulsory tax", "Voluntary charity", "Fasting", "Pilgrimage"], ans: 1, exp: "Sadaqah is voluntary act of charity." }
+              ]
+            }
+          ]
+        },
+        theme: {
+          title: "Philosophical & Ethical Themes",
+          color: "#f59e0b",
+          units: [
+            {
+              id: "t1",
+              code: "T1",
+              name: "Theme A: Relationships & Life and Death",
+              notes: [
+                {
+                  t: "Relationships & Family",
+                  content: "Religious views on marriage, divorce, sexuality, and family structures.",
+                  bullets: [
+                    "Marriage: Sacred covenant ordained by God. Catholic views regard marriage as an indissoluble sacrament.",
+                    "Divorce: Permitted in Islam as a last resort (Iddah waiting period applies); discouraged in Catholicism (annulment possible); allowed in Protestantism on grounds of adultery/unreconcilable breakdown.",
+                    "Sexual Relationships: Traditional religious views reserve sex for heterosexual marriage. Modern progressive views emphasize consent, love, and equality regardless of gender orientation."
+                  ]
+                },
+                {
+                  t: "Life and Death (Abortion & Euthanasia)",
+                  content: "Ethical debates surrounding sanctity vs quality of life.",
+                  bullets: [
+                    "Sanctity of Life: Life is holy, created by God, and belongs to God alone. Human life has intrinsic value from conception.",
+                    "Quality of Life: Life's value depends on human experience, autonomy, and freedom from intolerable pain.",
+                    "Abortion & Euthanasia: Opposed by Sanctity of Life advocates. Pro-choice / Pro-euthanasia views emphasize compassion, personal freedom, and relief of severe suffering."
+                  ]
+                }
+              ],
+              cards: [
+                { q: "What is Sanctity of Life?", a: "The belief that all human life is sacred, holy, and created by God." },
+                { q: "What is Quality of Life?", a: "The measure of fulfillment, health, and well-being an individual experiences." },
+                { q: "What is a sacrament in Christian marriage?", a: "A sacred outer sign of inward grace; a lifelong binding vow before God." },
+                { q: "What is an annulment in the Catholic Church?", a: "A declaration that a marriage was never validly consummated or contracted." },
+                { q: "What is Iddah in Islamic divorce?", a: "A 3-month waiting period to ensure no pregnancy and allow potential reconciliation." },
+                { q: "What is active euthanasia?", a: "Directly intervening to end a patient's life (e.g., lethal injection)." },
+                { q: "What is passive euthanasia?", a: "Withholding or withdrawing life-prolonging medical treatment." },
+                { q: "What is voluntary euthanasia?", a: "Ending a life at the explicit request of the patient." },
+                { q: "What is non-voluntary euthanasia?", a: "Ending a life when the patient is unable to give consent (e.g., coma)." },
+                { q: "What is the Doctrine of Double Effect?", a: "Doing an action with a good intention (e.g., pain relief) even if it foresaw an unavoidable bad side effect (e.g., shortened life)." },
+                { q: "What is cohabitation?", a: "A couple living together in a romantic relationship without being legally married." },
+                { q: "What is nuclear family?", a: "A family unit consisting of two parents and their children." },
+                { q: "What is extended family?", a: "A family group including parents, children, grandparents, aunts, uncles, and cousins." },
+                { q: "What is procreation?", a: "Producing offspring and bringing new human life into the world." },
+                { q: "What is contraception?", a: "Methods used to prevent pregnancy resulting from sexual intercourse." },
+                { q: "What is natural family planning?", a: "Contraceptive method tracking fertile window (approved by Catholic Church)." },
+                { q: "What is artificial contraception?", a: "Man-made devices/medications preventing pregnancy (e.g., condoms, pill)." },
+                { q: "What is pro-life argument?", a: "Opposition to abortion based on fetal right to life from conception." },
+                { q: "What is pro-choice argument?", a: "Support for abortion based on a woman's right to bodily autonomy." },
+                { q: "What is hospice movement?", a: "Palliative care focused on quality of life and dignity for terminally ill patients." },
+                { q: "What is stewardship of life?", a: "Duty to guard and respect human life as a gift from God." },
+                { q: "What is human dignity?", a: "Intrinsic worth possessed by every human being regardless of status." },
+                { q: "What is gender equality?", a: "Equal rights, responsibilities, and opportunities for all genders." },
+                { q: "What is legal marriage?", a: "A formal state-recognized contract between two consenting adults." },
+                { q: "What is civil partnership?", a: "Legal recognition of a couple's relationship offering similar rights to marriage." }
+              ],
+              quiz: [
+                { q: "What belief states human life is holy and belongs to God?", opts: ["Quality of Life", "Sanctity of Life", "Hedonism", "Utilitarianism"], ans: 1, exp: "Sanctity of Life holds human life as sacred and God-given." },
+                { q: "What type of euthanasia involves actively giving a lethal injection at the patient's request?", opts: ["Passive involuntary", "Active voluntary", "Passive voluntary", "Indirect non-voluntary"], ans: 1, exp: "Active voluntary euthanasia uses direct lethal means requested by the patient." },
+                { q: "Which Christian denomination does NOT permit divorce and remarriage under any circumstances?", opts: ["Church of England", "Roman Catholic Church", "Methodist Church", "Baptist Church"], ans: 1, exp: "Catholics view marriage as an indissoluble sacrament." },
+                { q: "What is the 3-month waiting period in Islamic divorce called?", opts: ["Nikah", "Iddah", "Mahr", "Talaq"], ans: 1, exp: "Iddah is the 3-month reconciliation and pregnancy check period." },
+                { q: "Which ethical principle allows pain relief that accidentally shortens life?", opts: ["Utilitarianism", "Doctrine of Double Effect", "Categorical Imperative", "Sola Scriptura"], ans: 1, exp: "Double Effect accepts unintended bad side effects of good intentions." },
+                { q: "What is artificial contraception?", opts: ["Rhythm method", "Condoms and the pill", "Abstinence", "Natural family planning"], ans: 1, exp: "Man-made mechanical or chemical barrier methods." },
+                { q: "What is the stance of the Roman Catholic Church on artificial contraception?", opts: ["Encouraged", "Forbidden as it blocks God's gift of life", "Neutral", "Mandatory"], ans: 1, exp: "Catholic doctrine forbids artificial birth control." },
+                { q: "What does the pro-choice position emphasize?", opts: ["Right to life from conception", "Woman's right to bodily autonomy", "Government control", "Church authority"], ans: 1, exp: "Pro-choice prioritizes a woman's reproductive choices." },
+                { q: "What alternative to euthanasia provides specialist palliative care?", opts: ["ICU treatment", "Hospice care", "Assisted suicide", "Cryogenics"], ans: 1, exp: "Hospices provide dignified care for terminally ill patients." },
+                { q: "What term describes living together without marriage?", opts: ["Cohabitation", "Civil partnership", "Polygamy", "Celibacy"], ans: 0, exp: "Cohabitation is co-residence without marriage." },
+                { q: "What is passive euthanasia?", opts: ["Lethal injection", "Withholding life-prolonging treatment", "Self-harm", "Accidental death"], ans: 1, exp: "Passive euthanasia allows natural death by withholding treatment." },
+                { q: "Which concept evaluates life value based on pleasure, pain, and capability?", opts: ["Sanctity of Life", "Quality of Life", "Original Sin", "Predestination"], ans: 1, exp: "Quality of life measures subjective human experience." },
+                { q: "What is an annulment?", opts: ["Standard divorce", "Declaration that a marriage was legally/spiritually invalid from start", "Separation agreement", "Adoption paper"], ans: 1, exp: "Annulment proves no valid marriage ever took place." },
+                { q: "What is polygamy?", opts: ["Marriage to one person", "Marriage to multiple spouses", "Remaining single", "Living in a commune"], ans: 1, exp: "Polygamy is having multiple spouses simultaneously." },
+                { q: "What does Christian scripture say about body stewardship?", opts: ["Bodies are disposable", "The body is a temple of the Holy Spirit", "Bodies do not matter", "Only the soul is created"], ans: 1, exp: "1 Corinthians 6 states the body is a temple." },
+                { q: "What does human autonomy mean in ethical debates?", opts: ["Following Church orders", "Right to self-determination and personal choice", "Obeying government laws", "Financial wealth"], ans: 1, exp: "Autonomy is personal freedom to make choices." },
+                { q: "What is the Catholic view on abortion?", opts: ["Permitted anytime", "Forbidden from conception as murder", "Encouraged for large families", "Left to doctors"], ans: 1, exp: "Catholicism bans abortion from moment of conception." },
+                { q: "Which Islamic term means marriage contract?", opts: ["Talaq", "Nikah", "Mahr", "Zina"], ans: 1, exp: "Nikah is the formal Islamic marriage contract." },
+                { q: "What is Mahr in Islamic marriage?", opts: ["Divorce papers", "Bridal gift given by groom to bride", "Wedding feast", "Religious prayer"], ans: 1, exp: "Mahr is the mandatory gift from groom to bride." },
+                { q: "What is involuntary euthanasia?", opts: ["Euthanasia performed against a competent person's explicit will", "Refusing medication", "Dying of old age", "Hospice care"], ans: 0, exp: "Involuntary euthanasia is performed against patient wishes (murder)." },
+                { q: "What is non-voluntary euthanasia?", opts: ["Patient requests death", "Patient is unable to express consent (e.g., coma)", "Doctor refuses care", "Natural death"], ans: 1, exp: "Non-voluntary occurs when patient cannot express consent." },
+                { q: "What is adultery?", opts: ["Marriage between different religions", "Sex between a married person and someone not their spouse", "Premarital sex", "Divorce"], ans: 1, exp: "Adultery violates marital fidelity." },
+                { q: "What is celibacy?", opts: ["Marriage vows", "Abstaining from sex and marriage, often for religious devotion", "Having many partners", "Divorce"], ans: 1, exp: "Celibacy is voluntary sexual abstinence." },
+                { q: "What does the Bible teach about children in family life?", opts: ["They are a burden", "They are a heritage and blessing from the Lord", "They belong to the state", "They should work early"], ans: 1, exp: "Psalm 127 calls children a heritage from God." },
+                { q: "What is a civil partnership?", opts: ["Church wedding", "Legal status granting couples rights similar to marriage", "Business contract", "Friendship pact"], ans: 1, exp: "Civil partnerships provide legal status to couples." }
+              ]
+            }
+          ]
+        }
+      };
+
+      function initSessionData() {
+        var rawCards = [];
+        var rawQuiz = [];
+
+        var units = getFilteredUnits();
+        units.forEach(function(u) {
+          if (u.cards) {
+            u.cards.forEach(function(c) {
+              rawCards.push({ unitName: u.name, q: c.q, a: c.a });
+            });
+          }
+          if (u.quiz) {
+            u.quiz.forEach(function(q) {
+              rawQuiz.push(shuffleQuizQuestion({ unitName: u.name, q: q.q, opts: q.opts, ans: q.ans, exp: q.exp }));
+            });
+          }
+        });
+
+        sessionCards = shuffleArray(rawCards);
+        sessionQuiz = shuffleArray(rawQuiz);
+      }
+
+      window.toggleTheme = function () {
+        isDark = !isDark;
+        if (isDark) {
+          document.documentElement.removeAttribute('data-theme');
+          document.getElementById('theme-btn').innerText = 'Dark Mode';
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+          document.getElementById('theme-btn').innerText = 'Light Mode';
+        }
+      };
+
+      window.switchSubject = function (subjKey) {
+        currentSubj = subjKey;
+        currentUnit = 'all';
+        flashIdx = 0;
+        quizIdx = 0;
+        quizSelected = null;
+        quizScore = 0;
+        flipped = false;
+
+        document.querySelectorAll('.subj-btn').forEach(function (btn) {
+          btn.classList.toggle('active', btn.getAttribute('data-subj') === subjKey);
+        });
+
+        document.documentElement.style.setProperty('--accent', SPEC_DATA[subjKey].color);
+        updateUnitDropdown();
+        initSessionData();
+        render();
+      };
+
+      window.switchUnit = function (unitVal) {
+        currentUnit = unitVal;
+        flashIdx = 0;
+        quizIdx = 0;
+        quizSelected = null;
+        quizScore = 0;
+        flipped = false;
+        initSessionData();
+        render();
+      };
+
+      window.switchTab = function (tabKey) {
+        currentTab = tabKey;
+        flipped = false;
+        if (tabKey === 'study' || tabKey === 'quiz') {
+          initSessionData();
+          flashIdx = 0; quizIdx = 0; quizSelected = null; quizScore = 0;
+        }
+        document.querySelectorAll('nav button').forEach(function (btn) {
+          btn.setAttribute('aria-selected', btn.id === 'tab-' + tabKey);
+        });
+        render();
+      };
+
+      function updateUnitDropdown() {
+        var select = document.getElementById('unit-select');
+        if (!select) return;
+        var html = '<option value="all">All Units (' + currentSubj.toUpperCase() + ')</option>';
+        if (SPEC_DATA[currentSubj] && SPEC_DATA[currentSubj].units) {
+          SPEC_DATA[currentSubj].units.forEach(function (u) {
+            html += '<option value="' + u.id + '">' + u.name + '</option>';
+          });
+        }
+        select.innerHTML = html;
+        select.value = currentUnit;
+      }
+
+      function getFilteredUnits() {
+        if (!SPEC_DATA[currentSubj]) return [];
+        var units = SPEC_DATA[currentSubj].units;
+        if (currentUnit === 'all') return units;
+        return units.filter(function (u) { return u.id === currentUnit; });
+      }
+
+      function renderNotes() {
+        var units = getFilteredUnits();
+        var html = '<div class="notes-container">';
+        units.forEach(function (u) {
+          html += '<div class="unit-panel">';
+          html += '<div class="unit-title"><span>' + u.name + '</span><span class="unit-spec-tag">Eduqas GCSE RS</span></div>';
+          if (u.notes) {
+            u.notes.forEach(function (n) {
+              html += '<div class="note-block">';
+              html += '<h4>' + n.t + '</h4>';
+              if (n.content) html += '<p>' + n.content + '</p>';
+              if (n.bullets && n.bullets.length) {
+                html += '<ul>';
+                n.bullets.forEach(function (b) {
+                  html += '<li>' + b + '</li>';
+                });
+                html += '</ul>';
+              }
+              html += '</div>';
+            });
+          }
+          html += '</div>';
+        });
+        html += '</div>';
+        return html;
+      }
+
+      function renderStudy() {
+        if (sessionCards.length === 0) initSessionData();
+
+        if (flashIdx >= sessionCards.length) {
+          var html = '<div class="quiz-container"><div class="score-summary">';
+          html += '<h2>Flashcards Completed!</h2>';
+          html += '<p>You have reviewed all <b>' + sessionCards.length + '</b> unique flashcards for this topic.</p>';
+          html += '<button class="btn primary" onclick="resetFlashcards()">Restart Flashcards</button>';
+          html += '</div></div>';
+          return html;
+        }
+
+        var c = sessionCards[flashIdx];
+        var html = '<div class="card-container">';
+        html += '<div class="card" onclick="flipCard()">';
+        html += '<div class="card-head"><span>' + c.unitName + '</span><span>Card ' + (flashIdx + 1) + ' of ' + sessionCards.length + '</span></div>';
+        html += '<div class="card-body">';
+        html += '<div class="card-q">' + c.q + '</div>';
+        if (flipped) {
+          html += '<div class="card-a">' + c.a + '</div>';
+        }
+        html += '</div>';
+        html += '<div class="card-hint">' + (flipped ? '✓ Tap card to flip back' : '💡 Tap card to reveal answer') + '</div>';
+        html += '</div>';
+        html += '</div>';
+
+        html += '<div class="actions">';
+        html += '<button class="btn miss" onclick="nextCard(event, false)">❌ Need Practice</button>';
+        html += '<button class="btn hit" onclick="nextCard(event, true)">✅ Got It!</button>';
+        html += '</div>';
+        return html;
+      }
+
+      window.flipCard = function () {
+        flipped = !flipped;
+        render();
+      };
+
+      window.nextCard = function (e, hit) {
+        if (e) e.stopPropagation();
+        flipped = false;
+        flashIdx++;
+        render();
+      };
+
+      window.resetFlashcards = function () {
+        flashIdx = 0;
+        flipped = false;
+        initSessionData();
+        render();
+      };
+
+      function renderQuiz() {
+        if (sessionQuiz.length === 0) initSessionData();
+
+        if (quizIdx >= sessionQuiz.length) {
+          var pct = Math.round((quizScore / sessionQuiz.length) * 100);
+          var html = '<div class="quiz-container"><div class="score-summary">';
+          html += '<h2>Quiz Completed!</h2>';
+          html += '<div class="score-circle">' + pct + '%</div>';
+          html += '<p>You scored <b>' + quizScore + ' out of ' + sessionQuiz.length + '</b> correct.</p>';
+          html += '<button class="btn primary" onclick="resetQuiz()">Restart Quiz</button>';
+          html += '</div></div>';
+          return html;
+        }
+
+        var q = sessionQuiz[quizIdx];
+        var html = '<div class="quiz-container">';
+        html += '<div class="quiz-header"><span>' + q.unitName + '</span><span>Question ' + (quizIdx + 1) + ' of ' + sessionQuiz.length + '</span></div>';
+        html += '<div class="quiz-q">' + q.q + '</div>';
+        html += '<div class="opts">';
+        q.opts.forEach(function (opt, idx) {
+          var cls = 'opt';
+          if (quizSelected !== null) {
+            if (idx === q.ans) cls += ' right';
+            else if (idx === quizSelected) cls += ' wrong';
+          }
+          html += '<button class="' + cls + '" ' + (quizSelected !== null ? 'disabled' : '') + ' onclick="selectQuizOpt(' + idx + ')">';
+          html += '<span class="opt-idx">' + String.fromCharCode(65 + idx) + '</span>';
+          html += '<span>' + opt + '</span>';
+          html += '</button>';
+        });
+        html += '</div>';
+
+        if (quizSelected !== null) {
+          html += '<div class="explanation"><b>Explanation:</b> ' + q.exp + '</div>';
+          html += '<button class="btn primary" style="margin-top:10px;" onclick="nextQuizQ()">Next Question →</button>';
+        }
+        html += '</div>';
+        return html;
+      }
+
+      window.selectQuizOpt = function (idx) {
+        quizSelected = idx;
+        if (idx === sessionQuiz[quizIdx].ans) quizScore++;
+        render();
+      };
+
+      window.nextQuizQ = function () {
+        quizIdx++;
+        quizSelected = null;
+        render();
+      };
+
+      window.resetQuiz = function () {
+        quizIdx = 0;
+        quizSelected = null;
+        quizScore = 0;
+        initSessionData();
+        render();
+      };
+
+      function render() {
+        var main = document.getElementById('view');
+        if (!main) return;
+        if (currentTab === 'notes') main.innerHTML = renderNotes();
+        else if (currentTab === 'study') main.innerHTML = renderStudy();
+        else if (currentTab === 'quiz') main.innerHTML = renderQuiz();
+      }
+
+      updateUnitDropdown();
+      initSessionData();
+      render();
+    })();
+  </script>
+</body>
+</html>
