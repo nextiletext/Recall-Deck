@@ -81,12 +81,12 @@
     .brand-container {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 16px;
     }
 
     .brand-logo {
-      width: 56px;
-      height: 56px;
+      width: 72px;
+      height: 72px;
       border-radius: 50%;
       object-fit: cover;
       border: 2px solid var(--line);
@@ -96,7 +96,7 @@
     .brand h1 {
       font-family: var(--display);
       font-weight: 800;
-      font-size: 1.6rem;
+      font-size: 1.65rem;
       letter-spacing: -0.02em;
       line-height: 1.1;
       margin: 0;
@@ -207,6 +207,17 @@
       box-shadow: 0 0 8px var(--online);
     }
 
+    @media (max-width: 480px) {
+      .header-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .mode-btn {
+        align-self: flex-end;
+        margin-top: -30px;
+      }
+    }
+
     @media (max-width: 420px) {
       .link-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -222,7 +233,6 @@
     <div class="top-box">
       <div class="header-row">
         <div class="brand-container">
-          <!-- Ensure your logo file is named logo.jfif in the same folder -->
           <img src="Recall Deck Logo.jfif" alt="Recall Deck Logo" class="brand-logo">
           <div class="brand">
             <h1>Recall Deck - RCS</h1>
